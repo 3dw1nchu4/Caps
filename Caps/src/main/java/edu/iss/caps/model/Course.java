@@ -31,7 +31,7 @@ public class Course {
 	private int currentEnrollment;
 	@Column(name="Size")
 	private int size;
-	//sandi
+
 
 	@OneToOne
     @JoinColumn(name="LecturerId") 
