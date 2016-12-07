@@ -62,11 +62,11 @@ public class Enrolment {
 		this.grade = grade;
 	}
 
-	public int getEarnedCredit() {
+	public Integer getEarnedCredit() {
 		return earnedCredit;
 	}
 
-	public void setEarnedCredit(int earnedCredit) {
+	public void setEarnedCredit(Integer earnedCredit) {
 		this.earnedCredit = earnedCredit;
 	}
 
@@ -113,12 +113,6 @@ public class Enrolment {
 		this.status = status;
 	}
 
-
-
-
-	public void setEarnedCredit(Integer earnedCredit) {
-		this.earnedCredit = earnedCredit;
-	}
 
 
 
