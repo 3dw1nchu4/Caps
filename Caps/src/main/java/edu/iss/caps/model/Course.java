@@ -31,6 +31,7 @@ public class Course {
 	private int currentEnrollment;
 	@Column(name="Size")
 	private int size;
+	//gogul
 
 	@OneToOne
     @JoinColumn(name="LecturerId") 
