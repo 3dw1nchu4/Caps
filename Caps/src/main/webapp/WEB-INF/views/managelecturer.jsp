@@ -108,25 +108,24 @@
 					</div>
 				</div>
 				<div id="editcontent" style="display: none">
-					<form id="formEditRecord" method="get">
+					<form id="formEditRecord" method="post">
 						<h2 class="form-signin-heading">Edit Record</h2>
 						<div style="width: 40%">
-							<label for="id">Lecturer ID: </label> 
-							<input type="text" id="id" name="id"
-								class="form-control" value="${data.lecturerId }"
+							<label for="id">Lecturer ID: </label> <input type="text" id="id"
+								name="id" class="form-control" value="${data.lecturerId }"
 								placeholder="Unique ID" required autofocus>
 						</div>
 						<div style="width: 40%">
-							<label for="firstName">First Name: </label> 
-							<input type="text"
-								id="firstName" name="firstName" class="form-control" placeholder="First Name"
-								value="${data.firstName }" required autofocus>
+							<label for="firstName">First Name: </label> <input type="text"
+								id="firstName" name="firstName" class="form-control"
+								placeholder="First Name" value="${data.firstName }" required
+								autofocus>
 						</div>
 						<div style="width: 40%">
-							<label for="lastName">Last Name: </label> 
-							<input type="text"
-								id="lastName" name="lastname" class="form-control" placeholder="Last Name"
-								value="${data.lastName }" required autofocus>
+							<label for="lastName">Last Name: </label> <input type="text"
+								id="lastName" name="lastName" class="form-control"
+								placeholder="Last Name" value="${data.lastName }" required
+								autofocus>
 						</div>
 						<br> <br>
 						<!-- removed the type="submit" property for testing-->
@@ -194,14 +193,22 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Confirm Deletion</h4>
 				</div>
-				<div class="modal-body">
-					<p>The selected entry will be permanently deleted.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="button" class="btn btn-danger">Delete</button>
+				<form action="deletelecturer" method="post">
+					<div class="modal-body">
 
-				</div>
+						<p>The selected entry will be permanently deleted.</p>
+						<input type="hidden"
+								id="deletethis" name="deletethis" class="form-control"
+								placeholder="Last Name" value="" required 
+								/>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button id="deletebtn" name="deletebtn" type="submit"
+							class="btn btn-danger">Delete</button>
+					</div>
+				</form>
+
 			</div>
 
 		</div>
@@ -293,11 +300,11 @@
 		if (qs['id'] !="create")
 		{
 			document.getElementById("id").readOnly = true;
-			document.getElementById("formEditRecord").action = "updateLecturer";
+			document.getElementById("formEditRecord").action = "updatelecturer";
 			document.getElementById("submitbutton").innerHTML = "Update Record";
 		} else
 		{
-			document.getElementById("formEditRecord").action = "createLecturer";
+			document.getElementById("formEditRecord").action = "createlecturer";
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
 		}
 	}
@@ -330,8 +337,14 @@
 	
 	function DeleteRecord(id)
 	{
+		//Attaches correct delete event to button
+		console.log("event attached");
+		
+		document.getElementById("deletethis").value = id;
 		$('#deleteModal').modal('toggle');
 	}
+	
+
 	
 </script>
 </html>

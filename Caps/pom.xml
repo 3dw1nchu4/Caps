@@ -130,7 +130,12 @@
 			<version>${logback.version}</version>
 		</dependency>
 
-
+		<!-- Site Mesh -->
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>${sitemesh.version}</version>
+		</dependency>
 
 	</dependencies>
 	<build>
