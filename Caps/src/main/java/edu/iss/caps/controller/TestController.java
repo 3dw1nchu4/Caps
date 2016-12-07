@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.iss.caps.model.Enrolment;
 import edu.iss.caps.model.LecturerDetail;
 import edu.iss.caps.model.StudentDetail;
+import edu.iss.caps.model.User;
 import edu.iss.caps.service.CourseService;
 import edu.iss.caps.service.EnrolmentService;
 import edu.iss.caps.service.LecturerService;
 import edu.iss.caps.service.StudentService;
+import edu.iss.caps.service.UserService;
 
 /*import edu.iss.cats.exception.CourseNotFound;
 import edu.iss.cats.model.Course;
@@ -33,6 +35,9 @@ public class TestController {
 	private StudentService ss;
 	@Autowired
 	private EnrolmentService scs;
+	@Autowired
+	private UserService us;
+	
 
 	@RequestMapping(value = "/1")
 	@ResponseBody
@@ -74,6 +79,18 @@ public class TestController {
 		ArrayList<Enrolment> l= scs.findAllCoursesAttending();
 		for (Enrolment ldetails : l){
 			s=s+ldetails.toString();
+		}
+		return s;
+	}
+	
+	@RequestMapping(value = "/5")
+	@ResponseBody
+	public String test5() {
+		
+		String s="";
+		ArrayList<User> l= us.findAllUsers();
+		for (User u : l){
+			s=s+u.toString();
 		}
 		return s;
 	}

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import edu.iss.caps.model.*;
 
 @Entity
 @Table(name = "Enrolments")
@@ -148,20 +149,10 @@ public class Enrolment {
 	}
 
 
-
-
 	@Override
 	public String toString() {
 		return "Enrolment [enrolmentId=" + enrolmentId + ", grade=" + grade + ", earnedCredit=" + earnedCredit
 				+ ", status=" + status + ", courses=" + courses + ", studentDetails=" + studentDetails.toString() + "]";
 	}
-
-	
-	
-
-
-
-
-	
-	
+		
 }

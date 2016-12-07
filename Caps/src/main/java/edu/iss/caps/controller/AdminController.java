@@ -60,7 +60,7 @@ public class AdminController
 	}
 	//CREATE NEW
 	//Error - need to add User Service
-	@RequestMapping(value = "/createLecturer", method = RequestMethod.GET)
+	@RequestMapping(value = "/createlecturer", method = RequestMethod.POST)
 	public ModelAndView createLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 
@@ -76,22 +76,28 @@ public class AdminController
 			return mav;
 	}
 	//Update Existing
-	@RequestMapping(value = "/updateLecturer", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/updatelecturer", method = RequestMethod.POST)
 	public String updateLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-
-		    
 			String id = requestParams.get("id");
 			String firstName = requestParams.get("firstName");
 			String lastName = requestParams.get("lastName");
-			
 			LecturerDetail lecturer = lecturerService.findLecturerById(id);
 			lecturer.setFirstName(firstName);
 			lecturer.setLastName(lastName);
-			
 			lecturerService.changeLecturer(lecturer);
 			
+			return "redirect:manage?manage=lecturer";
+	}
+	//delete lecturer
+	@RequestMapping(value = "/deletelecturer", method = RequestMethod.POST)
+	public String deleteLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+			String id = requestParams.get("id");
 
+			//lecturerService.changeLecturer(lecturer);
+			
 			return "redirect:manage?manage=lecturer";
 	}
 	
