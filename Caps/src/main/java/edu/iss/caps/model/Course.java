@@ -22,8 +22,6 @@ public class Course {
 	private String courseName;
 	@Column(name = "Credits")
 	private int credits;
-	//seng 
-
 
 	@Column(name = "StartDate")
 	private Date startDate;
@@ -152,8 +150,5 @@ public class Course {
 				+ startDate + ", endDate=" + endDate + ", currentEnrollment=" + currentEnrollment + ", size=" + size
 				+ ", lecturerDetails=" + lecturerDetails.toString() + "]";
 	}
-
-
-	
 	
 }
