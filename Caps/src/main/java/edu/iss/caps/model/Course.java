@@ -152,8 +152,5 @@ public class Course {
 				+ startDate + ", endDate=" + endDate + ", currentEnrollment=" + currentEnrollment + ", size=" + size
 				+ ", lecturerDetails=" + lecturerDetails.toString() + "]";
 	}
-
-
-	//thiha0.1
 	
 }
