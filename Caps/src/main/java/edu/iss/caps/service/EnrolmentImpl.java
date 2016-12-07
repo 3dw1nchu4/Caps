@@ -1,6 +1,7 @@
 package edu.iss.caps.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -21,5 +22,28 @@ public class EnrolmentImpl implements EnrolmentService {
 		ArrayList<Enrolment> scList = (ArrayList<Enrolment>)scRepository.findAll();
 		return scList;
 	}
+
+	@Override
+	public ArrayList<Enrolment> findbycid(int courseId , String lecid) {
+		// TODO Auto-generated method stub
+		return scRepository.findbycid(courseId,lecid);
+	}
+	
+	@Override
+	public ArrayList<Enrolment> findungraded() {
+		// TODO Auto-generated method stub
+		return scRepository.findungraded();
+	}
+
+
+	@Override
+	public List<Enrolment> findstudentbylecturerid(String s) {
+		// TODO Auto-generated method stub
+		return scRepository.findstudentbylecturerid(s);
+	}
+
+	
+	
+
 
 }
