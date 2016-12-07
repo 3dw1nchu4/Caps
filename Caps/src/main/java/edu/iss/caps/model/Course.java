@@ -22,7 +22,7 @@ public class Course {
 	private String courseName;
 	@Column(name = "Credits")
 	private int credits;
-	//hi
+	//hi again Linda
 
 
 	@Column(name = "StartDate")
