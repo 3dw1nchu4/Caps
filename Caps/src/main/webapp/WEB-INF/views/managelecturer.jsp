@@ -27,6 +27,21 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
+<style>
+
+#searchclear {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    bottom: 0;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ccc;
+}
+</style>
+
 
 </head>
 <body>
@@ -35,10 +50,10 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a href="javascript:Manage('student')">Manage
+					<li id="sidebarStudent"><a href="managestudent">Manage
 							Students</a></li>
-					<li id="sidebarLecturer"><a
-						href="javascript:Manage('lecturer')">Manage Lecturers</a></li>
+					<li id="sidebarLecturer"><a href="managelecturer">Manage
+							Lecturers</a></li>
 					<li id="sidebarCourse"><a href="javascript:Manage('course')">Manage
 							Courses</a></li>
 					<li id="sidebarEnrolment"><a
@@ -54,20 +69,24 @@
 				<div id="mainbody" style="width: 100%">
 
 					<div class="container" style="width: 100%">
+
 						<div class="row">
-							<div class="col-xs-1">
-								<label for="search"><h4>Search:</h4> </label>
-							</div>
-							<div class="col-xs-5">
-								<input type="text" id="inputPK" class="form-control"
-									placeholder="Search for something here">
-							</div>
-							<div class="container">
-								<div class="col xs-6">
+							<form action="searchlecturer" method=get>
+								<div class="col-xs-1">
+									<label for="search"><h4>Search: </h4> </label>
+								</div>
+								<div class="col-xs-4">
+									<input type="text" id="searchcontent" name="searchcontent"
+										class="form-control" placeholder="Search for something here">
+										<span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+								</div>
+
+								<div class="col xs-6 btn-group">
 									<button class="btn btn-default" style="float: left">Search</button>
 								</div>
-								<div class="col xs-6"></div>
-							</div>
+							</form>
+
+
 							<div class="container">
 								<button class="btn btn-success" style="float: left"
 									onclick="EditRecord('create')">
@@ -126,6 +145,11 @@
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
 								autofocus>
+						</div>
+						<div style="width: 40%">
+							<label for="password">Password: </label> <input type="text"
+								id="password" name="password" class="form-control"
+								placeholder="User password" value="" autofocus>
 						</div>
 						<br> <br>
 						<!-- removed the type="submit" property for testing-->
@@ -197,10 +221,8 @@
 					<div class="modal-body">
 
 						<p>The selected entry will be permanently deleted.</p>
-						<input type="hidden"
-								id="deletethis" name="deletethis" class="form-control"
-								placeholder="Last Name" value="" required 
-								/>
+						<input id="deletethis" name="deletethis" class="form-control"
+							placeholder="Last Name" value="" required />
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -226,9 +248,20 @@
 		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
 		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
 	});
+	
+	
+	//clears search content when clicking X
+	$("#searchclear").click(function(){
+	    $("#searchcontent").val('');
+	});
+	
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
 
 
-	var url = window.location.search;
+	var url = window.location.href;
 
 	var qs = (function(a)
 	{
@@ -251,39 +284,32 @@
 
 	try
 	{
-		if (qs['manage'] == "student")
+		if (url.includes("student"))
 		{
 			document.getElementById("sidebarStudent").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Student ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Student Records";
 	
-		} else if (qs['manage'] == "lecturer")
+		} else if (url.includes("lecturer"))
 		{
 			document.getElementById("sidebarLecturer").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Lecturer ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Lecturer Records";
 	
-		} else if (qs['manage'] == "course")
+		} else if (url.includes("course"))
 		{
 			document.getElementById("sidebarCourse").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Course ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Course Records";
 	
-		} else if (qs['manage'] == "enrolment")
+		} else if (url.includes("enrolment"))
 		{
 			document.getElementById("sidebarEnrolment").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Enrolment ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Enrolment Records";
 	
-		} else
-		{
-			$('#redirectModal').modal('toggle');
-			window.setTimeout(function()
-			{
-				window.location = "adminmgt.jsp?manage=student&userrole="
-						+ qs['userrole'];
-			}, 3000);
-		}
+		} 
+
 	}
 	catch (err)
 	{
@@ -291,6 +317,10 @@
 		RedirectToLogin();
 	}
 	
+	if (qs['searchcontent'] != null)
+	{
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+	}
 	
 	if (url.includes("id="))
 	{
@@ -311,7 +341,7 @@
 
 	function EditRecord(id) //Edit button
 	{
-		window.location.href = window.location.href + '&id='+id;
+		window.location.href = window.location.href + '?id='+id;
 	}
 
 	function Manage(recordtype)
