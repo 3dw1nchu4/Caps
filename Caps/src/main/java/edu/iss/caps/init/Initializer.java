@@ -24,13 +24,13 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
 		return new String[] { "/" };
 	}
 
-	@Override
+/*	@Override
 	protected Filter[] getServletFilters() {
 
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 		characterEncodingFilter.setEncoding("UTF-8");
 		return new Filter[] { characterEncodingFilter, new SiteMeshFilter() };
-	}
+	}*/
 	
 	
 }
