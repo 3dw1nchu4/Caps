@@ -43,6 +43,7 @@ public class LecturerServiceImpl implements LecturerService{
 	}
 
 	@Override
+	@Transactional
 	public LecturerDetail changeLecturer(LecturerDetail lecturer) {
 		// TODO Auto-generated method stub
 		return ldRepository.saveAndFlush(lecturer);

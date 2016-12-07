@@ -18,6 +18,8 @@ public class LecturerDetail {
 	private String firstName;
 	@Column(name = "LastName")
 	private String lastName;
+	@Column(name="Status")
+	private String status;
 
 //	@OneToMany
 //	List<Courses> course = new ArrayList<Courses>();
@@ -57,6 +59,16 @@ public class LecturerDetail {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public int hashCode() {
@@ -85,9 +97,10 @@ public class LecturerDetail {
 
 	@Override
 	public String toString() {
-		return "LecturerDetails [lecturerId=" + lecturerId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", ";
+		return "LecturerDetail [lecturerId=" + lecturerId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", status=" + status + "]";
 	}
+
 
 	
 	

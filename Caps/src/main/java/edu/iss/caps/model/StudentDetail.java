@@ -22,6 +22,8 @@ public class StudentDetail {
 	private String lastName;
 	@Column(name = "EnrolmentDate")
 	private Date enrolmentDate;
+	@Column(name="Status")
+	private String status;
 	
 	public StudentDetail(){
 		
@@ -74,15 +76,26 @@ public class StudentDetail {
 	}
 
 
-
-	public Date getEnrollmentDate() {
+	public Date getEnrolmentDate() {
 		return enrolmentDate;
 	}
 
 
 
-	public void setEnrollmentDate(Date enrollmentDate) {
-		this.enrolmentDate = enrollmentDate;
+	public void setEnrolmentDate(Date enrolmentDate) {
+		this.enrolmentDate = enrolmentDate;
+	}
+
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 
@@ -94,6 +107,8 @@ public class StudentDetail {
 		result = prime * result + ((studentId == null) ? 0 : studentId.hashCode());
 		return result;
 	}
+	
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -116,8 +131,12 @@ public class StudentDetail {
 
 	@Override
 	public String toString() {
-		return "StudentDetails [studentId=" + studentId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", enrolmentDate=" + enrolmentDate + "]";
+		return "StudentDetail [studentId=" + studentId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", enrolmentDate=" + enrolmentDate + ", status=" + status + "]";
 	}
+
+
+
+	
 	
 }
