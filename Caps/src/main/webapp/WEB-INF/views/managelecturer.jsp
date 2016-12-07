@@ -13,9 +13,26 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
 <!-- jQuery library -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- For dropdown select -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js"></script>
+
+
 <!-- Latest compiled JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -28,17 +45,16 @@
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
 <style>
-
 #searchclear {
-    position: absolute;
-    right: 20px;
-    top: 0;
-    bottom: 0;
-    height: 14px;
-    margin: auto;
-    font-size: 14px;
-    cursor: pointer;
-    color: #ccc;
+	position: absolute;
+	right: 20px;
+	top: 0;
+	bottom: 0;
+	height: 14px;
+	margin: auto;
+	font-size: 14px;
+	cursor: pointer;
+	color: #ccc;
 }
 </style>
 
@@ -70,42 +86,58 @@
 
 					<div class="container" style="width: 100%">
 
-						<div class="row">
-							<form action="searchlecturer" method=get>
-								<div class="col-xs-1">
-									<label for="search"><h4>Search: </h4> </label>
-								</div>
-								<div class="col-xs-4">
-									<input type="text" id="searchcontent" name="searchcontent"
-										class="form-control" placeholder="Search for something here">
-										<span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+						<nav class="navbar navbar-default" role="navigation">
+						<div class="container-fluid">
+							<!--  div class="navbar-header">
+								<a class="navbar-brand" href="#">Search</a>
+							</div>-->
+
+							<form class="navbar-form navbar-left" role="search"
+								action="searchlecturer" method="get">
+								<div class="form-group">
+									<label>Account Status: </label> <select name="accountstatus"
+										id="accountstatus" class="selectpicker">
+										<optgroup label="Account Status">
+											<option value="active">Active</option>
+											<option value="disabled">Disabled</option>
+											<option value="all">All</option>
+										</optgroup>
+									</select>
 								</div>
 
-								<div class="col xs-6 btn-group">
-									<button class="btn btn-default" style="float: left">Search</button>
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Search"
+										name="searchcontent" id="searchcontent">
+
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
 								</div>
-							</form>
-
-
-							<div class="container">
-								<button class="btn btn-success" style="float: left"
+								<button type="submit" class="btn btn-default">Search</button>
+								<button type="button" class="btn btn-success"
 									onclick="EditRecord('create')">
 									<span class="glyphicon glyphicon-plus"></span><span>
-										Creates</span>
+										Create New</span>
 								</button>
-							</div>
+							</form>
 						</div>
+						</nav>
+
+
+						<div class="container"></div>
 					</div>
 
-					<div class="table-responsive">
+					<div id="searchcount" name="searchcount" style="display:none"><h5> Your search returned ${dataList.size() } results</h5></div>
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th id="tableheader1">#</th>
-									<th>Header</th>
-									<th>Header</th>
-									<th>Header</th>
-									<th></th>
+									<th id="tableheader1"><h4>#</h4></th>
+									<th><h4>First Name</h4></th>
+									<th><h4>Last Name</h4></th>
+									<th><h4>Status</h4></th>
+									<th><h4></h4></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -114,7 +146,7 @@
 										<td>${object.lecturerId}</td>
 										<td>${object.firstName}</td>
 										<td>${object.lastName}</td>
-
+										<td>${object.status}</td>
 										<td><button class="btn btn-primary"
 												onclick="EditRecord('${object.lecturerId}')">Edit</button>
 											<button class="btn btn-danger"
@@ -156,7 +188,7 @@
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
 						<button class="btn btn-danger" onclick="BackToPrevious()">Cancel
-							and Return to Previous</button>
+						</button>
 					</form>
 				</div>
 			</div>
@@ -248,7 +280,10 @@
 		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
 		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
 	});
-	
+
+	$(document).ready(function() {
+	    $('.selectpicker').selectpicker();
+	});
 	
 	//clears search content when clicking X
 	$("#searchclear").click(function(){
@@ -320,7 +355,13 @@
 	if (qs['searchcontent'] != null)
 	{
 		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
 	}
+	if (qs['accountstatus'] != null)
+	{
+		document.getElementById("accountstatus").value = qs['accountstatus'];
+	}
+	
 	
 	if (url.includes("id="))
 	{
@@ -341,7 +382,7 @@
 
 	function EditRecord(id) //Edit button
 	{
-		window.location.href = window.location.href + '?id='+id;
+		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer?id="+id;
 	}
 
 	function Manage(recordtype)
@@ -352,8 +393,7 @@
 	
 	function BackToPrevious()
 	{
-		var previous = qs['manage'];
-		Manage(previous);
+		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer";
 	}
 	
 	function RedirectToLogin()

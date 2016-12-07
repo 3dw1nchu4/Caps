@@ -142,8 +142,17 @@ public class AdminController
 		} catch (Exception e)
 		{
 			ModelAndView mav = new ModelAndView("managelecturer");
-			List<LecturerDetail> lctList = lecturerService.findAllLecturers();
-			mav.addObject("dataList", lctList);
+			ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
+			List<LecturerDetail> tempList = new ArrayList<LecturerDetail>();
+			for(LecturerDetail l : lctList)
+			{
+				if (l.getStatus().toLowerCase().contains("active"))
+				{
+					tempList.add(l);
+				}
+			}
+			
+			mav.addObject("dataList", tempList);
 			return mav;
 		}
 	}
@@ -165,6 +174,7 @@ public class AdminController
 			User userTemp = userService.findUser(id);
 			id = userTemp.getUserId();
 			LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
+			lecturer.setStatus("Active");
 			lecturerService.createLecturer(lecturer);
 			ModelAndView mav = new ModelAndView("managelecturer");
 			
@@ -182,6 +192,7 @@ public class AdminController
 			String password = requestParams.get("password");
 			String role = "Lecturer";
 			
+			
 			if(password.length() > 1) //If password not keyed in, no update
 			{
 			User user = new User(id, password, role);
@@ -189,58 +200,63 @@ public class AdminController
 			}
 			User userTemp = userService.findUser(id);
 			id = userTemp.getUserId();
-			LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
+			
+			
+			LecturerDetail lecturer = lecturerService.findLecturerById(id);
+			lecturer.setFirstName(firstName);	
+			lecturer.setLastName(lastName);
 			lecturerService.changeLecturer(lecturer);
 
 			return "redirect:managelecturer";
 	}
 	//delete lecturer
-	//problem with foreign key constraints - KIV
 	@RequestMapping(value = "/deletelecturer", method = RequestMethod.POST)
 	public String deleteLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 			String id = requestParams.get("deletethis");
 			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-			lecturerService.removeLecturer(lecturer);
-			
-			User user = userService.findUser(id);
-			userService.removeUser(user);
-			
+			lecturer.setStatus("Disabled");
+			lecturerService.changeLecturer(lecturer);
 			return "redirect:managelecturer";
 	}
 	@RequestMapping(value = "/searchlecturer", method = RequestMethod.GET)
 	public ModelAndView searchLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		String accountstatus = requestParams.get("accountstatus").toLowerCase();
+		if (accountstatus.contains("all"))
+		{
+			accountstatus = "";
+		}
 		ModelAndView mav = new ModelAndView("managelecturer");
 		ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
 		List<LecturerDetail> searchList = new ArrayList<LecturerDetail>();
 		for(LecturerDetail l : lctList)
 		{
-			if (l.getFirstName().toLowerCase().contains(searchContent))
+			if (l.getFirstName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
-			else if (l.getLastName().toLowerCase().contains(searchContent))
+			else if (l.getLastName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
-			else if (l.getLecturerId().toLowerCase().contains(searchContent))
+			else if (l.getLecturerId().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
-			else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent))
+			else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
-			else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent))
+			else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
-			
 		}
 		
 		mav.addObject("dataList", searchList);
+		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
 	
