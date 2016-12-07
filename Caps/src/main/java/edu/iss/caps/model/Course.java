@@ -22,8 +22,6 @@ public class Course {
 	private String courseName;
 	@Column(name = "Credits")
 	private int credits;
-	
-
 
 	@Column(name = "StartDate")
 	private Date startDate;
