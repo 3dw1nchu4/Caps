@@ -4,6 +4,7 @@ package edu.iss.caps.service;
 
 import java.util.ArrayList;
 
+import edu.iss.caps.exception.FailedAuthentication;
 import edu.iss.caps.model.User;
 
 public interface UserService {
@@ -12,7 +13,7 @@ public interface UserService {
 	
 	ArrayList<User> findAllUsers();
 	
-	User authenticate(String name, String password);
+	User authenticate(String userId, String password) throws FailedAuthentication;
 
 	User createUser(User user);
 
