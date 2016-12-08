@@ -188,9 +188,9 @@
 								placeholder="User password" value="" autofocus>
 						</div>
 						<br> <br>
-						<div id="studentcourses">
+						<div id="studentcourses" name= "studentcourses">
 
-							<h3>${data.lastName }, ${data.firstName }is enrolled in
+							<h3><b><u>${data.lastName }, ${data.firstName }</u></b> is enrolled in
 								${enroldata.size() } courses</h3>
 							<table class="table table-striped">
 								<thead>
@@ -212,7 +212,7 @@
 											<td>${enrol.earnedCredit}</td>
 											<td><button type = "button" class="btn btn-info"
 													onclick="RemoveEnrolment('${enrol.enrolmentId}')"  
-													<c:if test="${enrol.status.contains('Passed')}"> disabled
+													<c:if test="${enrol.status.contains('Passed') || enrol.status.contains('Removed')}"> disabled
 													</c:if>> Remove
 													from Course</button>
 										</tr>
@@ -438,10 +438,14 @@
 			document.getElementById("id").readOnly = true;
 			document.getElementById("formEditRecord").action = "updatestudent";
 			document.getElementById("submitbutton").innerHTML = "Update Record";
+			
+			
 		} else
 		{
 			document.getElementById("formEditRecord").action = "createstudent";
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
+			document.getElementById("studentcourses").style.display = "none";
+			document.getElementById("password").required = true;
 		}
 	}
 

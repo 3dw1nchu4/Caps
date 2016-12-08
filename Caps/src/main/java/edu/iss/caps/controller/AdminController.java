@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +35,8 @@ import edu.iss.caps.service.EnrolmentService;;
 @Controller
 public class AdminController
 {
-//Edwin
-	
+	// Edwin
+
 	@Autowired
 	CourseService cseService;
 	@Autowired
@@ -44,9 +47,32 @@ public class AdminController
 	StudentService studentService;
 	@Autowired
 	EnrolmentService enrolmentService;
+/*
+	@RequestMapping(value = "/")
+	public String testMestod(HttpSession session)
+	{
+		try
+		{
+			User u = (User) session.getAttribute("user");
+			
+			if (u.getRole().equals("Admin"))
+			{
+				return "redirect:managestudent";
+			}
+			else
+			{
+				return "redirect:www.google.com";
+			}
+		}
+		catch (Exception e)
+		{
+			return "redirect:www.google.com";
+		}
+		
+		
+	}*/
 
-	
-///////////////  ADMIN-STUDENT /////////////////////////
+	////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-STUDENT >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
 	@RequestMapping(value = "/managestudent", method = RequestMethod.GET)
 	public ModelAndView manageStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -55,18 +81,18 @@ public class AdminController
 			String id = requestParams.get("id").toLowerCase();
 			ModelAndView mav = new ModelAndView("managestudent");
 			StudentDetail student = studentService.findStudentById(id);
-			
+
 			ArrayList<Enrolment> enrolList = enrolmentService.findAllCoursesAttending();
 			List<Enrolment> enrolList2 = new ArrayList<Enrolment>();
-			for(Enrolment e : enrolList)
+			for (Enrolment e : enrolList)
 			{
 				if (e.getStudentDetails().getStudentId().toLowerCase().contains(id))
 				{
 					enrolList2.add(e);
-				
+
 				}
 			}
-			
+
 			mav.addObject("enroldata", enrolList2);
 			mav.addObject("data", student);
 			return mav;
@@ -75,101 +101,98 @@ public class AdminController
 			ModelAndView mav = new ModelAndView("managestudent");
 			ArrayList<StudentDetail> lctList = studentService.findAllStudents();
 			List<StudentDetail> tempList = new ArrayList<StudentDetail>();
-			for(StudentDetail l : lctList)
+			for (StudentDetail l : lctList)
 			{
 				if (l.getStatus().toLowerCase().contains("active"))
 				{
 					tempList.add(l);
 				}
 			}
-			
+
 			mav.addObject("dataList", tempList);
 			return mav;
 		}
 	}
-	//CREATE NEW
+
+	// CREATE NEW
 	@RequestMapping(value = "/createstudent", method = RequestMethod.POST)
-	public ModelAndView createStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	public String createStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 
-			String id = requestParams.get("id");
-			String firstName = requestParams.get("firstName");
-			String lastName = requestParams.get("lastName");
-			String password = requestParams.get("password");
-			String role = "Student";
-			
-			User user = new User(id, password, role);
-			userService.createUser(user);
-			
-			User userTemp = userService.findUser(id);
-			id = userTemp.getUserId();
-			
-			
-			//for testing purposes
-			@SuppressWarnings("deprecation")
-			Date d = new Date(2012, 10, 20);
-			
+		String id = requestParams.get("id");
+		String firstName = requestParams.get("firstName");
+		String lastName = requestParams.get("lastName");
+		String password = requestParams.get("password");
+		String role = "Student";
 
-			StudentDetail student = new StudentDetail(id, firstName, lastName, d);
-			student.setStatus("Active");
-			studentService.createStduent(student);
-			ModelAndView mav = new ModelAndView("managestudent");
-			
-			StudentDetail student1 = studentService.findStudentById(id);
-			mav.addObject("data", student1);
-			return mav;
+		User user = new User(id, password, role);
+		userService.createUser(user);
+
+		User userTemp = userService.findUser(id);
+		id = userTemp.getUserId();
+
+		// for testing purposes
+		@SuppressWarnings("deprecation")
+		Date d = new Date(2012, 10, 20);
+
+		StudentDetail student = new StudentDetail(id, firstName, lastName, d);
+		student.setStatus("Active");
+		studentService.createStduent(student);
+
+		return "redirect:managestudent?create=success";
 	}
-	//Update Existing student
+
+	// Update Existing student
 	@RequestMapping(value = "/updatestudent", method = RequestMethod.POST)
 	public String updateStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-			String id = requestParams.get("id");
-			String firstName = requestParams.get("firstName");
-			String lastName = requestParams.get("lastName");
-			String password = requestParams.get("password");
-			String role = "Student";
-			
-			
-			if(password.length() > 1) //If password not keyed in, no update
-			{
+		String id = requestParams.get("id");
+		String firstName = requestParams.get("firstName");
+		String lastName = requestParams.get("lastName");
+		String password = requestParams.get("password");
+		String role = "Student";
+
+		if (password.length() > 1) // If password not keyed in, no update
+		{
 			User user = new User(id, password, role);
 			userService.changeUser(user);
-			}
-			User userTemp = userService.findUser(id);
-			id = userTemp.getUserId();
-			
-			
-			StudentDetail student = studentService.findStudentById(id);
-			student.setFirstName(firstName);	
-			student.setLastName(lastName);
-			studentService.changeStudent(student);
+		}
+		User userTemp = userService.findUser(id);
+		id = userTemp.getUserId();
 
-			return "redirect:managestudent";
+		StudentDetail student = studentService.findStudentById(id);
+		student.setFirstName(firstName);
+		student.setLastName(lastName);
+		studentService.changeStudent(student);
+
+		return "redirect:managestudent";
 	}
-	//delete student
+
+	// delete student
 	@RequestMapping(value = "/deletestudent", method = RequestMethod.POST)
 	public String deleteStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-			String id = requestParams.get("deletethis");
-			StudentDetail student = studentService.findStudentById(id);
-			student.setStatus("Disabled");
-			studentService.changeStudent(student);
-			return "redirect:managestudent";
-	} 
-	
-	//remove student from enrolment
-	@RequestMapping(value = "/removestudentenrolment", method = RequestMethod.POST)
-	public String removeStudentFromEnrolment(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
-	{
-			int id = Integer.parseInt(requestParams.get("removethis"));
-			Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
-			enrolment.setStatus("Removed");
-			enrolment.setGrade("Removed");
-			enrolmentService.updateEnrolment(enrolment);
-			return "redirect:managestudent";
+		String id = requestParams.get("deletethis");
+		StudentDetail student = studentService.findStudentById(id);
+		student.setStatus("Disabled");
+		studentService.changeStudent(student);
+		return "redirect:managestudent";
 	}
-	
-	//search student
+
+	// remove student from enrolment
+	@RequestMapping(value = "/removestudentenrolment", method = RequestMethod.POST)
+	public String removeStudentFromEnrolment(Locale locale, Model model,
+			@RequestParam Map<String, String> requestParams)
+	{
+		int id = Integer.parseInt(requestParams.get("removethis"));
+		Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
+		enrolment.setStatus("Removed");
+		enrolment.setGrade("N/A");
+		enrolmentService.updateEnrolment(enrolment);
+		return "redirect:managestudent";
+	}
+
+	// search student
 	@RequestMapping(value = "/searchstudent", method = RequestMethod.GET)
 	public ModelAndView searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -182,36 +205,37 @@ public class AdminController
 		ModelAndView mav = new ModelAndView("managestudent");
 		ArrayList<StudentDetail> lctList = studentService.findAllStudents();
 		List<StudentDetail> searchList = new ArrayList<StudentDetail>();
-		for(StudentDetail l : lctList)
+		for (StudentDetail l : lctList)
 		{
-			if (l.getFirstName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			if (l.getFirstName().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if (l.getLastName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if (l.getLastName().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if (l.getStudentId().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if (l.getStudentId().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
 		}
-		
+
 		mav.addObject("dataList", searchList);
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
 
-///////////////  ADMIN-LECTURER /////////////////////////
+	////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-LECTURER >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
 	@RequestMapping(value = "/managelecturer", method = RequestMethod.GET)
 	public ModelAndView manageLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -227,81 +251,82 @@ public class AdminController
 			ModelAndView mav = new ModelAndView("managelecturer");
 			ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
 			List<LecturerDetail> tempList = new ArrayList<LecturerDetail>();
-			for(LecturerDetail l : lctList)
+			for (LecturerDetail l : lctList)
 			{
 				if (l.getStatus().toLowerCase().contains("active"))
 				{
 					tempList.add(l);
 				}
 			}
-			
+
 			mav.addObject("dataList", tempList);
 			return mav;
 		}
 	}
-	//CREATE NEW
-	//Error - need to add User Service
+
+	// CREATE NEW
 	@RequestMapping(value = "/createlecturer", method = RequestMethod.POST)
 	public ModelAndView createLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 
-			String id = requestParams.get("id");
-			String firstName = requestParams.get("firstName");
-			String lastName = requestParams.get("lastName");
-			String password = requestParams.get("password");
-			String role = "Lecturer";
-			
-			User user = new User(id, password, role);
-			userService.createUser(user);
-			
-			User userTemp = userService.findUser(id);
-			id = userTemp.getUserId();
-			LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
-			lecturer.setStatus("Active");
-			lecturerService.createLecturer(lecturer);
-			ModelAndView mav = new ModelAndView("managelecturer");
-			
-			LecturerDetail lecturer1 = lecturerService.findLecturerById(id);
-			mav.addObject("data", lecturer1);
-			return mav;
+		String id = requestParams.get("id");
+		String firstName = requestParams.get("firstName");
+		String lastName = requestParams.get("lastName");
+		String password = requestParams.get("password");
+		String role = "Lecturer";
+
+		User user = new User(id, password, role);
+		userService.createUser(user);
+
+		User userTemp = userService.findUser(id);
+		id = userTemp.getUserId();
+		LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
+		lecturer.setStatus("Active");
+		lecturerService.createLecturer(lecturer);
+		ModelAndView mav = new ModelAndView("managelecturer");
+
+		LecturerDetail lecturer1 = lecturerService.findLecturerById(id);
+		mav.addObject("data", lecturer1);
+		return mav;
 	}
-	//Update Existing
+
+	// Update Existing
 	@RequestMapping(value = "/updatelecturer", method = RequestMethod.POST)
 	public String updateLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-			String id = requestParams.get("id");
-			String firstName = requestParams.get("firstName");
-			String lastName = requestParams.get("lastName");
-			String password = requestParams.get("password");
-			String role = "Lecturer";
-			
-			
-			if(password.length() > 1) //If password not keyed in, no update
-			{
+		String id = requestParams.get("id");
+		String firstName = requestParams.get("firstName");
+		String lastName = requestParams.get("lastName");
+		String password = requestParams.get("password");
+		String role = "Lecturer";
+
+		if (password.length() > 1) // If password not keyed in, no update
+		{
 			User user = new User(id, password, role);
 			userService.changeUser(user);
-			}
-			User userTemp = userService.findUser(id);
-			id = userTemp.getUserId();
-			
-			
-			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-			lecturer.setFirstName(firstName);	
-			lecturer.setLastName(lastName);
-			lecturerService.changeLecturer(lecturer);
+		}
+		User userTemp = userService.findUser(id);
+		id = userTemp.getUserId();
 
-			return "redirect:managelecturer";
+		LecturerDetail lecturer = lecturerService.findLecturerById(id);
+		lecturer.setFirstName(firstName);
+		lecturer.setLastName(lastName);
+		lecturerService.changeLecturer(lecturer);
+
+		return "redirect:managelecturer";
 	}
-	//delete lecturer
+
+	// delete lecturer
 	@RequestMapping(value = "/deletelecturer", method = RequestMethod.POST)
 	public String deleteLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-			String id = requestParams.get("deletethis");
-			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-			lecturer.setStatus("Disabled");
-			lecturerService.changeLecturer(lecturer);
-			return "redirect:managelecturer";
+		String id = requestParams.get("deletethis");
+		LecturerDetail lecturer = lecturerService.findLecturerById(id);
+		lecturer.setStatus("Disabled");
+		lecturerService.changeLecturer(lecturer);
+		return "redirect:managelecturer";
 	}
+
 	@RequestMapping(value = "/searchlecturer", method = RequestMethod.GET)
 	public ModelAndView searchLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -314,37 +339,37 @@ public class AdminController
 		ModelAndView mav = new ModelAndView("managelecturer");
 		ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
 		List<LecturerDetail> searchList = new ArrayList<LecturerDetail>();
-		for(LecturerDetail l : lctList)
+		for (LecturerDetail l : lctList)
 		{
-			if (l.getFirstName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			if (l.getFirstName().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if (l.getLastName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if (l.getLastName().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if (l.getLecturerId().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if (l.getLecturerId().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
-			}
-			else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			} else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
 			}
 		}
-		
+
 		mav.addObject("dataList", searchList);
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
-	
-	
-///////////////  ADMIN-COURSE /////////////////////////
+
+////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
 	@RequestMapping(value = "/manage", params = "manage=course", method = RequestMethod.GET)
 	public ModelAndView manage3(Locale locale, Model model)
 	{
