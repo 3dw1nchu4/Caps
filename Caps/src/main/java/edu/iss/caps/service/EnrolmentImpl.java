@@ -7,7 +7,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import edu.iss.caps.model.Course;
 import edu.iss.caps.model.Enrolment;
+import edu.iss.caps.model.StudentDetail;
+import edu.iss.caps.repository.CourseRepository;
 import edu.iss.caps.repository.EnrolmentRepository;
 
 @Service
@@ -15,6 +18,7 @@ public class EnrolmentImpl implements EnrolmentService {
 	
 	@Resource
 	private EnrolmentRepository scRepository;
+	private CourseRepository courseRepository;
 
 
 	public ArrayList<Enrolment> findAllCoursesAttending() {
@@ -39,10 +43,15 @@ public class EnrolmentImpl implements EnrolmentService {
 	@Override
 	public ArrayList<Enrolment> findungraded() {
 		// TODO Auto-generated method stub
-		//return scRepository.findungraded();
-		return null;
+		return scRepository.findungraded();
 	}
 
+	@Override
+	public ArrayList<Enrolment> findcompleted() {
+		// TODO Auto-generated method stub
+		return scRepository.findcompleted();
+	}
+	
 	@Override
 	public List<Enrolment> findstudentbylecturerid(String s) {
 		// TODO Auto-generated method stub
@@ -64,7 +73,7 @@ public class EnrolmentImpl implements EnrolmentService {
 
 
 	@Override
-	public ArrayList<Enrolment> findcompletedbyid(int id) {
+	public List<Enrolment> findcompletedbyid(int id) {
 		// TODO Auto-generated method stub
 		return scRepository.findcompletedbyid(id);
 	}
@@ -75,14 +84,39 @@ public class EnrolmentImpl implements EnrolmentService {
 		// TODO Auto-generated method stub
 		return scRepository.findungraded(s, id);
 	}
-	
+
+	//joe////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@Override
 	public ArrayList<Enrolment> findCourseBySID(String sid){
 		return scRepository.findCourseBySID(sid);
-		}
+	}
 
+////////////////////////////////////////joe//////////////////////////////////////
+	@Override
+	public void createEnrollment(StudentDetail studentDetail, Course course) {
+	Enrolment e = new Enrolment();
+	e.setStudentDetails(studentDetail);
+	e.setStatus("Enrolled");
+//	int a = course.getCurrentEnrollment();
+//	int ce=a+1;
+//	course.setCurrentEnrollment(ce);
+//	 courseRepository.saveAndFlush(course);
+
+	
+	     e.setCourses(course);
+	     
+		 scRepository.saveAndFlush(e);
+//		
+		
+	}
 	@Override
 	public ArrayList<Enrolment> findcompletedgradesbysid(String studentId) {
 		// TODO Auto-generated method stub
 		return scRepository.findcompletedgradesbysid(studentId);
 	}
+
+
+	
+
+
 }
