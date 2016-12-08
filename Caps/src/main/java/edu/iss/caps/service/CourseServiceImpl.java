@@ -44,5 +44,11 @@ public class CourseServiceImpl implements CourseService {
 		// TODO Auto-generated method stub
 		 cr.delete(course);
 	}
+	
+	@Override
+	public ArrayList<Course> findbylecid(String lectureID) {
+		// TODO Auto-generated method stub
+		return cr.findbylecid(lectureID);
+	}
 
 }

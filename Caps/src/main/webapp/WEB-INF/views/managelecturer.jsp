@@ -13,9 +13,26 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
 <!-- jQuery library -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- For dropdown select -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js"></script>
+
+
 <!-- Latest compiled JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -27,6 +44,20 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
+<style>
+#searchclear {
+	position: absolute;
+	right: 20px;
+	top: 0;
+	bottom: 0;
+	height: 14px;
+	margin: auto;
+	font-size: 14px;
+	cursor: pointer;
+	color: #ccc;
+}
+</style>
+
 
 </head>
 <body>
@@ -35,10 +66,10 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a href="javascript:Manage('student')">Manage
+					<li id="sidebarStudent"><a href="managestudent">Manage
 							Students</a></li>
-					<li id="sidebarLecturer"><a
-						href="javascript:Manage('lecturer')">Manage Lecturers</a></li>
+					<li id="sidebarLecturer"><a href="managelecturer">Manage
+							Lecturers</a></li>
 					<li id="sidebarCourse"><a href="javascript:Manage('course')">Manage
 							Courses</a></li>
 					<li id="sidebarEnrolment"><a
@@ -54,39 +85,59 @@
 				<div id="mainbody" style="width: 100%">
 
 					<div class="container" style="width: 100%">
-						<div class="row">
-							<div class="col-xs-1">
-								<label for="search"><h4>Search:</h4> </label>
-							</div>
-							<div class="col-xs-5">
-								<input type="text" id="inputPK" class="form-control"
-									placeholder="Search for something here">
-							</div>
-							<div class="container">
-								<div class="col xs-6">
-									<button class="btn btn-default" style="float: left">Search</button>
+
+						<nav class="navbar navbar-default" role="navigation">
+						<div class="container-fluid">
+							<!--  div class="navbar-header">
+								<a class="navbar-brand" href="#">Search</a>
+							</div>-->
+
+							<form class="navbar-form navbar-left" role="search"
+								action="searchlecturer" method="get">
+								<div class="form-group">
+									<label>Account Status: </label> <select name="accountstatus"
+										id="accountstatus" class="selectpicker">
+										<optgroup label="Account Status">
+											<option value="active">Active</option>
+											<option value="disabled">Disabled</option>
+											<option value="all">All</option>
+										</optgroup>
+									</select>
 								</div>
-								<div class="col xs-6"></div>
-							</div>
-							<div class="container">
-								<button class="btn btn-success" style="float: left"
+
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Search"
+										name="searchcontent" id="searchcontent">
+
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-default">Search</button>
+								<button type="button" class="btn btn-success"
 									onclick="EditRecord('create')">
 									<span class="glyphicon glyphicon-plus"></span><span>
-										Creates</span>
+										Create New</span>
 								</button>
-							</div>
+							</form>
 						</div>
+						</nav>
+
+
+						<div class="container"></div>
 					</div>
 
-					<div class="table-responsive">
+					<div id="searchcount" name="searchcount" style="display:none"><h5> Your search returned ${dataList.size() } results</h5></div>
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th id="tableheader1">#</th>
-									<th>Header</th>
-									<th>Header</th>
-									<th>Header</th>
-									<th></th>
+									<th id="tableheader1"><h4>#</h4></th>
+									<th><h4>First Name</h4></th>
+									<th><h4>Last Name</h4></th>
+									<th><h4>Status</h4></th>
+									<th><h4></h4></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -95,7 +146,7 @@
 										<td>${object.lecturerId}</td>
 										<td>${object.firstName}</td>
 										<td>${object.lastName}</td>
-
+										<td>${object.status}</td>
 										<td><button class="btn btn-primary"
 												onclick="EditRecord('${object.lecturerId}')">Edit</button>
 											<button class="btn btn-danger"
@@ -108,32 +159,36 @@
 					</div>
 				</div>
 				<div id="editcontent" style="display: none">
-					<form id="formEditRecord" method="get">
+					<form id="formEditRecord" method="post">
 						<h2 class="form-signin-heading">Edit Record</h2>
 						<div style="width: 40%">
-							<label for="id">Lecturer ID: </label> 
-							<input type="text" id="id" name="id"
-								class="form-control" value="${data.lecturerId }"
+							<label for="id">Lecturer ID: </label> <input type="text" id="id"
+								name="id" class="form-control" value="${data.lecturerId }"
 								placeholder="Unique ID" required autofocus>
 						</div>
 						<div style="width: 40%">
-							<label for="firstName">First Name: </label> 
-							<input type="text"
-								id="firstName" name="firstName" class="form-control" placeholder="First Name"
-								value="${data.firstName }" required autofocus>
+							<label for="firstName">First Name: </label> <input type="text"
+								id="firstName" name="firstName" class="form-control"
+								placeholder="First Name" value="${data.firstName }" required
+								autofocus>
 						</div>
 						<div style="width: 40%">
-							<label for="lastName">Last Name: </label> 
-							<input type="text"
-								id="lastName" name="lastname" class="form-control" placeholder="Last Name"
-								value="${data.lastName }" required autofocus>
+							<label for="lastName">Last Name: </label> <input type="text"
+								id="lastName" name="lastName" class="form-control"
+								placeholder="Last Name" value="${data.lastName }" required
+								autofocus>
+						</div>
+						<div style="width: 40%">
+							<label for="password">Password: </label> <input type="text"
+								id="password" name="password" class="form-control"
+								placeholder="User password" value="" autofocus>
 						</div>
 						<br> <br>
 						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
 						<button class="btn btn-danger" onclick="BackToPrevious()">Cancel
-							and Return to Previous</button>
+						</button>
 					</form>
 				</div>
 			</div>
@@ -194,14 +249,20 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Confirm Deletion</h4>
 				</div>
-				<div class="modal-body">
-					<p>The selected entry will be permanently deleted.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="button" class="btn btn-danger">Delete</button>
+				<form action="deletelecturer" method="post">
+					<div class="modal-body">
 
-				</div>
+						<p>The selected entry will be permanently deleted.</p>
+						<input id="deletethis" name="deletethis" class="form-control"
+							placeholder="Last Name" value="" required />
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button id="deletebtn" name="deletebtn" type="submit"
+							class="btn btn-danger">Delete</button>
+					</div>
+				</form>
+
 			</div>
 
 		</div>
@@ -220,8 +281,22 @@
 		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
 	});
 
+	$(document).ready(function() {
+	    $('.selectpicker').selectpicker();
+	});
+	
+	//clears search content when clicking X
+	$("#searchclear").click(function(){
+	    $("#searchcontent").val('');
+	});
+	
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
 
-	var url = window.location.search;
+
+	var url = window.location.href;
 
 	var qs = (function(a)
 	{
@@ -244,44 +319,47 @@
 
 	try
 	{
-		if (qs['manage'] == "student")
+		if (url.includes("student"))
 		{
 			document.getElementById("sidebarStudent").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Student ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Student Records";
 	
-		} else if (qs['manage'] == "lecturer")
+		} else if (url.includes("lecturer"))
 		{
 			document.getElementById("sidebarLecturer").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Lecturer ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Lecturer Records";
 	
-		} else if (qs['manage'] == "course")
+		} else if (url.includes("course"))
 		{
 			document.getElementById("sidebarCourse").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Course ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Course Records";
 	
-		} else if (qs['manage'] == "enrolment")
+		} else if (url.includes("enrolment"))
 		{
 			document.getElementById("sidebarEnrolment").className = "active";
 			document.getElementById("tableheader1").innerHTML = "Enrolment ID";
 			document.getElementById("sectiontitle").innerHTML = "Manage Enrolment Records";
 	
-		} else
-		{
-			$('#redirectModal').modal('toggle');
-			window.setTimeout(function()
-			{
-				window.location = "adminmgt.jsp?manage=student&userrole="
-						+ qs['userrole'];
-			}, 3000);
-		}
+		} 
+
 	}
 	catch (err)
 	{
 		console.log("no query string");
 		RedirectToLogin();
+	}
+	
+	if (qs['searchcontent'] != null)
+	{
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
+	}
+	if (qs['accountstatus'] != null)
+	{
+		document.getElementById("accountstatus").value = qs['accountstatus'];
 	}
 	
 	
@@ -293,18 +371,18 @@
 		if (qs['id'] !="create")
 		{
 			document.getElementById("id").readOnly = true;
-			document.getElementById("formEditRecord").action = "updateLecturer";
+			document.getElementById("formEditRecord").action = "updatelecturer";
 			document.getElementById("submitbutton").innerHTML = "Update Record";
 		} else
 		{
-			document.getElementById("formEditRecord").action = "createLecturer";
+			document.getElementById("formEditRecord").action = "createlecturer";
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
 		}
 	}
 
 	function EditRecord(id) //Edit button
 	{
-		window.location.href = window.location.href + '&id='+id;
+		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer?id="+id;
 	}
 
 	function Manage(recordtype)
@@ -315,8 +393,7 @@
 	
 	function BackToPrevious()
 	{
-		var previous = qs['manage'];
-		Manage(previous);
+		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer";
 	}
 	
 	function RedirectToLogin()
@@ -330,8 +407,14 @@
 	
 	function DeleteRecord(id)
 	{
+		//Attaches correct delete event to button
+		console.log("event attached");
+		
+		document.getElementById("deletethis").value = id;
 		$('#deleteModal').modal('toggle');
 	}
+	
+
 	
 </script>
 </html>

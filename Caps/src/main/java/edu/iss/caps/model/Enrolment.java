@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import edu.iss.caps.model.*;
 
 @Entity
 @Table(name = "Enrolments")
@@ -62,11 +63,11 @@ public class Enrolment {
 		this.grade = grade;
 	}
 
-	public int getEarnedCredit() {
+	public Integer getEarnedCredit() {
 		return earnedCredit;
 	}
 
-	public void setEarnedCredit(int earnedCredit) {
+	public void setEarnedCredit(Integer earnedCredit) {
 		this.earnedCredit = earnedCredit;
 	}
 
@@ -116,12 +117,6 @@ public class Enrolment {
 
 
 
-	public void setEarnedCredit(Integer earnedCredit) {
-		this.earnedCredit = earnedCredit;
-	}
-
-
-
 
 	
 
@@ -154,20 +149,10 @@ public class Enrolment {
 	}
 
 
-
-
 	@Override
 	public String toString() {
 		return "Enrolment [enrolmentId=" + enrolmentId + ", grade=" + grade + ", earnedCredit=" + earnedCredit
 				+ ", status=" + status + ", courses=" + courses + ", studentDetails=" + studentDetails.toString() + "]";
 	}
-
-	
-	
-
-
-
-
-	
-	
+		
 }

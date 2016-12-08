@@ -31,6 +31,8 @@ public class Course {
 	private int currentEnrollment;
 	@Column(name="Size")
 	private int size;
+	@Column(name="Status")
+	private String status;
 
 
 	@OneToOne
@@ -122,6 +124,20 @@ public class Course {
 		this.size = size;
 	}
 	
+	
+	
+	public String getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -149,7 +165,7 @@ public class Course {
 	public String toString() {
 		return "Course [courseId=" + courseId + ", courseName=" + courseName + ", credits=" + credits + ", startDate="
 				+ startDate + ", endDate=" + endDate + ", currentEnrollment=" + currentEnrollment + ", size=" + size
-				+ ", lecturerDetails=" + lecturerDetails.toString() + "]";
+				+ ", lecturerDetails=" + lecturerDetails.toString() + "status=" + status + "]";
 	}
 	
 }

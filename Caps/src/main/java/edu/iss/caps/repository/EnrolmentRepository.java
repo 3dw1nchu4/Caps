@@ -1,6 +1,10 @@
 package edu.iss.caps.repository;
 
+import java.util.ArrayList;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import edu.iss.caps.model.Enrolment;
 
@@ -23,5 +27,13 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer>{
 	@Query(value="delete from enrolment c where c.studentid = ?1 AND c.courseid = ?2")
 	void deleteCoursebyStudentID(String StudentID, int courseid);*/
 	
+	@Query("SELECT sc from Enrolment sc WHERE sc.courses.lecturerDetails.lecturerId = :lid " )
+	ArrayList<Enrolment> findstudentbylecturerid(@Param("lid") String lid);
+	
+	@Query("SELECT sc from Enrolment sc WHERE sc.courses.courseId = :sid AND sc.courses.lecturerDetails.lecturerId = :lid")
+	ArrayList<Enrolment> findbycid(@Param("sid") int courseId,@Param("lid") String LecId );
+	
+	@Query("SELECT w FROM Enrolment w WHERE w.grade is null")
+	ArrayList<Enrolment> findungraded();
 	
 }

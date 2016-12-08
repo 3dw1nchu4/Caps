@@ -15,4 +15,6 @@ public interface CourseService {
 	Course changeCourse(Course course);
 
 	void removeCourse(Course course);
+	
+	ArrayList<Course> findbylecid(String lectureID);
 }
