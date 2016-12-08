@@ -26,7 +26,7 @@ public class CommonController {
 	@Autowired
 	UserService uService;
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "login", method = RequestMethod.GET)
 	public String logic(Model model) {
 		model.addAttribute("user", new User());
 		return "login";
@@ -44,6 +44,7 @@ public class CommonController {
 				break;
 		case "Lecturer": mav=new ModelAndView("redirect:/Lec/byid");
 				break;
+		case "Student": mav=new ModelAndView("redirect:/Course/listall");
 		}
 		return mav;
 	}
