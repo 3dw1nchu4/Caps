@@ -19,11 +19,11 @@ public interface EnrolmentService {
 	
 	Enrolment updateEnrolment(Enrolment e);
 
-	List<Enrolment> findcompletedbyid(int id);
+	ArrayList<Enrolment> findcompletedgradesbysid(String studentId);
 
 	List<Enrolment> findungraded(String s, int id);
 
-	ArrayList<Enrolment> findcompleted();
+	ArrayList<Enrolment> findcompletedbyid(int cid);
 
 	ArrayList<Enrolment> findbycid(int courseId);
 	
