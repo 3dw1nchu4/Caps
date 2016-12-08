@@ -1,3 +1,18 @@
+
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<title>Lecturer</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -9,7 +24,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradethem</title>
+<title>coursestograde</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -27,8 +42,6 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
-		<%@ taglib prefix="form"
-					uri="http://www.springframework.org/tags/form"%>
 
 </head>
 <body>
@@ -41,12 +54,12 @@
 						href="${pageContext.request.contextPath}/Lec/byid">View Course
 							Taught </a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewallenrole">View Course
-							Enrolement </a></li>
+						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
+							Course Enrolement </a></li>
 					<li class="active" id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
-							a course </a></li>
-					<li id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a
+							course </a></li>
+					<li  id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
 							Student Preformance </a></li>
 				</ul>
@@ -56,7 +69,8 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle"></h2>
+				<h2 class="sub-header" id="sectiontitle">Section title(displaying only the courses u teach)</h2>
+
 
 
 				<div class="container" style="width: 100%">
@@ -65,18 +79,20 @@
 							<label for="search"><h4>Search:</h4> </label>
 						</div>
 						<div class="col-xs-5">
-							<input type="text" id="inputPK" class="form-control"
-								placeholder="Search for something here">
+							<input type="number" id="inputPK" class="form-control"
+								placeholder="Search by course ID (not imp)">
 						</div>
 						<div class="col xs-6">
-							<a class="btn btn-success"
-								href="${pageContext.request.contextPath}/Lec/enrole"><spring:message
-									code="Search" /></a>
+							<input type="submit" class="btn btn-success" value="Search"
+								onclick="search()" class="btn"> 
 						</div>
 					</div>
 				</div>
 				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
 	Employee</a>-->
+				<%@ taglib prefix="form"
+					uri="http://www.springframework.org/tags/form"%>
+					<%@ page import="java.io.*,java.util.*" %>
 
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
@@ -84,79 +100,49 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
+										<th><spring:message code="fieldLabel.courseid" /></th>
 
-										<th><spring:message code="fieldLabel.Studentid" /></th>
-										<th><spring:message code="fieldLabel.name" /></th>
 										<th><spring:message code="fieldLabel.coursename" /></th>
-										<th><spring:message code="fieldLabel.grade" /></th>
-										<th><spring:message code="fieldLabel.operation" /></th>
+										<th><spring:message code="fieldLabel.credits" /></th>
+										<th><spring:message code="fieldLabel.cenroll" /></th>
+
+
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="role" items="${Enlist}">
 										<tr class="listRecord">
-											<td>${role.studentDetails.studentId}</td>
-											<td>${role.studentDetails.firstName}
-												${role.studentDetails.lastName}</td>
-											<td>${role.courses.courseName}</td>
-											
-											
-											<td>
-											<form:form  name="grade" action="update?sd=${role.studentDetails.studentId}&couid=${role.courses.courseId}&enid=${role.enrolmentId}" >
-											<select name ="glist">
-													<option>--NA--</option>
-													<option value="A">A</option>
-													<option>B</option>
-													<option>C</option>
-													<option>D</option>
-													<option>E</option>
-													<option>F</option>
-											</select>
-											<input  type="submit" name = "submit">
-											</form:form>
-											</td>
-											
-										
+											<td>${role.courseId}</td>
+											<td>${role.courseName}</td>
+											<td>${role.credits}</td>
+										<td>	${role.currentEnrollment}</td>
+
+											<td align="center"><a class="btn btn-primary"
+												href="${pageContext.request.contextPath}/Lec/grade/${role.courseId}">Grade</a></td>
+										</tr>
+
+
+
 										</tr>
 
 									</c:forEach>
 								</tbody>
 							</table>
+						</div>
+
 					</c:when>
 
 					<c:otherwise>
 
 
-						<spring:message code="error.notfound" />
+						<spring:message code="error.notfoundall" />
 
 					</c:otherwise>
 
 				</c:choose>
 			</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		</div>
-
-	</div>
 	</div>
 	</div>
 
@@ -173,5 +159,13 @@
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
+
+	function search() {
+		var x = document.getElementById("inputPK").value;
+		window.location = "${pageContext.request.contextPath}/Lec/viewalltograde/"
+				+ x;
+	}
 </script>
 </html>
+
+

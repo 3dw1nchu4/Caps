@@ -50,125 +50,119 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li  id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/byid">View Course Taught
-							</a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/enrole">View Course Enrolement
-							</a></li><li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/grade">Grade a course
-							</a></li><li class="active" id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewsp">View a Student Preformance
-							</a></li>
+						href="${pageContext.request.contextPath}/Lec/byid">View Course
+							Taught </a></li>
+					<li id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
+							Course Enrolement </a></li>
+					<li id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a
+							course </a></li>
+					<li class="active" id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
+							Student Preformance </a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
-				<!-- 
-				<div class="row placeholders">
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-				</div>
--->
+			
 
 
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
 
 
-				
-<div class="container" style="width: 100%">
-	<div class="row">
-		<div class="col-xs-1">
-			<label for="search"><h4>Search:</h4> </label>
-		</div>
-		<div class="col-xs-5">
-			<input type="text" id="inputPK" class="form-control"
-				placeholder="Search for something here">
-		</div>
-		<div class="col xs-6">
-		<a class="btn btn-success"
-						href="${pageContext.request.contextPath}/Lec/all"><spring:message
-								code="Search"  /></a>
+
+				<div class="container" style="width: 100%">
+					<div class="row">
+						<div class="col-xs-1">
+							<label for="search"><h4>Search:</h4> </label>
+						</div>
+						<div class="col-xs-5">
+							<input type="text" id="inputPK" class="form-control"
+								placeholder="Search by name (trying to implement)">
+						</div>
+						<div class="col xs-6">
+							<a class="btn btn-success"
+								href="${pageContext.request.contextPath}/Lec/viewsp"><spring:message
+									code="Search" /></a>
+										<a class="btn btn-success"
+								href="${pageContext.request.contextPath}/Lec/viewallcr">
+									<span class="glyphicon glyphicon-arrow-left"></span> back to All courses</a>
+						</div>
+					</div>
+				</div>
+				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
+	Employee</a>-->
+				<%@ taglib prefix="form"
+					uri="http://www.springframework.org/tags/form"%>
+
+				<c:choose>
+					<c:when test="${fn:length(Enlist) gt 0}">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+
+										<th><spring:message code="fieldLabel.name" /></th>
+
+										
+										<th><spring:message code="fieldLabel.grade" /></th>
+										<th><spring:message code="fieldLabel.earncredit" /></th>
+										<th><spring:message code="fieldLabel.gpa" /></th>
+
+										<th><spring:message code="fieldLabel.status" /></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="role" items="${Enlist}">
+										<tr class="listRecord">
+
+											<td>${role.studentDetails.firstName}
+												${role.studentDetails.lastName}</td>
+
+
+										
+											<td>${role.grade}</td>
+											<td>${role.earnedCredit}</td>
+											<td>0</td>
+											<td align="center"><c:set var="sta" scope="session"
+													value="${role.status}" /> <c:choose>
+													<c:when test="${sta=='Failed'}">
+														<p class="btn btn-danger">
+															<spring:message code="${role.status}" />
+														</p>
+													</c:when>
+													<c:when test="${sta=='Passed'}">
+														<p class="btn btn-success">
+															<spring:message code="${role.status}" />
+														</p>
+													</c:when>
+
+												</c:choose></td>
+										</tr>
+
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+
+					</c:when>
+
+					<c:otherwise>
+
+						<spring:message code="error.notfoundhere" />
+
+					</c:otherwise>
+
+				</c:choose>
+			</div>
+
 		</div>
 	</div>
-</div>
-<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
-	Employee</a>-->
-
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-
-<div class="table-responsive">
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th><spring:message code="fieldLabel.courseid" /></th>
-				<th><spring:message code="fieldLabel.coursename" /></th>
-				<th><spring:message code="fieldLabel.lectureid" /></th>
-				<th><spring:message code="fieldLabel.credits" /></th>
-				<th><spring:message code="fieldLabel.startdate" /></th>
-				<th><spring:message code="fieldLabel.enddate" /></th>
-				<th><spring:message code="fieldLabel.size" /></th>
-				<th><spring:message code="fieldLabel.cenroll" /></th>
-
-
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="employee" items="${list}">
-				<tr class="listRecord">
-					<td>${employee.courseId}</td>
-					<td>${employee.courseName}</td>
-					<td>${employee.lecturerDetails.lecturerId}</td>
-					<td>${employee.credits}</td>
-					<td>${employee.startDate}</td>
-					<td>${employee.endDate}</td>
-					<td>${employee.size}</td>
-			
-					<td align="center"><a class="btn btn-primary"
-						href="${pageContext.request.contextPath}/Lec/enrole/${employee.courseId}"><spring:message
-								code="${employee.currentEnrollment}"  /><br>( view all )</a></td>
-				</tr>
-
-			</c:forEach>
-		</tbody>
-	</table>
-</div>
-
-</div>
-</div>
-</div>
+	</div>
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -177,14 +171,12 @@
 
 </body>
 <script>
-	$(function()
-	{
-		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
-		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+	$(function() {
+		$("#header").load(
+				"${pageContext.request.contextPath}/resources/header.html");
+		$("#footer").load(
+				"${pageContext.request.contextPath}/resources/footer.html");
 	});
-
-
-
 </script>
 </html>
 

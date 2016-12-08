@@ -1,6 +1,7 @@
 package edu.iss.caps.repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,10 +31,23 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer>{
 	@Query("SELECT sc from Enrolment sc WHERE sc.courses.lecturerDetails.lecturerId = :lid " )
 	ArrayList<Enrolment> findstudentbylecturerid(@Param("lid") String lid);
 	
-	@Query("SELECT sc from Enrolment sc WHERE sc.courses.courseId = :sid AND sc.courses.lecturerDetails.lecturerId = :lid")
-	ArrayList<Enrolment> findbycid(@Param("sid") int courseId,@Param("lid") String LecId );
+	@Query("SELECT sc from Enrolment sc WHERE sc.courses.courseId = :sid ")
+	ArrayList<Enrolment> findbycid(@Param("sid") int courseId );
 	
-	@Query("SELECT w FROM Enrolment w WHERE w.grade is null")
-	ArrayList<Enrolment> findungraded();
+	@Query("SELECT w FROM Enrolment w WHERE w.grade is null AND( w.courses.lecturerDetails.lecturerId = :lid AND w.courses.courseId = :cid)")
+	ArrayList<Enrolment> findungraded(@Param("lid") String LecId,@Param("cid") int id);
+	
+	@Query("SELECT w FROM Enrolment w WHERE w.grade is not null")
+	ArrayList<Enrolment> findcompleted();
+
+	@Query("SELECT w FROM Enrolment w WHERE w.grade is not null AND w.courses.courseId = :lid ")
+	List<Enrolment> findcompletedbyid(@Param("lid") int cid);
+	
+	
+	
+	
+	
+	
+	
 	
 }

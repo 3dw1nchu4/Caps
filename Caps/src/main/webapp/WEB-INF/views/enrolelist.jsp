@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title></title>
+<title>viewenrole</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -35,27 +35,27 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li  id="sidebarStudent"><a
+					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/byid">View Course
 							Taught </a></li>
 					<li class="active" id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/enrole">View
+						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/grade">Grade a
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a
 							course </a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewsp">View a
+						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
 							Student Preformance </a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
-				
+
 
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
-		
+
 
 
 
@@ -77,8 +77,11 @@
 						<div class="col xs-6">
 
 
-							<input type="submit" class="btn btn-success" value="OK"
+							<input type="submit" class="btn btn-success" value="Search"
 								onclick="search()" class="btn">
+								<a class="btn btn-success"
+								href="${pageContext.request.contextPath}/Lec/viewallenrole">
+									<span class="glyphicon glyphicon-arrow-left"></span> back to All courses</a>
 						</div>
 					</div>
 				</div>
@@ -90,29 +93,42 @@
 					uri="http://www.springframework.org/tags/form"%>
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
+					
 						<div class="table-responsive">
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th><spring:message code="fieldLabel.courseid" /></th>
-										<th><spring:message code="fieldLabel.firstname" /></th>
-										<th><spring:message code="fieldLabel.lastname" /></th>
-										<th><spring:message code="fieldLabel.coursename" /></th>
-										<th><spring:message code="fieldLabel.grade" /></th>
-										<th><spring:message code="fieldLabel.earncredit" /></th>
+									
+										<th><spring:message code="fieldLabel.Studentid" /></th>
+
+										<th><spring:message code="fieldLabel.name" /></th>
+										<th><spring:message code="fieldLabel.endate" /></th>
+										<th><spring:message code="fieldLabel.status" /></th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="role" items="${Enlist}">
 										<tr class="listRecord">
-											<td>${role.courses.courseId}</td>
-											<td>${role.studentDetails.firstName}</td>
-											<td>${role.studentDetails.lastName}</td>
+											<td>${role.studentDetails.studentId}</td>
+											<td>${role.studentDetails.firstName}
+												${role.studentDetails.lastName}</td>
+												<td>${role.studentDetails.enrolmentDate}</td>
+												<td align="center"><c:set var="sta" scope="session"
+													value="${role.studentDetails.status}" /> <c:choose>
+													<c:when test="${sta=='Disabled'}">
+														<p class="btn btn-danger">
+															<spring:message code="${role.studentDetails.status}" />
+														</p>
+													</c:when>
+													<c:when test="${sta=='Active'}">
+														<p class="btn btn-success">
+															<spring:message code="${role.studentDetails.status}" />
+														</p>
+													</c:when>
 
-											<td>${role.courses.courseName}</td>
-											<td>${role.grade}</td>
-											<td>${role.earnedCredit}</td>
+												</c:choose></td>
+												
 										</tr>
 
 									</c:forEach>

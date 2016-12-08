@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import edu.iss.caps.model.*;
+import edu.iss.caps.service.StudentService;
 
 @Entity
 @Table(name = "Enrolments")
@@ -155,4 +156,6 @@ public class Enrolment {
 				+ ", status=" + status + ", courses=" + courses + ", studentDetails=" + studentDetails.toString() + "]";
 	}
 		
+
+	
 }
