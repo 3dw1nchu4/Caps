@@ -21,7 +21,7 @@ public interface EnrolmentService {
 	
 	Enrolment updateEnrolment(Enrolment e);
 
-	List<Enrolment> findcompletedbyid(int id);
+	ArrayList<Enrolment> findcompletedbyid(int id);
 
 	List<Enrolment> findungraded(String s, int id);
 
@@ -31,6 +31,9 @@ public interface EnrolmentService {
 
 	List<Enrolment> findCourseBySID(String s);
 
+
 	void createEnrollment(StudentDetail studentDetail, Course c);
+
+	ArrayList<Enrolment> findcompletedgradesbysid(String studentId);
 
 }
