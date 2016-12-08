@@ -3,7 +3,9 @@ package edu.iss.caps.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.iss.caps.model.Course;
 import edu.iss.caps.model.Enrolment;
+import edu.iss.caps.model.StudentDetail;
 
 public interface EnrolmentService {
 
@@ -19,14 +21,16 @@ public interface EnrolmentService {
 	
 	Enrolment updateEnrolment(Enrolment e);
 
-	ArrayList<Enrolment> findcompletedgradesbysid(String studentId);
+	List<Enrolment> findcompletedbyid(int id);
 
 	List<Enrolment> findungraded(String s, int id);
 
-	ArrayList<Enrolment> findcompletedbyid(int cid);
+	ArrayList<Enrolment> findcompleted();
 
 	ArrayList<Enrolment> findbycid(int courseId);
-	
-	ArrayList<Enrolment> findCourseBySID(String sid);
+
+	List<Enrolment> findCourseBySID(String s);
+
+	void createEnrollment(StudentDetail studentDetail, Course c);
 
 }
