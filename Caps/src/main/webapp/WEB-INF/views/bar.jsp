@@ -1,9 +1,6 @@
 
 
 
-
-
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -90,33 +87,23 @@
 </div>
 
 
+	<h2>Your enrollment status : </h2> 
+	
+	<h1 class="text-danger">"${sessionScope.message}"</h1>	 
+
+<div class="col xs-6">
+		<a class="btn btn-primary"
+						href="${pageContext.request.contextPath}/Course/a"><spring:message
+								code="go back Enrolling for another Course"  /></a>
+		</div>
+
+				
+				<div class="clearfix"></div>
+		
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 
-<div class="table-responsive">
-	<table class="table table-striped">
-		<thead>
-				<tr>
-				<th><spring:message code="fieldLabel.courseid" /></th>
-				<th><spring:message code="fieldLabel.coursename" /></th>
-				<th><spring:message code="fieldLabel.grade" /></th>
-				<th><spring:message code="fieldLabel.earncredit" /></th>
-
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach var="role" items="${grlist}">
-				<tr class="listgrades">
-					<td>${role.courses.courseId}</td>
-					<td>${role.courses.courseName}</td>
-					<td>${role.grade}</td>
-					<td>${role.earnedCredit}</td>
-				</tr>
-
-			</c:forEach>		</tbody>
-	</table>
-</div>
 
 </div>
 </div>
@@ -129,12 +116,6 @@
 
 </body>
 <script>
-	function search() {
-		var x = document.getElementById("se").value;
-		window.location = "${pageContext.request.contextPath}/Lec/list-grade/" + x;
-	}
-</script>
-<script>
 	$(function()
 	{
 		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
@@ -145,13 +126,3 @@
 
 </script>
 </html>
-
-
-
-
-
-
-
-
-
-

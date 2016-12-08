@@ -1,9 +1,3 @@
-
-
-
-
-
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -97,24 +91,38 @@
 <div class="table-responsive">
 	<table class="table table-striped">
 		<thead>
-				<tr>
-				<th><spring:message code="fieldLabel.courseid" /></th>
-				<th><spring:message code="fieldLabel.coursename" /></th>
-				<th><spring:message code="fieldLabel.grade" /></th>
-				<th><spring:message code="fieldLabel.earncredit" /></th>
-
+				<tr class="listHeading">
+				<th>courseId</th>
+				<th>lecture name</th>
+				<th>startDate</th>
+				<th>endDate</th>
+				<th>credit</th>
+				<th>size</th>
+				<th>currentEnrollment</th>
+				
+				<th>enrolling for</th>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach var="role" items="${grlist}">
-				<tr class="listgrades">
-					<td>${role.courses.courseId}</td>
-					<td>${role.courses.courseName}</td>
-					<td>${role.grade}</td>
-					<td>${role.earnedCredit}</td>
+			<c:forEach var="c" items="${courseavailable}">
+				<tr class="listRecord">
+					<td>${c.courseId}</td>
+					<td>${c.lecturerDetails.firstName} ${ c.lecturerDetails.lastName}</td>
+					<td>${c.startDate}</td>
+					<td>${c.endDate}</td>
+					<td>${c.credits}</td>
+					<td>${c.size}</td>
+					<td>${c.currentEnrollment}</td>
+					
+					
+				    <td><div class="col xs-6">
+		            <a class="btn btn-Danger"
+						href="${pageContext.request.contextPath}/Course/enrol/${c.courseId}"><spring:message
+								code="enrolling"  /></a></div></td>
+				
 				</tr>
-
-			</c:forEach>		</tbody>
+			</c:forEach>
+		</tbody>
 	</table>
 </div>
 
@@ -128,12 +136,6 @@
 	</footer>
 
 </body>
-<script>
-	function search() {
-		var x = document.getElementById("se").value;
-		window.location = "${pageContext.request.contextPath}/Lec/list-grade/" + x;
-	}
-</script>
 <script>
 	$(function()
 	{

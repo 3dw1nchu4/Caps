@@ -1,9 +1,4 @@
 
-
-
-
-
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -54,12 +49,12 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a
+					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/listall">view all courses
 							</a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/grade">Grade a course
-							</a></li><li class="active" id="sidebarStudent"><a
+							</a></li><li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/a">enrollment
 							</a></li>
 				</ul>
@@ -97,24 +92,35 @@
 <div class="table-responsive">
 	<table class="table table-striped">
 		<thead>
-				<tr>
-				<th><spring:message code="fieldLabel.courseid" /></th>
+			<tr>
+			
+			    <th><spring:message code="fieldLabel.courseid" /></th>
 				<th><spring:message code="fieldLabel.coursename" /></th>
-				<th><spring:message code="fieldLabel.grade" /></th>
-				<th><spring:message code="fieldLabel.earncredit" /></th>
+			
+				<th><spring:message code="fieldLabel.credits" /></th>
+				<th><spring:message code="fieldLabel.startdate" /></th>
+				<th><spring:message code="fieldLabel.enddate" /></th>
+				<th><spring:message code="fieldLabel.size" /></th>
+				<th>currentEnrollment</th>
+
 
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach var="role" items="${grlist}">
-				<tr class="listgrades">
-					<td>${role.courses.courseId}</td>
-					<td>${role.courses.courseName}</td>
-					<td>${role.grade}</td>
-					<td>${role.earnedCredit}</td>
+			<c:forEach var="course" items="${courselist}">
+				<tr class="listRecord">
+					<td>${course.courseId}</td>
+					<td>${course.lecturerDetails.firstName} ${ course.lecturerDetails.lastName}</td>
+					<td>${course.startDate}</td>
+					<td>${course.endDate}</td>
+					<td>${course.credits}</td>
+					<td>${course.size}</td>
+					<td>${course.currentEnrollment}</td>
+					
 				</tr>
 
-			</c:forEach>		</tbody>
+			</c:forEach>
+		</tbody>
 	</table>
 </div>
 
@@ -129,12 +135,6 @@
 
 </body>
 <script>
-	function search() {
-		var x = document.getElementById("se").value;
-		window.location = "${pageContext.request.contextPath}/Lec/list-grade/" + x;
-	}
-</script>
-<script>
 	$(function()
 	{
 		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
@@ -145,13 +145,6 @@
 
 </script>
 </html>
-
-
-
-
-
-
-
 
 
 
