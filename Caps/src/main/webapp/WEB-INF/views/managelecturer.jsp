@@ -156,7 +156,7 @@
 
 							</tbody>
 						</table>
-					</div>
+					
 				</div>
 				<div id="editcontent" style="display: none">
 					<form id="formEditRecord" method="post">
