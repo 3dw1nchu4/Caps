@@ -370,7 +370,7 @@ public class AdminController
 	}
 
 ////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
-	@RequestMapping(value = "/manage", params = "manage=course", method = RequestMethod.GET)
+	@RequestMapping(value = "/managecourse", method = RequestMethod.GET)
 	public ModelAndView manage3(Locale locale, Model model)
 	{
 		ModelAndView mav = new ModelAndView("managecourse");
@@ -379,7 +379,7 @@ public class AdminController
 		return mav;
 	}
 
-	@RequestMapping(value = "/manage", params = "manage=enrolment", method = RequestMethod.GET)
+	@RequestMapping(value = "/manageenrolment", params = "manage=enrolment", method = RequestMethod.GET)
 	public ModelAndView manage4(Locale locale, Model model)
 	{
 		ModelAndView mav = new ModelAndView("manageenrolment");
