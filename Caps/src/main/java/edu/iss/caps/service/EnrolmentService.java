@@ -26,5 +26,7 @@ public interface EnrolmentService {
 	ArrayList<Enrolment> findcompleted();
 
 	ArrayList<Enrolment> findbycid(int courseId);
+	
+	ArrayList<Enrolment> findCourseBySID(String sid);
 
 }
