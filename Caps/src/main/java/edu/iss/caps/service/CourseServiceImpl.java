@@ -82,9 +82,22 @@ public class CourseServiceImpl implements CourseService {
 		
 		return sta;
 	}
+
 	public ArrayList<Course> findbynotcop(String studentId){
 		return cr.findbynotcop(studentId);
 	}
+	@Override
+	public void increasecourseEnrolment( Course course) {
+		
+		int a = course.getCurrentEnrollment();
+		int ce=a+1;
+		course.setCurrentEnrollment(ce);
+	    cr.saveAndFlush(course);
+
+	
+			
+		}
+
 
 
 
