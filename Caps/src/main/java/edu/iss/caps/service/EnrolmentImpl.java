@@ -47,7 +47,7 @@ public class EnrolmentImpl implements EnrolmentService {
 	}
 
 	@Override
-	public ArrayList<Enrolment> findcompleted() {
+	public ArrayList<Enrolment> findcompleted(int id) {
 		// TODO Auto-generated method stub
 		return scRepository.findcompleted();
 	}

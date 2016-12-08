@@ -21,11 +21,11 @@ public interface EnrolmentService {
 	
 	Enrolment updateEnrolment(Enrolment e);
 
-	ArrayList<Enrolment> findcompletedbyid(int id);
-
 	List<Enrolment> findungraded(String s, int id);
 
 	ArrayList<Enrolment> findcompleted();
+
+	ArrayList<Enrolment> findcompletedbyid(int cid);
 
 	ArrayList<Enrolment> findbycid(int courseId);
 
@@ -35,5 +35,8 @@ public interface EnrolmentService {
 	void createEnrollment(StudentDetail studentDetail, Course c);
 
 	ArrayList<Enrolment> findcompletedgradesbysid(String studentId);
+
+	ArrayList<Enrolment> findcompleted(int id);
+	
 
 }
