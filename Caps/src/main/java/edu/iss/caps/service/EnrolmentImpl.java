@@ -29,21 +29,44 @@ public class EnrolmentImpl implements EnrolmentService {
 		return scRepository.findbycid(courseId);
 	}
 	
-
-
-
+	
 	@Override
-	public List<Enrolment> findstudentbylecturerid(String s) {
+	public ArrayList<Enrolment> findbycid(int courseId , String lecid) {
 		// TODO Auto-generated method stub
-		return scRepository.findstudentbylecturerid(s);
+		return scRepository.findbycid(courseId,lecid);
+	}
+	
+	@Override
+	public ArrayList<Enrolment> findungraded() {
+		// TODO Auto-generated method stub
+		return scRepository.findungraded();
 	}
 
-	
 	@Override
 	public ArrayList<Enrolment> findcompleted() {
 		// TODO Auto-generated method stub
 		return scRepository.findcompleted();
 	}
+	
+	@Override
+	public List<Enrolment> findstudentbylecturerid(String s) {
+		// TODO Auto-generated method stub
+		return scRepository.findstudentbylecturerid(s);
+	}
+	
+
+	@Override
+	public Enrolment findbyEnrolmentId(int id)
+	{
+		return scRepository.getOne(id);
+	}
+
+	@Override
+	public Enrolment updateEnrolment(Enrolment e)
+	{
+		return scRepository.saveAndFlush(e);
+	}
+
 
 	@Override
 	public List<Enrolment> findcompletedbyid(int id) {
@@ -58,9 +81,7 @@ public class EnrolmentImpl implements EnrolmentService {
 		return scRepository.findungraded(s, id);
 	}
 
-
-
-
+	
 
 
 }

@@ -42,6 +42,10 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer>{
 
 	@Query("SELECT w FROM Enrolment w WHERE w.grade is not null AND w.courses.courseId = :lid ")
 	List<Enrolment> findcompletedbyid(@Param("lid") int cid);
+
+
+	@Query("SELECT sc from Enrolment sc WHERE sc.courses.courseId = :sid AND sc.courses.lecturerDetails.lecturerId = :lid")
+	ArrayList<Enrolment> findbycid(@Param("sid") int courseId,@Param("lid") String LecId );
 	
 	
 	

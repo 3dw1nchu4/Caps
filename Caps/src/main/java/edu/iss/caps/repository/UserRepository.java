@@ -9,5 +9,5 @@ import edu.iss.caps.model.User;
 public interface UserRepository extends JpaRepository<User, String> {
 	
 	@Query("SELECT u FROM User u WHERE u.userId=:uid AND u.password=:pwd")
-	User findUserByNamePwd(@Param("uid") String uname, @Param("pwd") String pwd);
+	User findUserByNamePwd(@Param("uid") String uid, @Param("pwd") String pwd);
 }

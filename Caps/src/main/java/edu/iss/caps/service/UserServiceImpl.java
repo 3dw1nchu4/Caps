@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import edu.iss.caps.exception.FailedAuthentication;
 import edu.iss.caps.model.User;
 import edu.iss.caps.repository.UserRepository;
 
@@ -29,10 +30,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User authenticate(String uid, String password) {
+	public User authenticate(String uid, String password) throws FailedAuthentication {
 		// TODO Auto-generated method stub
-		User u = uRepository.findUserByNamePwd(uid, password);
-		return u;
+		User u = uRepository.findUserByNamePwd(uid, password);		
+		if(u.getUserId().equals(uid)&&u.getPassword().equals(password)) return u;
+		else throw new FailedAuthentication();
 	}
 
 	@Override

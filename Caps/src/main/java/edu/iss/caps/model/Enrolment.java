@@ -8,12 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Proxy;
+
 import edu.iss.caps.model.*;
-import edu.iss.caps.service.StudentService;
 
 @Entity
 @Table(name = "Enrolments")
-
+@Proxy(lazy = false)
 public class Enrolment {
 
 	@Id
@@ -156,6 +158,4 @@ public class Enrolment {
 				+ ", status=" + status + ", courses=" + courses + ", studentDetails=" + studentDetails.toString() + "]";
 	}
 		
-
-	
 }
