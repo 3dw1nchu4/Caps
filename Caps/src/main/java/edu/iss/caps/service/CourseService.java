@@ -19,7 +19,7 @@ public interface CourseService {
 	
 	ArrayList<Course> findbylecid(String lectureID);
 
-	
+	ArrayList<Course> findbynotcop(String studentId);
 
 	List<Course> findbycid(int id);
 
