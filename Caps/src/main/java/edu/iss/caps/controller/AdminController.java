@@ -1,6 +1,10 @@
 package edu.iss.caps.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,8 +22,11 @@ import edu.iss.caps.model.LecturerDetail;
 import edu.iss.caps.model.User;
 import edu.iss.caps.service.CourseService;
 import edu.iss.caps.service.LecturerService;
+import edu.iss.caps.service.StudentService;
 import edu.iss.caps.service.UserService;
-
+import edu.iss.caps.model.StudentDetail;
+import edu.iss.caps.model.Enrolment;
+import edu.iss.caps.service.EnrolmentService;;
 
 @RequestMapping("/admin")
 @Controller
@@ -33,6 +40,10 @@ public class AdminController
 	LecturerService lecturerService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	StudentService studentService;
+	@Autowired
+	EnrolmentService enrolmentService;
 
 	
 ///////////////  ADMIN-STUDENT /////////////////////////
@@ -41,21 +52,42 @@ public class AdminController
 	{
 		try
 		{
-			String id = requestParams.get("id");
-			ModelAndView mav = new ModelAndView("managelecturer");
-			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-			mav.addObject("data", lecturer);
+			String id = requestParams.get("id").toLowerCase();
+			ModelAndView mav = new ModelAndView("managestudent");
+			StudentDetail student = studentService.findStudentById(id);
+			
+			ArrayList<Enrolment> enrolList = enrolmentService.findAllCoursesAttending();
+			List<Enrolment> enrolList2 = new ArrayList<Enrolment>();
+			for(Enrolment e : enrolList)
+			{
+				if (e.getStudentDetails().getStudentId().toLowerCase().contains(id))
+				{
+					enrolList2.add(e);
+				
+				}
+			}
+			
+			mav.addObject("enroldata", enrolList2);
+			mav.addObject("data", student);
 			return mav;
 		} catch (Exception e)
 		{
-			ModelAndView mav = new ModelAndView("managelecturer");
-			List<LecturerDetail> lctList = lecturerService.findAllLecturers();
-			mav.addObject("dataList", lctList);
+			ModelAndView mav = new ModelAndView("managestudent");
+			ArrayList<StudentDetail> lctList = studentService.findAllStudents();
+			List<StudentDetail> tempList = new ArrayList<StudentDetail>();
+			for(StudentDetail l : lctList)
+			{
+				if (l.getStatus().toLowerCase().contains("active"))
+				{
+					tempList.add(l);
+				}
+			}
+			
+			mav.addObject("dataList", tempList);
 			return mav;
 		}
 	}
 	//CREATE NEW
-	//Error - need to add User Service
 	@RequestMapping(value = "/createstudent", method = RequestMethod.POST)
 	public ModelAndView createStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -64,22 +96,30 @@ public class AdminController
 			String firstName = requestParams.get("firstName");
 			String lastName = requestParams.get("lastName");
 			String password = requestParams.get("password");
-			String role = "Lecturer";
+			String role = "Student";
 			
 			User user = new User(id, password, role);
 			userService.createUser(user);
 			
 			User userTemp = userService.findUser(id);
 			id = userTemp.getUserId();
-			LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
-			lecturerService.createLecturer(lecturer);
-			ModelAndView mav = new ModelAndView("managelecturer");
 			
-			LecturerDetail lecturer1 = lecturerService.findLecturerById(id);
-			mav.addObject("data", lecturer1);
+			
+			//for testing purposes
+			@SuppressWarnings("deprecation")
+			Date d = new Date(2012, 10, 20);
+			
+
+			StudentDetail student = new StudentDetail(id, firstName, lastName, d);
+			student.setStatus("Active");
+			studentService.createStduent(student);
+			ModelAndView mav = new ModelAndView("managestudent");
+			
+			StudentDetail student1 = studentService.findStudentById(id);
+			mav.addObject("data", student1);
 			return mav;
 	}
-	//Update Existing
+	//Update Existing student
 	@RequestMapping(value = "/updatestudent", method = RequestMethod.POST)
 	public String updateStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -87,7 +127,8 @@ public class AdminController
 			String firstName = requestParams.get("firstName");
 			String lastName = requestParams.get("lastName");
 			String password = requestParams.get("password");
-			String role = "Lecturer";
+			String role = "Student";
+			
 			
 			if(password.length() > 1) //If password not keyed in, no update
 			{
@@ -96,38 +137,80 @@ public class AdminController
 			}
 			User userTemp = userService.findUser(id);
 			id = userTemp.getUserId();
-			LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
-			lecturerService.changeLecturer(lecturer);
+			
+			
+			StudentDetail student = studentService.findStudentById(id);
+			student.setFirstName(firstName);	
+			student.setLastName(lastName);
+			studentService.changeStudent(student);
 
-			return "redirect:managelecturer";
+			return "redirect:managestudent";
 	}
-	//delete lecturer
-	//problem with foreign key constraints - KIV
+	//delete student
 	@RequestMapping(value = "/deletestudent", method = RequestMethod.POST)
 	public String deleteStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 			String id = requestParams.get("deletethis");
-			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-			lecturerService.removeLecturer(lecturer);
-			
-			User user = userService.findUser(id);
-			userService.removeUser(user);
-			
-			return "redirect:managelecturer";
+			StudentDetail student = studentService.findStudentById(id);
+			student.setStatus("Disabled");
+			studentService.changeStudent(student);
+			return "redirect:managestudent";
+	} 
+	
+	//remove student from enrolment
+	@RequestMapping(value = "/removestudentenrolment", method = RequestMethod.POST)
+	public String removeStudentFromEnrolment(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+			int id = Integer.parseInt(requestParams.get("removethis"));
+			Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
+			enrolment.setStatus("Removed");
+			enrolment.setGrade("Removed");
+			enrolmentService.updateEnrolment(enrolment);
+			return "redirect:managestudent";
 	}
 	
-	@RequestMapping(value = "/searchstudent", method = RequestMethod.POST)
-	public String searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	//search student
+	@RequestMapping(value = "/searchstudent", method = RequestMethod.GET)
+	public ModelAndView searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-			String id = requestParams.get("deletethis");
-			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-			lecturerService.removeLecturer(lecturer);
-			
-			User user = userService.findUser(id);
-			userService.removeUser(user);
-			
-			return "redirect:managelecturer";
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		String accountstatus = requestParams.get("accountstatus").toLowerCase();
+		if (accountstatus.contains("all"))
+		{
+			accountstatus = "";
+		}
+		ModelAndView mav = new ModelAndView("managestudent");
+		ArrayList<StudentDetail> lctList = studentService.findAllStudents();
+		List<StudentDetail> searchList = new ArrayList<StudentDetail>();
+		for(StudentDetail l : lctList)
+		{
+			if (l.getFirstName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			{
+				searchList.add(l);
+			}
+			else if (l.getLastName().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			{
+				searchList.add(l);
+			}
+			else if (l.getStudentId().toLowerCase().contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			{
+				searchList.add(l);
+			}
+			else if ((l.getFirstName().toLowerCase() + " " + l.getLastName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			{
+				searchList.add(l);
+			}
+			else if ((l.getLastName().toLowerCase() + " " + l.getFirstName().toLowerCase()).contains(searchContent) && l.getStatus().toLowerCase().contains(accountstatus))
+			{
+				searchList.add(l);
+			}
+		}
+		
+		mav.addObject("dataList", searchList);
+		mav.addObject("datacount", searchList.size());
+		return mav;
 	}
+
 ///////////////  ADMIN-LECTURER /////////////////////////
 	@RequestMapping(value = "/managelecturer", method = RequestMethod.GET)
 	public ModelAndView manageLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
