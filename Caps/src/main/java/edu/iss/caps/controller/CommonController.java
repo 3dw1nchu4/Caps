@@ -19,14 +19,14 @@ import edu.iss.caps.model.User;
 import edu.iss.caps.service.UserService;
 
 
-@RequestMapping("/")
+@RequestMapping("/home")
 @Controller
 public class CommonController {
 	
 	@Autowired
 	UserService uService;
 	
-	@RequestMapping(value = "login", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String logic(Model model) {
 		model.addAttribute("user", new User());
 		return "login";

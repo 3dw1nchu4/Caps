@@ -38,7 +38,8 @@ public class TestController {
 	@Autowired
 	private UserService us;
 	
-
+	
+	
 	@RequestMapping(value = "/1")
 	@ResponseBody
 	public String test() {
