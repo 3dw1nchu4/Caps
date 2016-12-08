@@ -70,10 +70,10 @@
 							Students</a></li>
 					<li id="sidebarLecturer"><a href="managelecturer">Manage
 							Lecturers</a></li>
-					<li id="sidebarCourse"><a href="javascript:Manage('course')">Manage
+					<li id="sidebarCourse"><a href="managecourse">Manage
 							Courses</a></li>
 					<li id="sidebarEnrolment"><a
-						href="javascript:Manage('enrolment')">Manage Enrolment</a></li>
+						href="manageenrolment">Manage Enrolment</a></li>
 				</ul>
 
 			</div>
