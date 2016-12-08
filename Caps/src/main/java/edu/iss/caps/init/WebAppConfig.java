@@ -28,6 +28,10 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import edu.iss.caps.interceptor.AdminCheckInterceptor;
+import edu.iss.caps.interceptor.LecturerCheckInterceptor;
+import edu.iss.caps.interceptor.StudentCheckInterceptor;
 // I am going to use SPRING CONTAINER
 @Configuration
 // Web MVC
@@ -146,6 +150,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
 		localeChangeInterceptor.setParamName("lang");
 		registry.addInterceptor(localeChangeInterceptor);
+		//registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/admin/*");
+		//registry.addInterceptor(new StudentCheckInterceptor()).addPathPatterns("/Student/*");
+		//registry.addInterceptor(new LecturerCheckInterceptor()).addPathPatterns("/Lec/*");
 	}
 
 	@Bean
