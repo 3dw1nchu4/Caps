@@ -19,14 +19,14 @@ import edu.iss.caps.model.User;
 import edu.iss.caps.service.UserService;
 
 
-@RequestMapping("/home")
+@RequestMapping("/")
 @Controller
 public class CommonController {
 	
 	@Autowired
 	UserService uService;
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "login", method = RequestMethod.GET)
 	public String logic(Model model) {
 		model.addAttribute("user", new User());
 		return "login";
@@ -34,37 +34,26 @@ public class CommonController {
 
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	@ResponseBody
 	public ModelAndView authenticate(@ModelAttribute User user, HttpSession session, BindingResult result)  throws FailedAuthentication{
 		ModelAndView mav = new ModelAndView("login");
 		User u = uService.authenticate(user.getUserId(), user.getPassword());
+		u.setPassword("***");
 		session.setAttribute("user", u);
 		switch (u.getRole()){
 		case "Admin": mav=new ModelAndView("redirect:/admin/managelecturer");
+				break;
+		case "Lecturer": mav=new ModelAndView("redirect:/Lec/byid");
+				break;
 		}
 		return mav;
-		/*
-		 * public String authenticate(@ModelAttribute User user, HttpSession session, BindingResult result) {
-		 * if (result.hasErrors())
-			return mav;
-		User u = uService.authenticate(user.getUserId(), user.getPassword());
-		UserSession us = new UserSession();
-		if (user.getName() != null && user.getPassword() != null) {
-			User u = uService.authenticate(user.getName(), user.getPassword());
-			us.setUser(u);
-			// PUT CODE FOR SETTING SESSION ID
-			us.setSessionId(session.getId());
-			us.setEmployee(eService.findEmployeeById(us.getUser().getEmployeeId()));
-			ArrayList<Employee> subordinates = eService.findSubordinates(us.getUser().getEmployeeId());
-			if (subordinates != null) {
-				us.setSubordinates(subordinates);
-
-			}
-			mav = new ModelAndView("redirect:/staff/history");
-		} else {
-			return mav;
-		}
-		session.setAttribute("USERSESSION", us);
-		return mav;*/
 	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ResponseBody
+	public String sessionTest(HttpSession session) {
+		User u=(User) session.getAttribute("user");
+		return u.toString();
+	}
+	
+	
 }
