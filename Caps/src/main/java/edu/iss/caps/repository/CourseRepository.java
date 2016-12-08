@@ -18,8 +18,6 @@ public interface CourseRepository extends JpaRepository <Course, Integer>{
 	@Query("SELECT e FROM Course e where e.courseId = :id")
 	ArrayList<Course> findbycid(@Param("id") int sid);
 	
-	@Query(value = "SELECT * FROM caps.courses where CourseId NOT IN (SELECT CourseId FROM caps.enrolments WHERE StudentId=:id);", nativeQuery = true)
-	ArrayList<Course> findbynotcop(@Param("id") String id);
 
 	
 
