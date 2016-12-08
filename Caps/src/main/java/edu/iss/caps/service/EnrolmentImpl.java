@@ -80,8 +80,8 @@ public class EnrolmentImpl implements EnrolmentService {
 		// TODO Auto-generated method stub
 		return scRepository.findungraded(s, id);
 	}
-
 	
-
-
-}
+	public ArrayList<Enrolment> findCourseBySID(String sid){
+		return scRepository.findCourseBySID(sid);
+		}
+	}

@@ -82,7 +82,9 @@ public class CourseServiceImpl implements CourseService {
 		
 		return sta;
 	}
-
+	public ArrayList<Course> findbynotcop(String studentId){
+		return cr.findbynotcop(studentId);
+	}
 
 
 
