@@ -36,26 +36,41 @@
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
 					<li class="active" id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/byid">View Course Taught
-							</a></li>
+						href="${pageContext.request.contextPath}/Lec/byid">View Course
+							Taught </a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/enrole">View Course Enrolement
-							</a></li><li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/grade">Grade a course
-							</a></li><li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/all">View a Student Preformance
-							</a></li>
+						href="${pageContext.request.contextPath}/Lec/enrole">View
+							Course Enrolement </a></li>
+					<li id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/grade">Grade a
+							course </a></li>
+					<li id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/all">View a
+							Student Preformance </a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
-				
+
 
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
 
 
 
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th><spring:message code="fieldLabel.coursename" /></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="listRecord">
+								<td>$</td>
+							</tr>
+						</tbody>
+					</table>
 
 
 
@@ -73,12 +88,12 @@
 
 
 
+
+				</div>
 
 			</div>
-
-</div>
-</div>
-</div>
+		</div>
+	</div>
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -87,13 +102,11 @@
 
 </body>
 <script>
-	$(function()
-	{
-		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
-		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+	$(function() {
+		$("#header").load(
+				"${pageContext.request.contextPath}/resources/header.html");
+		$("#footer").load(
+				"${pageContext.request.contextPath}/resources/footer.html");
 	});
-
-
-
 </script>
 </html>

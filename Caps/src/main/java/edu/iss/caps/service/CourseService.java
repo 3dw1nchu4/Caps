@@ -1,6 +1,7 @@
 package edu.iss.caps.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.iss.caps.model.Course;
 
@@ -17,4 +18,18 @@ public interface CourseService {
 	void removeCourse(Course course);
 	
 	ArrayList<Course> findbylecid(String lectureID);
+
+	
+
+	List<Course> findbycid(int id);
+
+
+
+	int calcredit(String g, int cid);
+
+	String makestatus(String g);
+
+//	String makestatus(int cred);
+
+
 }

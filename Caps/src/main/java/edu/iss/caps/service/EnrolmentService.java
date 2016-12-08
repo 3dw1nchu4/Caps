@@ -9,10 +9,16 @@ public interface EnrolmentService {
 
 	ArrayList<Enrolment> findAllCoursesAttending();
 
-	ArrayList<Enrolment> findbycid(int id, String lecid);
+	ArrayList<Enrolment> findbycid(int id);
 
-	ArrayList<Enrolment> findungraded();
+	
 
 	List<Enrolment> findstudentbylecturerid(String s);
+	
+	ArrayList<Enrolment> findcompleted();
+
+	List<Enrolment> findcompletedbyid(int id);
+
+	List<Enrolment> findungraded(String s, int id);
 
 }

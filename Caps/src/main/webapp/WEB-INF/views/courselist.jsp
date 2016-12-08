@@ -24,7 +24,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title></title>
+<title>mycourses</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -54,55 +54,18 @@
 						href="${pageContext.request.contextPath}/Lec/byid">View Course Taught
 							</a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/enrole">View Course Enrolement
+						href="${pageContext.request.contextPath}/Lec/viewallenrole">View Course Enrolement
 							</a></li><li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/grade">Grade a course
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a course
 							</a></li><li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewsp">View a Student Preformance
+						href="${pageContext.request.contextPath}/Lec/viewallcr">View a Student Preformance
 							</a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
-				<!-- 
-				<div class="row placeholders">
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-				</div>
--->
-
-
+			
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
 
 
@@ -133,9 +96,9 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th><spring:message code="fieldLabel.courseid" /></th>
+			
 				<th><spring:message code="fieldLabel.coursename" /></th>
-				<th><spring:message code="fieldLabel.lectureid" /></th>
+			
 				<th><spring:message code="fieldLabel.credits" /></th>
 				<th><spring:message code="fieldLabel.startdate" /></th>
 				<th><spring:message code="fieldLabel.enddate" /></th>
@@ -148,9 +111,9 @@
 		<tbody>
 			<c:forEach var="employee" items="${list}">
 				<tr class="listRecord">
-					<td>${employee.courseId}</td>
+			
 					<td>${employee.courseName}</td>
-					<td>${employee.lecturerDetails.lecturerId}</td>
+					
 					<td>${employee.credits}</td>
 					<td>${employee.startDate}</td>
 					<td>${employee.endDate}</td>
