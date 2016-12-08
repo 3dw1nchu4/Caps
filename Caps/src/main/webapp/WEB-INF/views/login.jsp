@@ -28,44 +28,38 @@
 		<h1>Login</h1>
 		<div class="jumbotron">
 
-			<form class="form-signin">
+			<form:form modelAttribute="user" method="POST"
+				action="${pageContext.request.contextPath}/home/authenticate">
 				<h2 class="form-signin-heading">Please sign in</h2>
-				<label for="inputEmail" class="sr-only">Email address</label> <input
-					type="email" id="inputEmail" class="form-control"
-					placeholder="Email address" required autofocus> <label
-					for="inputPassword" class="sr-only">Password</label> <input
-					type="password" id="inputPassword" class="form-control"
-					placeholder="Password" required>
+				<label for="userid" class="sr-only"></label>
+				<form:input class="form-control" placeholder="UserId" id="userid" path="userId"/><br>
+				<label for="inputPassword" class="sr-only"></label>
+				<form:input class="form-control" placeholder="Password" id="inputPassword" path="password"/>
 				<div class="checkbox">
 					<label> <input type="checkbox" value="remember-me">
 						Remember me
 					</label>
 				</div>
 				<!-- removed the type="submit" property for testing, redirect function for testing only -->
-				<button class="btn btn-lg btn-primary btn-block"
-					onclick="Redirect()">Sign in</button>
-			</form>
-		</div>
-	</div>
+				<form:button class="btn btn-lg btn-primary btn-block" name="submit" type="submit" value="s">
+				Sign in</form:button>
+			</form:form>
 
-	<footer
+				<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
 	<div id="footer"></div>
 	</footer>
 
 </body>
 <script>
-	$(function()
-	{
+	$(function() {
 		$("#header").load("resources/header.html");
 		$("#footer").load("resources/footer.html");
 	});
 
-	function Redirect()
-	{
+	function Redirect() {
 		var login = document.getElementById("inputEmail").value;
-		if (login.includes("admin"))
-		{
+		if (login.includes("admin")) {
 			window.location.href = "adminmgt.html?userrole=admin&manage=student";
 		}
 	}
