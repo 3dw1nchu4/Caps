@@ -35,7 +35,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-				
+
 					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
@@ -52,7 +52,8 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">course id: ${Enlist[0].courses.courseId}</h2>
+				<h2 class="sub-header" id="sectiontitle">course id:
+					${Enlist[0].courses.courseId}</h2>
 
 
 
@@ -69,7 +70,8 @@
 							</div>-->
 
 						<form class="navbar-form navbar-left" role="search"
-							action="${requestScope['javax.servlet.forward.request_uri']}" method="get">
+							action="${requestScope['javax.servlet.forward.request_uri']}"
+							method="get">
 							<div class="form-group">
 								<label>Search by : </label>
 							</div>
@@ -86,7 +88,7 @@
 									</div> -->
 							</div>
 							<button type="submit" class="btn btn-default">Search</button>
-							
+
 							<a class="btn btn-success"
 								href="${pageContext.request.contextPath}/Lec/viewallenrole">
 								<span class="glyphicon glyphicon-arrow-left"></span> back to All
@@ -104,6 +106,10 @@
 
 				<%@ taglib prefix="form"
 					uri="http://www.springframework.org/tags/form"%>
+
+				<div id="searchcount" name="searchcount" style="display: none">
+					<h5>Your search returned ${Enlist.size() } results</h5>
+				</div>
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
 
@@ -123,7 +129,7 @@
 								<tbody>
 									<c:forEach var="role" items="${Enlist}">
 										<tr class="listRecord">
-										
+
 											<td>${role.studentDetails.studentId}</td>
 											<td>${role.studentDetails.firstName}
 												${role.studentDetails.lastName}</td>

@@ -50,7 +50,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					
+
 					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
@@ -124,6 +124,9 @@
 										<th><spring:message code="fieldLabel.courseid" /></th>
 
 										<th><spring:message code="fieldLabel.coursename" /></th>
+										<th><spring:message code="fieldLabel.startdate" /></th>
+										<th><spring:message code="fieldLabel.enddate" /></th>
+										<th><spring:message code="fieldLabel.size" /></th>
 										<th><spring:message code="fieldLabel.credits" /></th>
 										<th><spring:message code="fieldLabel.cenroll" /></th>
 
@@ -135,7 +138,10 @@
 										<tr class="listRecord">
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
-											<td>${role.credits}</td>
+											<td>${role.startDate}</td>
+											<td>${role.endDate}</td>
+											<td  align="center">${role.size}</td>
+											<td  align="center">${role.credits}</td>
 											<td align="center"><c:set var="sta" scope="session"
 													value="${role.currentEnrollment}" /> <c:choose>
 													<c:when test="${sta==0}">
@@ -143,18 +149,19 @@
 															<spring:message code="${role.currentEnrollment}" />
 															<br>( view all )
 														</p>
-														
+
 													</c:when>
 													<c:otherwise>
 														<a class="btn btn-primary"
-											href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
-												code="${role.currentEnrollment}" /><br>( view all )</a>
+															href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
+																code="${role.currentEnrollment}" /><br>( view all
+															)</a>
 
 													</c:otherwise>
 
 												</c:choose></td>
 										</tr>
-									
+
 
 										</tr>
 

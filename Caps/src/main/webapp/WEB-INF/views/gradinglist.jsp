@@ -58,23 +58,48 @@
 
 
 				<div class="container" style="width: 100%">
-					<div class="row">
-						<div class="col-xs-1">
-							<label for="search"><h4>Search:</h4> </label>
-						</div>
-						<div class="col-xs-5">
-							<input type="text" id="inputPK" class="form-control"
-								placeholder="Search for something here">
-						</div>
-						<div class="col xs-6">
+					<nav class="navbar navbar-default" role="navigation">
+					<div class="container-fluid">
+					
+
+						<form class="navbar-form navbar-left" role="search"
+							action="${requestScope['javax.servlet.forward.request_uri']}"
+							method="get">
+							<div class="form-group">
+								<label>Search by : </label>
+							</div>
+							<div class="input-group">
+
+								<input type="text" class="form-control"
+									placeholder="Student name or ID" name="searchcontent"
+									id="searchcontent">
+
+							
+								
+							</div>
+							<button type="submit" class="btn btn-default">Search</button>
+
 							<a class="btn btn-success"
-								href="${pageContext.request.contextPath}/Lec/enrole"><spring:message
-									code="Search" /></a>
-						</div>
+								href="${pageContext.request.contextPath}/Lec/viewalltograde">
+								<span class="glyphicon glyphicon-arrow-left"></span> back to ungraded
+								courses
+							</a>
+
+						</form>
+
 					</div>
+					</nav>
 				</div>
 				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
 	Employee</a>-->
+		<div id="searchcount" name="searchcount" style="display: none">
+					<h5>Your search returned ${Enlist.size() } results</h5>
+				</div>
+				
+				<div class="t7-text-red" id="updatesucess" name="updatesucess" style="display: none">
+					<h3>Grade updated successfully.</h3>
+				</div>
+				
 
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
@@ -101,14 +126,14 @@
 											
 											<td>
 											<form:form  name="grade" action="update?sd=${role.studentDetails.studentId}&couid=${role.courses.courseId}&enid=${role.enrolmentId}" >
-											<select name ="glist">
-													<option>--NA--</option>
+											<select name ="glist" required="required">
+													<option value="">--NA--</option>
 													<option value="A">A</option>
-													<option>B</option>
-													<option>C</option>
-													<option>D</option>
-													<option>E</option>
-													<option>F</option>
+													<option value="B">B</option>
+													<option value="C">C</option>
+													<option value="D">D</option>
+													<option value="E">E</option>
+													<option value="F">F</option>
 											</select>
 											<input class="btn btn-primary" type="submit" name = "submit" value="Grade">
 											</form:form>
@@ -124,8 +149,6 @@
 
 					<c:otherwise>
 
-
-						<spring:message code="error.notfound" />
 
 					</c:otherwise>
 
@@ -158,24 +181,7 @@
 	</div>
 	</div>
 	
-		<!-- Successful transaction Modal -->
-	<div id="successActionModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Success</h4>
-				</div>
-				<div class="modal-body" id="successModalMessage">
-				
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-
-		</div>
-	</div>
+	
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -191,6 +197,12 @@
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
 	
+	
+
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
 	var qs = (function(a)
 			{
 				if (a == "")
@@ -209,12 +221,16 @@
 				return b;
 			})(window.location.search.substr(1).split('&'));
 	
-	
-	if (qs['actionstatus'] == "success")
+	if (qs['searchcontent'] != null)
 	{
-			document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
-			$('#successActionModal').modal('toggle');
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
 	}
-
+	
+	if (qs['actionstatus'] == "0")
+	{
+		
+		document.getElementById("updatesucess").style.display = "block";
+	}
 </script>
 </html>

@@ -115,7 +115,9 @@
 					uri="http://www.springframework.org/tags/form"%>
 				<%@ page import="java.io.*,java.util.*"%>
 
-
+				<div id="searchcount" name="searchcount" style="display: none">
+					<h5>Your search returned ${Enlist.size() } results</h5>
+				</div>
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
 						<div class="table-responsive">
@@ -138,10 +140,10 @@
 										<tr class="listRecord">
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
-											<td>${role.credits}</td>
+											<td >${role.credits}</td>
 											<td>${role.currentEnrollment}</td>
 
-										
+
 											<td align="center"><c:set var="sta" scope="session"
 													value="${cou[loop.index]}" /> <c:choose>
 													<c:when test="${sta==0}">

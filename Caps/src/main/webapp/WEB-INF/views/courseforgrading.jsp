@@ -50,14 +50,14 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					
+
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
 					<li class="active" id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a
-							course </a></li>
-					<li  id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
+							a course </a></li>
+					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
 							Student Preformance </a></li>
 				</ul>
@@ -67,30 +67,47 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">Section title(displaying only the courses u teach)</h2>
+				<h2 class="sub-header" id="sectiontitle">Ungraded Courses</h2>
 
 
 
 				<div class="container" style="width: 100%">
-					<div class="row">
-						<div class="col-xs-1">
-							<label for="search"><h4>Search:</h4> </label>
-						</div>
-						<div class="col-xs-5">
-							<input type="number" id="inputPK" class="form-control"
-								placeholder="Search by course ID (not imp)">
-						</div>
-						<div class="col xs-6">
-							<input type="submit" class="btn btn-success" value="Search"
-								onclick="search()" class="btn"> 
-						</div>
+					<nav class="navbar navbar-default" role="navigation">
+					<div class="container-fluid">
+						<!--  div class="navbar-header">
+								<a class="navbar-brand" href="#">Search</a>
+							</div>-->
+
+						<form class="navbar-form navbar-left" role="search"
+							action="1searchbyname" method="get">
+							<div class="form-group">
+								<label>Search by : </label>
+							</div>
+							<div class="input-group">
+
+								<input type="text" class="form-control"
+									placeholder="course name or ID" name="searchcontent"
+									id="searchcontent">
+
+
+							</div>
+							<button type="submit" class="btn btn-default">Search</button>
+						</form>
 					</div>
+					</nav>
+
 				</div>
 				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
 	Employee</a>-->
 				<%@ taglib prefix="form"
 					uri="http://www.springframework.org/tags/form"%>
-					<%@ page import="java.io.*,java.util.*" %>
+				<%@ page import="java.io.*,java.util.*"%>
+
+
+				<div id="searchcount" name="searchcount" style="display: none">
+					<h5>Your search returned ${Enlist.size() } results</h5>
+				</div>
+
 
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
@@ -102,7 +119,7 @@
 
 										<th><spring:message code="fieldLabel.coursename" /></th>
 										<th><spring:message code="fieldLabel.credits" /></th>
-										<th><spring:message code="fieldLabel.cenroll" /></th>
+										<th><spring:message code="fieldLabel.size" /></th>
 
 
 									</tr>
@@ -113,7 +130,7 @@
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
 											<td>${role.credits}</td>
-										<td>	${role.currentEnrollment}</td>
+											<td>${role.size}</td>
 
 											<td align="center"><a class="btn btn-primary"
 												href="${pageContext.request.contextPath}/Lec/grade/${role.courseId}">Grade</a></td>
@@ -121,7 +138,6 @@
 
 
 
-										</tr>
 
 									</c:forEach>
 								</tbody>
@@ -130,12 +146,7 @@
 
 					</c:when>
 
-					<c:otherwise>
-
-
-						<spring:message code="error.notfoundall" />
-
-					</c:otherwise>
+				
 
 				</c:choose>
 			</div>
@@ -158,11 +169,34 @@
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
 
-	function search() {
-		var x = document.getElementById("inputPK").value;
-		window.location = "${pageContext.request.contextPath}/Lec/viewalltograde/"
-				+ x;
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
+	var qs = (function(a)
+			{
+				if (a == "")
+					return
+					{};
+				var b =
+				{};
+				for (var i = 0; i < a.length; ++i)
+				{
+					var p = a[i].split('=', 2);
+					if (p.length == 1)
+						b[p[0]] = "";
+					else
+						b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+				}
+				return b;
+			})(window.location.search.substr(1).split('&'));
+	
+	if (qs['searchcontent'] != null)
+	{
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
 	}
+
 </script>
 </html>
 
