@@ -150,9 +150,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
 		localeChangeInterceptor.setParamName("lang");
 		registry.addInterceptor(localeChangeInterceptor);
-		//registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/admin/*");
-		//registry.addInterceptor(new StudentCheckInterceptor()).addPathPatterns("/Student/*");
-		//registry.addInterceptor(new LecturerCheckInterceptor()).addPathPatterns("/Lec/*");
+		registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/admin/*");
+		registry.addInterceptor(new StudentCheckInterceptor()).addPathPatterns("/Course/*");
+		registry.addInterceptor(new LecturerCheckInterceptor()).addPathPatterns("/Lec/*");
 	}
 
 	@Bean
