@@ -53,7 +53,7 @@
 
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
-							Course Enrolement </a></li>
+							Course Enrolment </a></li>
 					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
@@ -115,11 +115,12 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th><spring:message code="fieldLabel.courseid" /></th>
+										<th><h4><spring:message code="fieldLabel.courseid" /></h4></th>
 
-										<th><spring:message code="fieldLabel.coursename" /></th>
-										<th><spring:message code="fieldLabel.credits" /></th>
-										<th><spring:message code="fieldLabel.size" /></th>
+										<th><h4><spring:message code="fieldLabel.coursename" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.enddate" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.credits" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.size" /></h4></th>
 
 
 									</tr>
@@ -129,6 +130,7 @@
 										<tr class="listRecord">
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
+											<td>${role.endDate}</td>
 											<td>${role.credits}</td>
 											<td>${role.size}</td>
 
@@ -145,7 +147,13 @@
 						</div>
 
 					</c:when>
-
+			<c:otherwise>
+			<center>
+			<h3>
+			No course to be graded.
+			</h3>
+			</center>
+			</c:otherwise>
 				
 
 				</c:choose>

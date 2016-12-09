@@ -54,7 +54,7 @@
 
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
-							Course Enrolement </a></li>
+							Course Enrolment </a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
@@ -68,7 +68,8 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+				<h2 class="sub-header" id="sectiontitle">View a Student
+					performance</h2>
 
 
 
@@ -90,11 +91,6 @@
 									placeholder="course name or ID" name="searchcontent"
 									id="searchcontent">
 
-								<!-- <div class="input-group-btn">
-										<button class="btn btn-default" type="submit">
-											<i class="glyphicon glyphicon-search"></i>
-										</button>
-									</div> -->
 							</div>
 							<button type="submit" class="btn btn-default">Search</button>
 							<a class="btn btn-success"
@@ -124,12 +120,22 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th><spring:message code="fieldLabel.courseid" /></th>
+										<th><h4>
+												<spring:message code="fieldLabel.courseid" />
+											</h4></th>
 
-										<th><spring:message code="fieldLabel.coursename" /></th>
-										<th><spring:message code="fieldLabel.credits" /></th>
-										<th><spring:message code="fieldLabel.cenroll" /></th>
-										<th><spring:message code="fieldLabel.stgr" /></th>
+										<th><h4>
+												<spring:message code="fieldLabel.coursename" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.credits" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.cenroll" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.stgr" />
+											</h4></th>
 
 
 									</tr>
@@ -140,7 +146,7 @@
 										<tr class="listRecord">
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
-											<td >${role.credits}</td>
+											<td>${role.credits}</td>
 											<td>${role.currentEnrollment}</td>
 
 
@@ -161,35 +167,14 @@
 													</c:otherwise>
 
 												</c:choose></td>
-											<%-- 	<%
-											count =0;
-											${cou};
-											${count};
-											%> --%>
 										</tr>
-
-
-
 										</tr>
-
 									</c:forEach>
-
-
-
-
 								</tbody>
 							</table>
 						</div>
 
 					</c:when>
-
-					<c:otherwise>
-
-
-						<spring:message code="error.notfoundall" />
-
-					</c:otherwise>
-
 				</c:choose>
 			</div>
 
@@ -211,12 +196,7 @@
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
 
-	function search() {
-		var x = document.getElementById("inputPK").value;
-		window.location = "${pageContext.request.contextPath}/Lec/viewallcr/"
-				+ x;
-	}
-	
+
 
 	//clears search content when entering search box
 	$("#searchcontent").click(function(){

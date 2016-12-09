@@ -53,7 +53,7 @@
 
 					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
-							Course Enrolement </a></li>
+							Course Enrolment </a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
@@ -67,7 +67,7 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">Section</h2>
+				<h2 class="sub-header" id="sectiontitle">View Course Enrolment</h2>
 
 
 
@@ -121,14 +121,28 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th><spring:message code="fieldLabel.courseid" /></th>
+										<th><h4>
+												<spring:message code="fieldLabel.courseid" />
+											</h4></th>
 
-										<th><spring:message code="fieldLabel.coursename" /></th>
-										<th><spring:message code="fieldLabel.startdate" /></th>
-										<th><spring:message code="fieldLabel.enddate" /></th>
-										<th><spring:message code="fieldLabel.size" /></th>
-										<th><spring:message code="fieldLabel.credits" /></th>
-										<th><spring:message code="fieldLabel.cenroll" /></th>
+										<th><h4>
+												<spring:message code="fieldLabel.coursename" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.startdate" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.enddate" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.size" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.credits" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.cenroll" />
+											</h4></th>
 
 
 									</tr>
@@ -140,8 +154,8 @@
 											<td>${role.courseName}</td>
 											<td>${role.startDate}</td>
 											<td>${role.endDate}</td>
-											<td  align="center">${role.size}</td>
-											<td  align="center">${role.credits}</td>
+											<td align="center">${role.size}</td>
+											<td align="center">${role.credits}</td>
 											<td align="center"><c:set var="sta" scope="session"
 													value="${role.currentEnrollment}" /> <c:choose>
 													<c:when test="${sta==0}">

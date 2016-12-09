@@ -53,7 +53,7 @@
 
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
-							Course Enrolement </a></li>
+							Course Enrolment </a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
@@ -68,7 +68,7 @@
 
 
 
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+				<h2 class="sub-header" id="sectiontitle">View Student performance</h2>
 
 
 
@@ -125,20 +125,20 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th><spring:message code="fieldLabel.Studentid" /></th>
-										<th><spring:message code="fieldLabel.name" /></th>
+										<th><h4></h4><spring:message code="fieldLabel.Studentid" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.name" /></h4></th>
 
 
-										<th><spring:message code="fieldLabel.grade" /></th>
-										<th><spring:message code="fieldLabel.earncredit" /></th>
-										<th><spring:message code="fieldLabel.gpa" /></th>
+										<th><h4><spring:message code="fieldLabel.grade" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.earncredit" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.gpa" /></h4></th>
 
-										<th><spring:message code="fieldLabel.status" /></th>
+										<th><h4><spring:message code="fieldLabel.status" /></h4></th>
 
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="role" items="${Enlist}">
+									<c:forEach var="role" items="${Enlist}"  varStatus="loop">
 										<tr class="listRecord">
 											<td>${role.studentDetails.studentId}</td>
 											<td>${role.studentDetails.firstName}
@@ -148,8 +148,8 @@
 
 											<td>${role.grade}</td>
 											<td>${role.earnedCredit}</td>
-											<td>0</td>
-											<td align="center"><c:set var="sta" scope="session"
+											<td>${Stgpa[loop.index]}</td>
+											<td><c:set var="sta" scope="session"
 													value="${role.status}" /> <c:choose>
 													<c:when test="${sta=='Failed'}">
 														<p class="btn btn-danger">

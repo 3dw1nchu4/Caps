@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,116 +54,132 @@ public class Lecturercontroller {
 
 	@Autowired
 	private StudentService sds;
-	
-	
 
-	// @RequestMapping(value = "/all", method = RequestMethod.GET)
-	// public ModelAndView viewtaught() {
-	// ModelAndView mav = new ModelAndView("courselist");
-	// List<Course> course = cs.findAllCourses();
-	// mav.addObject("list", course);
-	// return mav;
-	// }
-
-	// @RequestMapping(value = "/view", method = RequestMethod.GET)
-	// public String home(Locale locale, Model model) {
-	// return "NewFile";
-	// }
-
-//	// 1.first page to load. lec id view..
-//	@RequestMapping(value = "/byid", method = RequestMethod.GET)
-//	public ModelAndView viewtaughtbyid(HttpServletRequest request) {
-//		User u = (User) request.getSession().getAttribute("user");
-//		String s = u.getUserId();
-//		ModelAndView mav = new ModelAndView("courselist");
-//		List<Course> course = cs.findbylecid(s);
-//		mav.addObject("list", course);
-//		return mav;
-//	}
-
-
-//---------------------------------------------------------------------------------
-	// 2.view all course to select.
+	// 1.view all course to select enrole details
 	@RequestMapping(value = "/viewallenrole", method = RequestMethod.GET)
-	public ModelAndView viewallcourseenrole(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest req) {
-		PagedListHolder<Course> courseList = null;
-
-		String type = pathVariablesMap.get("type");
-
-		if (null == type) {
-			// First Request, Return first set of list
-			List<Course> course = cs.findAllCourses();
-
-			courseList = new PagedListHolder<Course>();
-			courseList.setSource(course);
-			courseList.setPageSize(5);
-
-			req.getSession().setAttribute("Enlist", courseList);
-
-			printPageDetails(courseList);
-
-		} else if ("next".equals(type)) {
-			// Return next set of list
-			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("Enlist");
-
-			courseList.nextPage();
-
-			printPageDetails(courseList);
-
-		} else if ("prev".equals(type)) {
-			// Return previous set of list
-			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("Enlist");
-
-			courseList.previousPage();
-
-			printPageDetails(courseList);
-
-		} else {
-			// Return specific index set of list
-			System.out.println("type:" + type);
-
-			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("Enlist");
-
-			int pageNum = Integer.parseInt(type);
-
-			courseList.setPage(pageNum);
-
-			printPageDetails(courseList);
-		}
-		
+	public ModelAndView viewallcourseenrole() {
 		ModelAndView mav = new ModelAndView("enroleview");
+		List<Course> course = cs.findAllCourses();
+		mav.addObject("Enlist", course);
 		return mav;
 	}
-	private void printPageDetails(PagedListHolder Enlist) {
 
-		System.out.println("curent page - productList.getPage() :" + Enlist.getPage());
-
-		System.out.println("Total Num of pages - productList.getPageCount :" + Enlist.getPageCount());
-
-		System.out.println("is First page - productList.isFirstPage :" + Enlist.isFirstPage());
-
-		System.out.println("is Last page - productList.isLastPage :" + Enlist	.isLastPage());
-	}
-	//--------------------------------------------------------
-
-	// search courseid & course name(viewalleenrole) [2]
+	// 1.[search] search courseid & course name(viewalleenrole)
 	@RequestMapping(value = "/2searchbyname", method = RequestMethod.GET)
 	public ModelAndView searchStudent2(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
 			HttpServletRequest request) {
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
-//		User u = (User) request.getSession().getAttribute("user");
-//		String s = u.getUserId();
 		ModelAndView mav = new ModelAndView("enroleview");
 		ArrayList<Course> lctList = cs.findAllCourses();
 		List<Course> searchList = new ArrayList<Course>();
-		int bn=0;String s2="";
+		int bn = 0;
+		String s2 = "";
 		for (Course l : lctList) {
-			bn=(l.getCourseId());
-			s2=Integer.toString(bn);
+			bn = (l.getCourseId());
+			s2 = Integer.toString(bn);
+			if (l.getCourseName().toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			} else if (s2.toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+		}
+		mav.addObject("Enlist", searchList);
+		mav.addObject("datacount", searchList.size());
+		return mav;
+	}
+
+	// 1.1 view my course only.
+	@RequestMapping(value = "/mycourseenrole", method = RequestMethod.GET)
+	public ModelAndView mycourseenrole(HttpServletRequest request) {
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		ModelAndView mav = new ModelAndView("enroleview");
+		List<Course> course = cs.findbylecid(s);
+		mav.addObject("Enlist", course);
+		return mav;
+	}
+
+	// 1.2 view all student enroled / with search
+	@RequestMapping(value = "/enrole/{id}", method = RequestMethod.GET)
+	public ModelAndView findonlyen(@PathVariable int id, HttpServletRequest request,
+			@RequestParam Map<String, String> requestParams) {
+		ModelAndView mav = new ModelAndView("enrolelist");
+		ArrayList<Enrolment> lctList = ens.findbycid(id);
+
+		List<Enrolment> searchList = new ArrayList<Enrolment>();
+		if (requestParams.get("searchcontent") != null && !requestParams.get("searchcontent").isEmpty()) {
+			String searchContent = requestParams.get("searchcontent").toLowerCase();
+			for (Enrolment l : lctList) {
+
+				if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				} else if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				} else if (l.getStudentDetails().getStudentId().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+
+			}
+			mav.addObject("Enlist", searchList);
+			mav.addObject("datacount", searchList.size());
+			return mav;
+
+		}
+		mav.addObject("Enlist", lctList);
+		return mav;
+	}
+
+	// 2.1 grade course - show course to select
+	@RequestMapping(value = "/viewalltograde", method = RequestMethod.GET)
+	public ModelAndView viewalltograde(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("courseforgrading");
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		List<Course> course = cs.findbylecid(s);
+		List<Course> courseTemp = new ArrayList<Course>();
+		// List<Enrolment> enrolmentList = new ArrayList<Enrolment>();
+
+		for (Course c : course) {
+			if (ens.findungraded(s, c.getCourseId()).size() != 0) {
+				courseTemp.add(c);
+			}
+		}
+
+		// mav.addObject("Enlist2", courseTemp);
+
+		mav.addObject("Enlist", courseTemp);
+		return mav;
+	}
+
+	// search in 2.1 [for course name and id]
+	@RequestMapping(value = "/1searchbyname", method = RequestMethod.GET)
+	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
+			HttpServletRequest request) {
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		ModelAndView mav = new ModelAndView("courseforgrading");
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		// ArrayList<Course> lctList = cs.findbylecid(s);
+		List<Course> searchList = new ArrayList<Course>();
+
+		List<Course> course = cs.findbylecid(s);
+		List<Course> courseTemp = new ArrayList<Course>();
+
+		for (Course c : course) {
+			if (ens.findungraded(s, c.getCourseId()).size() != 0) {
+				courseTemp.add(c);
+			}
+		}
+
+		int bn = 0;
+		String s2 = "";
+		for (Course l : courseTemp) {
+			bn = (l.getCourseId());
+			s2 = Integer.toString(bn);
 			if (l.getCourseName().toLowerCase().contains(searchContent)) {
 				searchList.add(l);
 			}
-			
+
 			else if (s2.toLowerCase().contains(searchContent)) {
 				searchList.add(l);
 			}
@@ -174,209 +189,136 @@ public class Lecturercontroller {
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
-	
-	//2.2 view all student enroled
-	@RequestMapping(value = "/enrole", method = RequestMethod.GET)
-	public ModelAndView employeeListPage(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("enrolelist");
-		int id =Integer.parseInt(request.getParameter("id"));
-		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		List<Enrolment> enrole = ens.findbycid(id);
-		mav.addObject("Enlist", enrole);
-		return mav;
-	}
 
-	//2.2 view all student enroled 
-	@RequestMapping(value = "/enrole/{id}", method = RequestMethod.GET)
-	public ModelAndView findonlyen(@PathVariable int id, HttpServletRequest request, @RequestParam Map<String, String> requestParams) {
-		ModelAndView mav = new ModelAndView("enrolelist");
-//		User u = (User) request.getSession().getAttribute("user");
-//		String s = u.getUserId();
-	//	List<Enrolment> enrole = ens.findbycid(id);
-		ArrayList<Enrolment> lctList =  ens.findbycid(id);
-	
-		List<Enrolment> searchList = new ArrayList<Enrolment>();
-		if(requestParams.get("searchcontent")!= null && !requestParams.get("searchcontent").isEmpty()){
-			String searchContent = requestParams.get("searchcontent").toLowerCase();
-			for (Enrolment l : lctList) {
-			
-			if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
-					searchList.add(l);}
-					else			if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
-						searchList.add(l);
-			}
-					else			if (l.getStudentDetails().getStudentId().toLowerCase().contains(searchContent)) {
-						searchList.add(l);
-			}
-			
-			}
-			mav.addObject("Enlist", searchList);
-			mav.addObject("datacount", searchList.size());
-			return mav;
-			
-		
-		}
-		mav.addObject("Enlist", lctList);
-		return mav;
-	}
-	
-//	//2.2.1.search  by student id and name
-//	@RequestMapping(value = "/22searchbyname", method = RequestMethod.GET)
-//	public ModelAndView searchStudent22(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-//			HttpServletRequest request) {
-//		String searchContent = requestParams.get("searchcontent").toLowerCase();
-//		int id =Integer.parseInt(request.getParameter("id"));
-//		ModelAndView mav = new ModelAndView("enrolelist");
-//		ArrayList<Enrolment> lctList =  ens.findbycid(2);
-//		List<Enrolment> searchList = new ArrayList<Enrolment>();
-//	//	int bn=0;String s2="";
-//		for (Enrolment l : lctList) {
-////			bn=(l.getCourseId());
-////			s2=Integer.toString(bn);
-//		if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
-//				searchList.add(l);
-//		}
-//		
-//		else 	if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
-//			searchList.add(l);
-//	}
-//		}
-//
-//		mav.addObject("Enlist", searchList);
-//		mav.addObject("datacount", searchList.size());
-//		return mav;
-//	}
-	
+	// 2.2 grade a student
 	@RequestMapping(value = "/grade/{id}", method = RequestMethod.GET)
-	public ModelAndView searchgradeastudent(@PathVariable int id, HttpServletRequest request, @RequestParam Map<String, String> requestParams) {
+	public ModelAndView searchgradeastudent(@PathVariable int id, HttpServletRequest request,
+			@RequestParam Map<String, String> requestParams) {
 		ModelAndView mav = new ModelAndView("gradinglist");
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
-	
-//		ArrayList<Enrolment> lctList =  ens.findungraded(s, id);
+
+		// ArrayList<Enrolment> lctList = ens.findungraded(s, id);
 		List<Enrolment> lctList = ens.findungraded(s, id);
 		List<Enrolment> searchList = new ArrayList<Enrolment>();
-		if(requestParams.get("searchcontent")!= null && !requestParams.get("searchcontent").isEmpty()){
+		if (requestParams.get("searchcontent") != null && !requestParams.get("searchcontent").isEmpty()) {
 			String searchContent = requestParams.get("searchcontent").toLowerCase();
 			for (Enrolment l : lctList) {
-			
-			if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
-					searchList.add(l);}
-					else			if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
-						searchList.add(l);
-			}
-					else			if (l.getStudentDetails().getStudentId().toLowerCase().contains(searchContent)) {
-						searchList.add(l);
-			}
-			
-			}
-			mav.addObject("Enlist", searchList);
-			mav.addObject("datacount", searchList.size());
-			return mav;
-			
-		
-		}
-		mav.addObject("Enlist", lctList);
-		return mav;
-	}
-	
-	
-//
-//	@RequestMapping(value = "/grade/{id}", method = RequestMethod.GET)
-//	public ModelAndView gradeastudent(@PathVariable int id, HttpServletRequest request) {
-//		ModelAndView mav = new ModelAndView("gradinglist");
-//		User u = (User) request.getSession().getAttribute("user");
-//		String s = u.getUserId();
-//		List<Enrolment> employeeList = ens.findungraded(s, id);
-//		mav.addObject("Enlist", employeeList);
-//		return mav;
-//	}
-//
-//	@RequestMapping(value = "/viewsp", method = RequestMethod.GET)
-//	public ModelAndView viewstudentperformance() {
-//		ModelAndView mav = new ModelAndView("studentperformance");
-//		List<Enrolment> course = ens.findcompleted();
-//		mav.addObject("Enlist", course);
-//		return mav;
-//	}
 
-	
-	//4.2
-	@RequestMapping(value = "/viewsp/{id}", method = RequestMethod.GET)
-	public ModelAndView viewstudentbycid(@PathVariable int id, HttpServletRequest request,  @RequestParam Map<String, String> requestParams) {
-		ModelAndView mav = new ModelAndView("studentperformance");
-		
-		List<Enrolment> lctList = ens.findcompletedbyid(id);
-		
-		List<Enrolment> searchList = new ArrayList<Enrolment>();
-		if(requestParams.get("searchcontent")!= null && !requestParams.get("searchcontent").isEmpty()){
-			String searchContent = requestParams.get("searchcontent").toLowerCase();
-			for (Enrolment l : lctList) {
-			
-			if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
-					searchList.add(l);}
-					else			if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
-						searchList.add(l);
-			}
-					else			if (l.getStudentDetails().getStudentId().toLowerCase().contains(searchContent)) {
-						searchList.add(l);
-			}
-			
+				if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				} else if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				} else if (l.getStudentDetails().getStudentId().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+
 			}
 			mav.addObject("Enlist", searchList);
 			mav.addObject("datacount", searchList.size());
 			return mav;
-			
-		
+
 		}
 		mav.addObject("Enlist", lctList);
 		return mav;
 	}
-	
-	
-	//4.1 to grade
+
+	// 3.2 view all student performance / search for all students.
+	@RequestMapping(value = "/viewsp/{id}", method = RequestMethod.GET)
+	public ModelAndView viewstudentbycid(@PathVariable int id, HttpServletRequest request,
+			@RequestParam Map<String, String> requestParams) {
+		ModelAndView mav = new ModelAndView("studentperformance");
+
+		List<Enrolment> lctList = ens.findcompletedbyid(id);
+
+		List<Enrolment> searchList = new ArrayList<Enrolment>();
+		if (requestParams.get("searchcontent") != null && !requestParams.get("searchcontent").isEmpty()) {
+			String searchContent = requestParams.get("searchcontent").toLowerCase();
+			for (Enrolment l : lctList) {
+
+				if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				} else if (l.getStudentDetails().getLastName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				} else if (l.getStudentDetails().getStudentId().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+
+			}
+			mav.addObject("Enlist", searchList);
+			mav.addObject("datacount", searchList.size());
+			ArrayList<String> gpa = new ArrayList<String>();
+			System.out.println(lctList.size());
+			for (Enrolment en : lctList) {
+				float f = sds.calcStudentGPA(en.getStudentDetails().getStudentId());
+				String ss = String.format("%.2f%n", f);
+				gpa.add(ss);
+			}
+			mav.addObject("Stgpa", gpa);
+
+			return mav;
+
+		}
+		mav.addObject("Enlist", lctList);
+		ArrayList<String> gpa = new ArrayList<String>();
+		for (Enrolment en : lctList) {
+			float f = sds.calcStudentGPA(en.getStudentDetails().getStudentId());
+			String ss = String.format("%.2f%n", f);
+			gpa.add(ss);
+		}
+		mav.addObject("Stgpa", gpa);
+		return mav;
+	}
+
+	// 3.1 to view performance
 	@RequestMapping(value = "/viewallcr", method = RequestMethod.GET)
 	public ModelAndView viewallcourse() {
 		ModelAndView mav = new ModelAndView("courseavi");
 		List<Course> course = cs.findAllCourses();
 		mav.addObject("Enlist", course);
 		ArrayList<Integer> ar = new ArrayList<Integer>();
-	      for (Course num : course) { 		      
-	        ar.add(ens.countungraded(num.getCourseId()));
-	      }
-		
+		for (Course num : course) {
+			ar.add(ens.countungraded(num.getCourseId()));
+		}
 		mav.addObject("cou", ar);
-		
+
 		return mav;
 	}
-	
-	// search courseid & course name(viewallcr) [4]
-		@RequestMapping(value = "/searchviewallcr", method = RequestMethod.GET)
-		public ModelAndView searchviewallcr(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-				HttpServletRequest request) {
-			String searchContent = requestParams.get("searchcontent").toLowerCase();
-			ModelAndView mav = new ModelAndView("courseavi");
-			ArrayList<Course> lctList = cs.findAllCourses();
-			List<Course> searchList = new ArrayList<Course>();
-			int bn=0;String s2="";
-			for (Course l : lctList) {
-				bn=(l.getCourseId());
-				s2=Integer.toString(bn);
-				if (l.getCourseName().toLowerCase().contains(searchContent)) {
-					searchList.add(l);
-				}
-				
-				else if (s2.toLowerCase().contains(searchContent)) {
-					searchList.add(l);
-				}
+
+	// search courseid & course name(viewallcr) [3]
+	@RequestMapping(value = "/searchviewallcr", method = RequestMethod.GET)
+	public ModelAndView searchviewallcr(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
+			HttpServletRequest request) {
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		ModelAndView mav = new ModelAndView("courseavi");
+		ArrayList<Course> lctList = cs.findAllCourses();
+		List<Course> searchList = new ArrayList<Course>();
+		int bn = 0;
+		String s2 = "";
+		for (Course l : lctList) {
+			bn = (l.getCourseId());
+			s2 = Integer.toString(bn);
+			if (l.getCourseName().toLowerCase().contains(searchContent)) {
+				searchList.add(l);
 			}
 
-			mav.addObject("Enlist", searchList);
-			mav.addObject("datacount", searchList.size());
-			return mav;
+			else if (s2.toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
 		}
 
+		mav.addObject("Enlist", searchList);
+		ArrayList<Integer> ar = new ArrayList<Integer>();
+		for (Course num : searchList) {
+			ar.add(ens.countungraded(num.getCourseId()));
+		}
+		mav.addObject("cou", ar);
+
+		mav.addObject("datacount", searchList.size());
+		return mav;
+	}
+
+	// 3.1 view my course for viewing performance
 	@RequestMapping(value = "/mycourse", method = RequestMethod.GET)
 	public ModelAndView mycourse(HttpServletRequest request) {
 		User u = (User) request.getSession().getAttribute("user");
@@ -385,125 +327,18 @@ public class Lecturercontroller {
 		List<Course> course = cs.findbylecid(s);
 		mav.addObject("Enlist", course);
 		ArrayList<Integer> ar = new ArrayList<Integer>();
-	      for (Course num : course) { 		      
-	        ar.add(ens.countungraded(num.getCourseId()));
-	      }
-		
+		for (Course num : course) {
+			ar.add(ens.countungraded(num.getCourseId()));
+		}
+
 		mav.addObject("cou", ar);
-		
+
 		return mav;
 	}
 
-	@RequestMapping(value = "/viewallcr/{id}", method = RequestMethod.GET)
-	public ModelAndView searchin4(@PathVariable int id, HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("courseavi");
-
-		List<Course> enrole = cs.findbycid(id);
-		mav.addObject("Enlist", enrole);
-		return mav;
-	}
-
-	
-	//grade course show
-	@RequestMapping(value = "/viewalltograde", method = RequestMethod.GET)
-	public ModelAndView viewalltograde(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("courseforgrading");
-		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		List<Course> course = cs.findbylecid(s);
-		List<Course> courseTemp = new ArrayList<Course>();
-		//List<Enrolment> enrolmentList = new ArrayList<Enrolment>();
-
-		for(Course c : course)
-		{	
-			if (ens.findungraded(s, c.getCourseId()).size() !=0)
-			{
-				courseTemp.add(c);
-			}
-		}
-		
-		//mav.addObject("Enlist2", courseTemp);
-	
-		mav.addObject("Enlist", courseTemp);
-		return mav;
-	}
-	
-	
-	@RequestMapping(value = "/1searchbyname", method = RequestMethod.GET)
-	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-			HttpServletRequest request) {
-		String searchContent = requestParams.get("searchcontent").toLowerCase();
-		ModelAndView mav = new ModelAndView("courseforgrading");
-		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-//		ArrayList<Course> lctList = cs.findbylecid(s);
-		List<Course> searchList = new ArrayList<Course>();
-		
-		List<Course> course = cs.findbylecid(s);
-		List<Course> courseTemp = new ArrayList<Course>();
-		
-
-		for(Course c : course)
-		{	
-			if (ens.findungraded(s, c.getCourseId()).size() !=0)
-			{
-				courseTemp.add(c);
-			}
-		}
-		
-		
-		
-		
-		
-		int bn=0;String s2="";
-		for (Course l : courseTemp) {
-			bn=(l.getCourseId());
-			s2=Integer.toString(bn);
-			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			}
-			
-			else if (s2.toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			}
-		}
-
-		mav.addObject("Enlist", searchList);
-		mav.addObject("datacount", searchList.size());
-		return mav;
-	}
-	
-	
-//	// search by course name (grade) page
-//	@RequestMapping(value = "/1searchbyname", method = RequestMethod.GET)
-//	public ModelAndView searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-//			HttpServletRequest request) {
-//		String searchContent = requestParams.get("searchcontent").toLowerCase();
-//		User u = (User) request.getSession().getAttribute("user");
-//		String s = u.getUserId();
-//		ModelAndView mav = new ModelAndView("courseforgrading");
-//		ArrayList<Course> lctList = cs.findbylecid(s);
-//		List<Course> searchList = new ArrayList<Course>();
-//		int bn=0;String s2="";
-//		for (Course l : lctList) {
-//			bn=(l.getCourseId());
-//			s2=Integer.toString(bn);
-//			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-//				searchList.add(l);
-//			}
-//			else if (s2.toLowerCase().contains(searchContent)) {
-//				searchList.add(l);
-//			}
-//		}
-//
-//		mav.addObject("Enlist", searchList);
-//		mav.addObject("datacount", searchList.size());
-//		return mav;
-//	}
-
+	// update the grade.. (2.2)
 	@RequestMapping(value = "/grade/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request) {
-		// ModelAndView mav = new ModelAndView("courseforgrading");
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		String g = request.getParameter("glist");
@@ -519,17 +354,7 @@ public class Lecturercontroller {
 		ens.updateEnrolment(en);
 		List<Course> course = cs.findbylecid(s);
 		// mav.addObject("Enlist", course);
-		return "redirect:" + cid+"?actionstatus=0";
-	}
-
-	@RequestMapping(value = "/mycourseenrole", method = RequestMethod.GET)
-	public ModelAndView mycourseenrole(HttpServletRequest request) {
-		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		ModelAndView mav = new ModelAndView("enroleview");
-		List<Course> course = cs.findbylecid(s);
-		mav.addObject("Enlist", course);
-		return mav;
+		return "redirect:" + cid + "?actionstatus=0";
 	}
 
 }

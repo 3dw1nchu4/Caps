@@ -38,7 +38,7 @@
 
 					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
-							Course Enrolement </a></li>
+							Course Enrolment </a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
@@ -52,16 +52,7 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">course id:
-					${Enlist[0].courses.courseId}</h2>
-
-
-
-
-
-
-
-
+				<h2 class="sub-header" id="sectiontitle">Student Details</h2>
 				<div class="container" style="width: 100%">
 					<nav class="navbar navbar-default" role="navigation">
 					<div class="container-fluid">
@@ -81,11 +72,6 @@
 									placeholder="Student name or ID" name="searchcontent"
 									id="searchcontent">
 
-								<!-- <div class="input-group-btn">
-										<button class="btn btn-default" type="submit">
-											<i class="glyphicon glyphicon-search"></i>
-										</button>
-									</div> -->
 							</div>
 							<button type="submit" class="btn btn-default">Search</button>
 
@@ -117,24 +103,28 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
-
-										<th><spring:message code="fieldLabel.Studentid" /></th>
-
-										<th><spring:message code="fieldLabel.name" /></th>
-										<th><spring:message code="fieldLabel.endate" /></th>
-										<th><spring:message code="fieldLabel.status" /></th>
-
+										<th><h4>
+												<spring:message code="fieldLabel.Studentid" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.name" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.enddate" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.status" />
+											</h4></th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="role" items="${Enlist}">
 										<tr class="listRecord">
-
 											<td>${role.studentDetails.studentId}</td>
 											<td>${role.studentDetails.firstName}
 												${role.studentDetails.lastName}</td>
 											<td>${role.studentDetails.enrolmentDate}</td>
-											<td align="center"><c:set var="sta" scope="session"
+											<td><c:set var="sta" scope="session"
 													value="${role.studentDetails.status}" /> <c:choose>
 													<c:when test="${sta=='Disabled'}">
 														<p class="btn btn-danger">

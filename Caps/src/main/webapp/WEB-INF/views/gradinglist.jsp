@@ -40,7 +40,7 @@
 					
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View Course
-							Enrolement </a></li>
+							Enrolment </a></li>
 					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
@@ -54,7 +54,7 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle"></h2>
+				<h2 class="sub-header" id="sectiontitle">Grade all Student</h2>
 
 
 				<div class="container" style="width: 100%">
@@ -108,10 +108,10 @@
 								<thead>
 									<tr>
 
-										<th><spring:message code="fieldLabel.Studentid" /></th>
-										<th><spring:message code="fieldLabel.name" /></th>
-										<th><spring:message code="fieldLabel.coursename" /></th>
-										<th><spring:message code="fieldLabel.grade" /></th>
+										<th><h4><spring:message code="fieldLabel.Studentid" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.name" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.coursename" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.grade" /></h4></th>
 										
 									</tr>
 								</thead>
@@ -122,8 +122,6 @@
 											<td>${role.studentDetails.firstName}
 												${role.studentDetails.lastName}</td>
 											<td>${role.courses.courseName}</td>
-											
-											
 											<td>
 											<form:form  name="grade" action="update?sd=${role.studentDetails.studentId}&couid=${role.courses.courseId}&enid=${role.enrolmentId}" >
 											<select name ="glist" required="required">
@@ -137,50 +135,37 @@
 											</select>
 											<input class="btn btn-primary" type="submit" name = "submit" value="Grade">
 											</form:form>
-											</td>
-											
-										
-										</tr>
+											</td>	</tr>
 
 									</c:forEach>
 								</tbody>
 							</table>
-					</c:when>
+					</c:when></c:choose>
+			</div></div>
 
-					<c:otherwise>
+	</div>
+	</div>
+	</div>
+	<!-- Not logged in Modal -->
 
-
-					</c:otherwise>
-
-				</c:choose>
+	<div id="redirectLoginModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">All students graded</h4>
+				</div>
+				<div class="modal-body">
+					<p><h3> Grade updated successfully.</h3>
+						You will be redirected to the Grade a course page.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
 			</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		</div>
-
 	</div>
-	</div>
-	</div>
-	
 	
 
 	<footer
@@ -197,7 +182,7 @@
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
 	
-	
+
 
 	//clears search content when entering search box
 	$("#searchcontent").click(function(){
@@ -232,5 +217,18 @@
 		
 		document.getElementById("updatesucess").style.display = "block";
 	}
+	
+	<c:if test = '${Enlist.size() ==0 }'>
+	{
+		if (qs['searchcontent'] == null)
+		{
+			$('#redirectLoginModal').modal('toggle');
+			window.setTimeout(function()
+			{
+				window.location = "${pageContext.request.contextPath}/Lec/viewalltograde";
+			}, 3000);
+		}
+	}
+	</c:if>
 </script>
 </html>
