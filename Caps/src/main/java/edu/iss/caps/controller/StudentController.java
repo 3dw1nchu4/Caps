@@ -46,7 +46,7 @@ public class StudentController {
 //	}
 	@RequestMapping(value="/sec",method = RequestMethod.GET)
 	public String testMestod(HttpServletRequest request){
-	    request.getSession().setAttribute("name", "S001");
+//	    request.getSession().setAttribute("name", "S001");
 	    
 	    
 	    return "sec";
@@ -98,6 +98,8 @@ public class StudentController {
 		String s=(String) sid;
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
 		
+		
+		
 		mav.addObject("grlist", grades);
 		return mav;
 	}
@@ -113,6 +115,7 @@ public class StudentController {
 		   Course c = cService.findCourse(courseId);
 		   String message ="";
 		
+		   
 
 		if (c.getSize()>c.getCurrentEnrollment()) {
 			Object sid=request.getSession().getAttribute("name");
