@@ -50,20 +50,7 @@ public class AdminController
 	@Autowired
 	EnrolmentService enrolmentService;
 
-	/*
-	 * @RequestMapping(value = "/") public String testMestod(HttpSession
-	 * session) { try { User u = (User) session.getAttribute("user");
-	 * 
-	 * if (u.getRole().equals("Admin")) { return "redirect:managestudent"; }
-	 * else { return "redirect:www.google.com"; } } catch (Exception e) { return
-	 * "redirect:www.google.com"; }
-	 * 
-	 * 
-	 * }
-	 */
-
-	//// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-STUDENT
-	//// >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
+	
 	@RequestMapping(value = "/managestudent", method = RequestMethod.GET)
 	public ModelAndView manageStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -562,7 +549,7 @@ public class AdminController
 		return mav;
 	}
 
-
+// To get date formatted from string
 	@SuppressWarnings("deprecation")
 	private static Date ConvertToDate(String dateString)
 	{

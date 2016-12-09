@@ -66,21 +66,19 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a href="managestudent">Manage
+					<li id="sidebarStudent" class="active"><a href="managestudent">Manage
 							Students</a></li>
 					<li id="sidebarLecturer"><a href="managelecturer">Manage
 							Lecturers</a></li>
 					<li id="sidebarCourse"><a href="managecourse">Manage
 							Courses</a></li>
-					<li id="sidebarEnrolment"><a
-						href="javascript:Manage('enrolment')">Manage Enrolment</a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+				<h2 class="sub-header" id="sectiontitle">Manage Student Records</h2>
 
 				<div id="mainbody" style="width: 100%">
 
@@ -135,9 +133,8 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th id="tableheader1"><h4>#</h4></th>
-								<th><h4>First Name</h4></th>
-								<th><h4>Last Name</h4></th>
+								<th><h4>Student ID</h4></th>
+								<th><h4>Name</h4></th>
 								<th><h4>Enrolment Date</h4></th>
 								<th><h4>Status</h4></th>
 								<th><h4></h4></th>
@@ -147,14 +144,13 @@
 							<c:forEach var="object" items="${dataList}">
 								<tr class="listRecord">
 									<td>${object.studentId}</td>
-									<td>${object.firstName}</td>
-									<td>${object.lastName}</td>
+									<td>${object.lastName}, ${object.firstName}</td>
 									<td>${object.enrolmentDate}</td>
 									<td>${object.status}</td>
 									<td><button class="btn btn-primary"
 											onclick="EditRecord('${object.studentId}')">Edit</button>
 										<button class="btn btn-danger"
-											onclick="DeleteRecord('${object.studentId}')">Delete</button></td>
+											onclick="DeleteRecord('${object.studentId}')">Disable</button></td>
 								</tr>
 							</c:forEach>
 
@@ -213,7 +209,7 @@
 											<td>${enrol.earnedCredit}</td>
 											<td><button type="button" class="btn btn-info"
 													onclick="RemoveEnrolment('${enrol.enrolmentId}')"
-													<c:if test="${enrol.status.contains('Passed') || enrol.status.contains('Removed')}"> disabled
+													<c:if test="${enrol.status.contains('Passed') || enrol.status.contains('Failed') || enrol.status.contains('Removed')}"> disabled
 													</c:if>>
 													Remove from Course</button>
 										</tr>
@@ -225,7 +221,7 @@
 						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
-						<button class="btn btn-danger" onclick="BackToPrevious()">Cancel
+						<button type="button" class="btn btn-danger" onclick="BackToPrevious()">Cancel
 						</button>
 					</form>
 
@@ -344,16 +340,10 @@
 	    $('.selectpicker').selectpicker();
 	});
 	
-	//clears search content when clicking X
-	$("#searchclear").click(function(){
-	    $("#searchcontent").val('');
-	});
-	
 	//clears search content when entering search box
 	$("#searchcontent").click(function(){
 	    $("#searchcontent").val('');
 	});
-
 
 	var url = window.location.href;
 
@@ -375,41 +365,6 @@
 		return b;
 	})(window.location.search.substr(1).split('&'));
 	
-
-	try
-	{
-		if (url.includes("student"))
-		{
-			document.getElementById("sidebarStudent").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Student ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Student Records";
-	
-		} else if (url.includes("lecturer"))
-		{
-			document.getElementById("sidebarLecturer").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Lecturer ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Lecturer Records";
-	
-		} else if (url.includes("course"))
-		{
-			document.getElementById("sidebarCourse").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Course ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Course Records";
-	
-		} else if (url.includes("enrolment"))
-		{
-			document.getElementById("sidebarEnrolment").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Enrolment ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Enrolment Records";
-	
-		} 
-
-	}
-	catch (err)
-	{
-		console.log("no query string");
-		RedirectToLogin();
-	}
 	
 	if (qs['searchcontent'] != null)
 	{
@@ -446,12 +401,6 @@
 	function EditRecord(id) //Edit button
 	{
 		window.location.href = "${pageContext.request.contextPath}/admin/managestudent?id="+id;
-	}
-
-	function Manage(recordtype)
-	{
-		window.location.href = url + "?userrole=" + qs['userrole'] + "&manage="
-				+ recordtype;
 	}
 	
 	function BackToPrevious()

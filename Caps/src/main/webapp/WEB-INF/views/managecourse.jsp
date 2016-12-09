@@ -70,18 +70,15 @@
 							Students</a></li>
 					<li id="sidebarLecturer"><a href="managelecturer">Manage
 							Lecturers</a></li>
-					<li id="sidebarCourse"><a href="managecourse">Manage
+					<li id="sidebarCourse" class="active"><a href="managecourse">Manage
 							Courses</a></li>
-					<li id="sidebarEnrolment"><a href="manageenrolment">Manage
-							Enrolment</a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 
-				<h2 class="sub-header" id="sectiontitle" name="sectiontitle">Section
-					title</h2>
+				<h2 class="sub-header" id="sectiontitle" name="sectiontitle">Manage Student Records</h2>
 
 				<div id="mainbody" style="width: 100%">
 
@@ -291,9 +288,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Success</h4>
 				</div>
-				<div class="modal-body" id="successModalMessage">
-				
-				</div>
+				<div class="modal-body" id="successModalMessage"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
@@ -361,23 +356,23 @@
 		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
 		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
 	});
-try{
-	$(document).ready(function() {
-	    $('.selectpicker').selectpicker();
-	});
 	
-	//clears search content when clicking X
-	$("#searchclear").click(function(){
-	    $("#searchcontent").val('');
-	});
-	
-	//clears search content when entering search box
-	$("#searchcontent").click(function(){
-	    $("#searchcontent").val('');
-	});
-}
-catch (err)
-{
+	try
+	{
+		$(document).ready(function() 
+		{
+		    $('.selectpicker').selectpicker();
+		});
+			
+		//clears search content when entering search box
+		$("#searchcontent").click(function()
+		{
+		    $("#searchcontent").val('');
+		});
+	}
+	catch (err)
+	{
+		console.log(err);
 	}
 
 	var url = window.location.href;
@@ -401,37 +396,6 @@ catch (err)
 		return b;
 	})(window.location.search.substr(1).split('&'));
 	
-
-	try
-	{
-		if (url.includes("student"))
-		{
-			document.getElementById("sidebarStudent").className = "active";
-			document.getElementById("sectiontitle").innerHTML = "Manage Student Records";
-	
-		} else if (url.includes("lecturer"))
-		{
-			document.getElementById("sidebarLecturer").className = "active";
-			document.getElementById("sectiontitle").innerHTML = "Manage Lecturer Records";
-	
-		} else if (url.includes("course"))
-		{
-			document.getElementById("sidebarCourse").className = "active";
-			document.getElementById("sectiontitle").innerHTML = "Manage Course Records";
-	
-		} else if (url.includes("enrolment"))
-		{
-			document.getElementById("sidebarEnrolment").className = "active";
-			document.getElementById("sectiontitle").innerHTML = "Manage Enrolment Records";
-	
-		} 
-
-	}
-	catch (err)
-	{
-		console.log(err);
-		
-	}
 	
 	if (qs['searchcontent'] != null)
 	{
@@ -463,34 +427,22 @@ catch (err)
 			
 		}
 	}
-	
-	//if (url.includes("actionstatus="))
-		//{
-		//$('#successActionModal').modal('toggle');
-	//	}
+
 	if (qs['actionstatus'] == "success")
-{
+	{
 		document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
 		$('#successActionModal').modal('toggle');
-}
+	}
 
-if (qs['actionstatus'] == "createsuccess")
-{
+	if (qs['actionstatus'] == "createsuccess")
+	{
 		document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
 		$('#successActionModal').modal('toggle');
-}
+	}
 	
-	
-
 	function EditRecord(id) //Edit button
 	{
 		window.location.href = "${pageContext.request.contextPath}/admin/managecourse?id="+id;
-	}
-
-	function Manage(recordtype)
-	{
-		window.location.href = url + "?userrole=" + qs['userrole'] + "&manage="
-				+ recordtype;
 	}
 	
 	function BackToPrevious()

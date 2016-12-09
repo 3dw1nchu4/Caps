@@ -68,19 +68,18 @@
 				<ul class="nav nav-sidebar">
 					<li id="sidebarStudent"><a href="managestudent">Manage
 							Students</a></li>
-					<li id="sidebarLecturer"><a href="managelecturer">Manage
-							Lecturers</a></li>
+					<li id="sidebarLecturer" class="active"><a
+						href="managelecturer">Manage Lecturers</a></li>
 					<li id="sidebarCourse"><a href="managecourse">Manage
 							Courses</a></li>
-					<li id="sidebarEnrolment"><a href="manageenrolment">Manage
-							Enrolment</a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+				<h2 class="sub-header" id="sectiontitle">Manage Lecturer
+					Records</h2>
 
 				<div id="mainbody" style="width: 100%">
 
@@ -152,7 +151,7 @@
 									<td><button class="btn btn-primary"
 											onclick="EditRecord('${object.lecturerId}')">Edit</button>
 										<button class="btn btn-danger"
-											onclick="DeleteRecord('${object.lecturerId}')">Delete</button></td>
+											onclick="DeleteRecord('${object.lecturerId}')">Disable</button></td>
 								</tr>
 							</c:forEach>
 
@@ -187,59 +186,63 @@
 						</div>
 						<br> <br>
 
-						
+
 						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
-						<button class="btn btn-danger" onclick="BackToPrevious()">Cancel
-						</button>
+						<button type="button" class="btn btn-danger"
+							onclick="BackToPrevious()">Cancel</button>
 					</form>
-					
+
 					<div id="lecturercourses" name="lecturercourses">
-					<br><br>
-							<h3>
-								<b><u>${data.lastName }, ${data.firstName }</u></b> is teaching
-								the following ${enroldata.size() } courses
-							</h3>
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th><h4>Course Id</h4></th>
-										<th><h4>Course Name</h4></th>
-										<th><h4>From / To</h4></th>
-										<th><h4>Enrolment / Capacity</h4></th>
-										<th><h4>Reassign To Another Lecturer</h4></th>
+						<br> <br>
+						<h3>
+							<b><u>${data.lastName }, ${data.firstName }</u></b> is teaching
+							the following ${enroldata.size() } courses
+						</h3>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th><h4>Course Id</h4></th>
+									<th><h4>Course Name</h4></th>
+									<th><h4>From / To</h4></th>
+									<th><h4>Course Size</h4></th>
+									<th><h4>Reassign To Another Lecturer</h4></th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="enrol" items="${enroldata}">
+									<tr class="listRecord">
+										<td>${enrol.courseId}</td>
+										<td>${enrol.courseName}</td>
+										<td>From: ${enrol.startDate} <br> To:
+											${enrol.endDate}
+										</td>
+										<td>${enrol.currentEnrollment}/${enrol.size}</td>
+										<td>
+											<div>
+												<select id="changelecturerpicker${enrol.courseId}"
+													name="changelecturerpicker"
+													class="selectpicker show-tick form-control"
+													data-live-search="true" style="width: 500px">
+													<c:forEach var="lecturer" items="${lecturerList}">
+														<option
+															data-subtext="${lecturer.lastName }, ${lecturer.firstName }">${lecturer.lecturerId }</option>
+													</c:forEach>
+												</select>
+											</div>
+										</td>
+										<td>
+											<button type="button" class="btn btn-info"
+												onclick="ChangeLecturer('${enrol.courseId}')">
+												Reassign</button>
+										</td>
 									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="enrol" items="${enroldata}">
-										<tr class="listRecord">
-											<td>${enrol.courseId}</td>
-											<td>${enrol.courseName}</td>
-											<td>From: ${enrol.startDate} <br> To: ${enrol.endDate}</td>
-											<td>${enrol.currentEnrollment} / ${enrol.size}</td>
-											<td><label for="changelecturerpicker" class="control-label">Lecturer
-													ID:</label>
-												<div>
-													<select id="changelecturerpicker${enrol.courseId}" name="changelecturerpicker"
-														class="selectpicker show-tick form-control"
-														data-live-search="true" style="width:500px">
-														<c:forEach var="lecturer" items="${lecturerList}">
-															<option
-																data-subtext="${lecturer.lastName }, ${lecturer.firstName }">${lecturer.lecturerId }</option>
-														</c:forEach>
-													</select>
-												</div>
+								</c:forEach>
+							</tbody>
+						</table>
 
-												<button type="button" class="btn btn-info"
-													onclick="ChangeLecturer('${enrol.courseId}')">
-													Reassign</button></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-
-						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -279,9 +282,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Success</h4>
 				</div>
-				<div class="modal-body" id="successModalMessage">
-				
-				</div>
+				<div class="modal-body" id="successModalMessage"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
@@ -316,14 +317,15 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Confirm Inactivation of Lecturer Account</h4>
+					<h4 class="modal-title">Confirm Inactivation of Lecturer
+						Account</h4>
 				</div>
 				<form action="deletelecturer" method="post">
 					<div class="modal-body">
 
 						<p>The selected account will be inactivated.</p>
 						<input id="deletethis" name="deletethis" class="form-control"
-							placeholder="Last Name" value="" required type="hidden"/>
+							placeholder="Last Name" value="" required type="hidden" />
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -354,11 +356,6 @@
 	    $('.selectpicker').selectpicker();
 	});
 	
-	//clears search content when clicking X
-	$("#searchclear").click(function(){
-	    $("#searchcontent").val('');
-	});
-	
 	//clears search content when entering search box
 	$("#searchcontent").click(function(){
 	    $("#searchcontent").val('');
@@ -385,41 +382,6 @@
 		return b;
 	})(window.location.search.substr(1).split('&'));
 	
-
-	try
-	{
-		if (url.includes("student"))
-		{
-			document.getElementById("sidebarStudent").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Student ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Student Records";
-	
-		} else if (url.includes("lecturer"))
-		{
-			document.getElementById("sidebarLecturer").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Lecturer ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Lecturer Records";
-	
-		} else if (url.includes("course"))
-		{
-			document.getElementById("sidebarCourse").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Course ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Course Records";
-	
-		} else if (url.includes("enrolment"))
-		{
-			document.getElementById("sidebarEnrolment").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Enrolment ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Enrolment Records";
-	
-		} 
-
-	}
-	catch (err)
-	{
-		console.log("no query string");
-		RedirectToLogin();
-	}
 	
 	if (qs['searchcontent'] != null)
 	{
@@ -452,12 +414,6 @@
 	function EditRecord(id) //Edit button
 	{
 		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer?id="+id;
-	}
-
-	function Manage(recordtype)
-	{
-		window.location.href = url + "?userrole=" + qs['userrole'] + "&manage="
-				+ recordtype;
 	}
 	
 	function BackToPrevious()
