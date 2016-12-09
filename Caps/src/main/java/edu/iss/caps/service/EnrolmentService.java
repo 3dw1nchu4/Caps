@@ -13,7 +13,7 @@ public interface EnrolmentService {
 
 	ArrayList<Enrolment> findbycid(int id, String lecid);
 
-	ArrayList<Enrolment> findungraded();
+
 
 	List<Enrolment> findstudentbylecturerid(String s);
 	
@@ -23,11 +23,12 @@ public interface EnrolmentService {
 
 	List<Enrolment> findungraded(String s, int id);
 
-	ArrayList<Enrolment> findcompleted();
 
 	ArrayList<Enrolment> findcompletedbyid(int cid);
 
 	ArrayList<Enrolment> findbycid(int courseId);
+	
+	int countungraded(int cid);
 
 	List<Enrolment> findCourseBySID(String s);
 
