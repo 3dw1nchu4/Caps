@@ -42,8 +42,8 @@
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a
-							course </a></li>
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
+							a course </a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
 							Student Preformance </a></li>
@@ -54,7 +54,7 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+				<h2 class="sub-header" id="sectiontitle">course id: ${Enlist[0].courses.courseId}</h2>
 
 
 
@@ -64,26 +64,41 @@
 
 
 				<div class="container" style="width: 100%">
-					<div class="row">
-						<div class="col-xs-1">
-							<label for="search"><h4>Search:</h4> </label>
-						</div>
-						<div class="col-xs-5">
+					<nav class="navbar navbar-default" role="navigation">
+					<div class="container-fluid">
+						<!--  div class="navbar-header">
+								<a class="navbar-brand" href="#">Search</a>
+							</div>-->
 
-							<input type='text' class="form-control" id="se"
-								placeholder="Search by course Id" name='search' />
+						<form class="navbar-form navbar-left" role="search"
+							action="${requestScope['javax.servlet.forward.request_uri']}" method="get">
+							<div class="form-group">
+								<label>Search by : </label>
+							</div>
+							<div class="input-group">
 
-						</div>
-						<div class="col xs-6">
+								<input type="text" class="form-control"
+									placeholder="Student name or ID" name="searchcontent"
+									id="searchcontent">
 
-
-							<input type="submit" class="btn btn-success" value="Search"
-								onclick="search()" class="btn">
-								<a class="btn btn-success"
+								<!-- <div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div> -->
+							</div>
+							<button type="submit" class="btn btn-default">Search</button>
+							
+							<a class="btn btn-success"
 								href="${pageContext.request.contextPath}/Lec/viewallenrole">
-									<span class="glyphicon glyphicon-arrow-left"></span> back to All courses</a>
-						</div>
+								<span class="glyphicon glyphicon-arrow-left"></span> back to All
+								courses
+							</a>
+
+						</form>
+
 					</div>
+					</nav>
 				</div>
 				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
 	Employee</a>-->
@@ -93,12 +108,12 @@
 					uri="http://www.springframework.org/tags/form"%>
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
-					
+
 						<div class="table-responsive">
 							<table class="table table-striped">
 								<thead>
 									<tr>
-									
+
 										<th><spring:message code="fieldLabel.Studentid" /></th>
 
 										<th><spring:message code="fieldLabel.name" /></th>
@@ -110,11 +125,12 @@
 								<tbody>
 									<c:forEach var="role" items="${Enlist}">
 										<tr class="listRecord">
+										
 											<td>${role.studentDetails.studentId}</td>
 											<td>${role.studentDetails.firstName}
 												${role.studentDetails.lastName}</td>
-												<td>${role.studentDetails.enrolmentDate}</td>
-												<td align="center"><c:set var="sta" scope="session"
+											<td>${role.studentDetails.enrolmentDate}</td>
+											<td align="center"><c:set var="sta" scope="session"
 													value="${role.studentDetails.status}" /> <c:choose>
 													<c:when test="${sta=='Disabled'}">
 														<p class="btn btn-danger">
@@ -128,7 +144,7 @@
 													</c:when>
 
 												</c:choose></td>
-												
+
 										</tr>
 
 									</c:forEach>
@@ -139,8 +155,11 @@
 					</c:when>
 
 					<c:otherwise>
-
-						<spring:message code="error.notfound" />
+						<br>
+						<br>
+						<center>
+							<spring:message code="error.notfound" />
+						</center>
 
 					</c:otherwise>
 
@@ -187,5 +206,40 @@
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
+	
+	function search() {
+		var x = document.getElementById("inputPK").value;
+		window.location = "${pageContext.request.contextPath}/Lec/viewallcr/"
+				+ x;
+	}
+
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
+	var qs = (function(a)
+			{
+				if (a == "")
+					return
+					{};
+				var b =
+				{};
+				for (var i = 0; i < a.length; ++i)
+				{
+					var p = a[i].split('=', 2);
+					if (p.length == 1)
+						b[p[0]] = "";
+					else
+						b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+				}
+				return b;
+			})(window.location.search.substr(1).split('&'));
+	
+	if (qs['searchcontent'] != null)
+	{
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
+	}
+
 </script>
 </html>

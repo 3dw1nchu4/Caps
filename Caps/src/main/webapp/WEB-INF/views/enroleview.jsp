@@ -53,13 +53,13 @@
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/byid">View Course
 							Taught </a></li>
-					<li  class="active" id="sidebarStudent"><a
+					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a
-							course </a></li>
-					<li  id="sidebarStudent"><a
+						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
+							a course </a></li>
+					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
 							Student Preformance </a></li>
 				</ul>
@@ -69,35 +69,53 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+				<h2 class="sub-header" id="sectiontitle">Section</h2>
 
 
 
 				<div class="container" style="width: 100%">
-					<div class="row">
-						<div class="col-xs-1">
-							<label for="search"><h4>Search:</h4> </label>
-						</div>
-						<div class="col-xs-5">
-							<input type="number" id="inputPK" class="form-control"
-								placeholder="Search by course ID (All-course)">
-						</div>
-						<div class="col xs-6">
-							<input type="submit" class="btn btn-success" value="Search"
-								onclick="search()" class="btn"> <a
-								class="btn btn-success"
+					<nav class="navbar navbar-default" role="navigation">
+					<div class="container-fluid">
+						<!--  div class="navbar-header">
+								<a class="navbar-brand" href="#">Search</a>
+							</div>-->
+
+						<form class="navbar-form navbar-left" role="search"
+							action="2searchbyname" method="get">
+							<div class="form-group">
+								<label>Search by : </label>
+							</div>
+							<div class="input-group">
+
+								<input type="text" class="form-control"
+									placeholder="course name or ID" name="searchcontent"
+									id="searchcontent">
+
+								<!-- <div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div> -->
+							</div>
+							<button type="submit" class="btn btn-default">Search</button>
+							<a class="btn btn-success"
 								href="${pageContext.request.contextPath}/Lec/mycourseenrole"><spring:message
 									code="My course" /></a> <a class="btn btn-success"
 								href="${pageContext.request.contextPath}/Lec/viewallenrole"><spring:message
 									code="All course" /></a>
-						</div>
+						</form>
+
 					</div>
+					</nav>
+
 				</div>
-				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
-	Employee</a>-->
+
+				<div id="searchcount" name="searchcount" style="display: none">
+					<h5>Your search returned ${Enlist.size() } results</h5>
+				</div>
 				<%@ taglib prefix="form"
 					uri="http://www.springframework.org/tags/form"%>
-					<%@ page import="java.io.*,java.util.*" %>
+				<%@ page import="java.io.*,java.util.*"%>
 
 				<c:choose>
 					<c:when test="${fn:length(Enlist) gt 0}">
@@ -120,13 +138,25 @@
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
 											<td>${role.credits}</td>
+											<td align="center"><c:set var="sta" scope="session"
+													value="${role.currentEnrollment}" /> <c:choose>
+													<c:when test="${sta==0}">
+														<p class="btn btn-primary disabled">
+															<spring:message code="${role.currentEnrollment}" />
+															<br>( view all )
+														</p>
+														
+													</c:when>
+													<c:otherwise>
+														<a class="btn btn-primary"
+											href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
+												code="${role.currentEnrollment}" /><br>( view all )</a>
 
-											<td align="center"><a class="btn btn-primary"
-												href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
-														code="${role.currentEnrollment}" /><br>( view all )</a></td>
+													</c:otherwise>
+
+												</c:choose></td>
 										</tr>
-
-
+									
 
 										</tr>
 
@@ -137,12 +167,6 @@
 
 					</c:when>
 
-					<c:otherwise>
-
-
-						<spring:message code="error.notfoundall" />
-
-					</c:otherwise>
 
 				</c:choose>
 			</div>
@@ -170,6 +194,35 @@
 		window.location = "${pageContext.request.contextPath}/Lec/viewallcr/"
 				+ x;
 	}
+
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
+	var qs = (function(a)
+			{
+				if (a == "")
+					return
+					{};
+				var b =
+				{};
+				for (var i = 0; i < a.length; ++i)
+				{
+					var p = a[i].split('=', 2);
+					if (p.length == 1)
+						b[p[0]] = "";
+					else
+						b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+				}
+				return b;
+			})(window.location.search.substr(1).split('&'));
+	
+	if (qs['searchcontent'] != null)
+	{
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
+	}
+
 </script>
 </html>
 

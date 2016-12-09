@@ -19,7 +19,7 @@ import edu.iss.caps.model.User;
 import edu.iss.caps.service.UserService;
 
 
-@RequestMapping("/")
+@RequestMapping("/home")
 @Controller
 public class CommonController {
 	
