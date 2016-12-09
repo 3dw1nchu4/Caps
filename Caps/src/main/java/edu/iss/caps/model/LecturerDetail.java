@@ -1,4 +1,4 @@
-package edu.iss.caps.model;
+	package edu.iss.caps.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

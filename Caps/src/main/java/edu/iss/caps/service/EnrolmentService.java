@@ -37,7 +37,7 @@ public interface EnrolmentService {
 
 	ArrayList<Enrolment> findcompletedgradesbysid(String studentId);
 
-	ArrayList<Enrolment> findcompleted(int id);
+//	ArrayList<Enrolment> findcompleted(int id);
 	
 
 }

@@ -188,10 +188,11 @@
 								placeholder="User password" value="" autofocus>
 						</div>
 						<br> <br>
-						<div id="studentcourses" name= "studentcourses">
-
-							<h3><b><u>${data.lastName }, ${data.firstName }</u></b> is enrolled in
-								${enroldata.size() } courses</h3>
+						<div id="studentcourses" name="studentcourses">
+							<h3>
+								<b><u>${data.lastName }, ${data.firstName }</u></b> is enrolled
+								in ${enroldata.size() } courses
+							</h3>
 							<table class="table table-striped">
 								<thead>
 									<tr>
@@ -210,11 +211,11 @@
 											<td>${enrol.status}</td>
 											<td>${enrol.grade}</td>
 											<td>${enrol.earnedCredit}</td>
-											<td><button type = "button" class="btn btn-info"
-													onclick="RemoveEnrolment('${enrol.enrolmentId}')"  
+											<td><button type="button" class="btn btn-info"
+													onclick="RemoveEnrolment('${enrol.enrolmentId}')"
 													<c:if test="${enrol.status.contains('Passed') || enrol.status.contains('Removed')}"> disabled
-													</c:if>> Remove
-													from Course</button>
+													</c:if>>
+													Remove from Course</button>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -259,6 +260,25 @@
 		</div>
 	</div>
 
+	<!-- Successful transaction Modal -->
+	<div id="successActionModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Success</h4>
+				</div>
+				<div class="modal-body" id="successModalMessage">
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 	<!-- Not logged in Modal -->
 
 	<div id="redirectLoginModal" class="modal fade" role="dialog">
@@ -285,19 +305,19 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Confirm Deletion</h4>
+					<h4 class="modal-title">Confirm Inactivation of Student Account</h4>
 				</div>
 				<form action="deletestudent" method="post">
 					<div class="modal-body">
 
-						<p>The selected entry will be permanently deleted.</p>
+						<p>The selected student account will be inactivated.</p>
 						<input id="deletethis" name="deletethis" class="form-control"
-							placeholder="Last Name" value="" required />
+							placeholder="Last Name" value="" required type="hidden"/>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						<button id="deletebtn" name="deletebtn" type="submit"
-							class="btn btn-danger">Delete</button>
+							class="btn btn-danger">Confirm</button>
 					</div>
 				</form>
 
@@ -305,33 +325,7 @@
 
 		</div>
 	</div>
-	
-		<!-- Confirm Remove from Enrolment Modal -->
-	<div id="removeEnrolmentModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Confirm Deletion</h4>
-				</div>
-				<form action="removestudentenrolment" method="post">
-					<div class="modal-body">
 
-						<p>The selected entry will be permanently deleted.</p>
-						<input id="removethis" name="removethis" class="form-control"
-							placeholder="Last Name" value="" required />
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button id="deletebtn" name="deletebtn" type="submit"
-							class="btn btn-danger">Delete</button>
-					</div>
-				</form>
-
-			</div>
-
-		</div>
-	</div>
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -483,14 +477,17 @@
 		$('#deleteModal').modal('toggle');
 	}
 	
-	function RemoveEnrolment(id)
+	
+	if (qs['actionstatus'] == "success")
 	{
-		//Attaches correct delete event to button
-		console.log("event attached");
-		
-		document.getElementById("removethis").value = id;
-		$('#removeEnrolmentModal').modal('toggle');
-		
+			document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
+			$('#successActionModal').modal('toggle');
+	}
+
+	if (qs['actionstatus'] == "createsuccess")
+	{
+			document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
+			$('#successActionModal').modal('toggle');
 	}
 	
 

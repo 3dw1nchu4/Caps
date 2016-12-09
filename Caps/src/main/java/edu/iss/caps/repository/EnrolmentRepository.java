@@ -51,11 +51,11 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer>{
 	@Query("SELECT e from Enrolment e WHERE e.studentDetails.studentId = :sid")
 	ArrayList<Enrolment> findCourseBySID(@Param("sid") String StudentID);
 	
+	@Query("select count(courseId) from Enrolment w where w.grade is not null AND w.courses.courseId = :sid ")
+	int countungraded (@Param("sid") int courseId);
 	
 	@Query("SELECT w FROM Enrolment w WHERE w.grade is null")
 	ArrayList<Enrolment> findungraded();
-
-	//ArrayList<Enrolment> findcompleted();
 	
 	
 }

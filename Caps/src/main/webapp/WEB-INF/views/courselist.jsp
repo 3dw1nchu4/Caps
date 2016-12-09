@@ -68,29 +68,49 @@
 			
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
 
-
-				
 <div class="container" style="width: 100%">
-	<div class="row">
-		<div class="col-xs-1">
-			<label for="search"><h4>Search:</h4> </label>
-		</div>
-		<div class="col-xs-5">
-			<input type="text" id="inputPK" class="form-control"
-				placeholder="Search for something here">
-		</div>
-		<div class="col xs-6">
-		<a class="btn btn-success"
-						href="${pageContext.request.contextPath}/Lec/all"><spring:message
-								code="Search"  /></a>
-		</div>
-	</div>
-</div>
+
+						<nav class="navbar navbar-default" role="navigation">
+						<div class="container-fluid">
+							<!--  div class="navbar-header">
+								<a class="navbar-brand" href="#">Search</a>
+							</div>-->
+
+							<form class="navbar-form navbar-left" role="search"
+								action="1searchbyname" method="get">
+								<div class="form-group">
+										<label>Search by : </label> 
+								</div>
+								<div class="input-group">
+									
+									<input type="text" class="form-control" placeholder="course name"
+										name="searchcontent" id="searchcontent">
+
+									<!-- <div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div> -->
+								</div>
+								<button type="submit" class="btn btn-default">Search</button>
+							</form>
+						</div>
+						</nav>
+
+
+						
+					</div>
+
+					<div id="searchcount" name="searchcount" style="display:none"><h5> Your search returned ${list.size() } results</h5></div>
+					
+				
+
 <!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
 	Employee</a>-->
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<c:choose>
+					<c:when test="${fn:length(list) gt 0}">
 
 <div class="table-responsive">
 	<table class="table table-striped">
@@ -127,6 +147,8 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	</c:when>
+	</c:choose>
 </div>
 
 </div>
@@ -147,6 +169,33 @@
 	});
 
 
+	//clears search content when entering search box
+	$("#searchcontent").click(function(){
+	    $("#searchcontent").val('');
+	});
+	var qs = (function(a)
+			{
+				if (a == "")
+					return
+					{};
+				var b =
+				{};
+				for (var i = 0; i < a.length; ++i)
+				{
+					var p = a[i].split('=', 2);
+					if (p.length == 1)
+						b[p[0]] = "";
+					else
+						b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+				}
+				return b;
+			})(window.location.search.substr(1).split('&'));
+	
+	if (qs['searchcontent'] != null)
+	{
+		document.getElementById("searchcontent").value = qs['searchcontent'];
+		document.getElementById("searchcount").style.display = "block";
+	}
 
 </script>
 </html>
