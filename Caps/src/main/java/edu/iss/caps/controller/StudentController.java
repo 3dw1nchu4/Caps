@@ -1,7 +1,10 @@
 package edu.iss.caps.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,11 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -105,9 +110,13 @@ public class StudentController {
 		
 		float gpa = sService.calcStudentGPA(s);
 		
+		String k= String.format("%.2f", gpa) ;
+
+
 		
 		
-		request.getSession().setAttribute("GPA",Float.toString(gpa));
+		
+		request.getSession().setAttribute("GPA",k);
 		
 		
 		
@@ -168,5 +177,43 @@ public class StudentController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/listallsearchbyname", method = RequestMethod.GET)
+	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
+			HttpServletRequest request) {
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		ModelAndView mav = new ModelAndView("list-all");
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		// ArrayList<Course> lctList = cs.findbylecid(s);
+		List<Course> searchList = new ArrayList<Course>();
+
+		List<Course> course = cService.findAllCourses();
+//		List<Course> courseTemp = new ArrayList<Course>();
+//		
+//
+//		for (Course c : course) {
+//			if (eService.findungraded(s, c.getCourseId()).size() != 0) {
+//				courseTemp.add(c);
+//			}
+//		}
+
+		int bn = 0;
+		String s2 = "";
+		for (Course l : course) {
+			bn = (l.getCourseId());
+			s2 = Integer.toString(bn);
+			if (l.getCourseName().toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+
+			else if (s2.toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+		}
+
+		mav.addObject("courselist", searchList);
+		mav.addObject("datacount", searchList.size());
+		return mav;
+	}
 		
 }

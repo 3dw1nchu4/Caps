@@ -1,4 +1,5 @@
 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -17,6 +18,124 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<style>
+
+.navbar-custom {
+  
+  background-color: #6a7479;
+  border-color: #5b6367;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#838e93), to(#6a7479));
+  background-image: -webkit-linear-gradient(top, #838e93, 0%, #6a7479, 100%);
+  background-image: -moz-linear-gradient(top, #838e93 0%, #6a7479 100%);
+  background-image: linear-gradient(to bottom, #838e93 0%, #6a7479 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff838e93', endColorstr='#ff6a7479', GradientType=0);
+}
+.navbar-custom .navbar-brand {
+  color: #ffffff;
+}
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-brand:focus {
+  color: #e6e6e6;
+  background-color: transparent;
+}
+.navbar-custom .navbar-text {
+  color: #ffffff;
+}
+.navbar-custom .navbar-nav > li:last-child > a {
+  border-right: 1px solid #5b6367;
+}
+.navbar-custom .navbar-nav > li > a {
+  color: #ffffff;
+  border-left: 1px solid #5b6367;
+}
+.navbar-custom .navbar-nav > li > a:hover,
+.navbar-custom .navbar-nav > li > a:focus {
+  color: #c0c0c0;
+  background-color: transparent;
+}
+.navbar-custom .navbar-nav > .active > a,
+.navbar-custom .navbar-nav > .active > a:hover,
+.navbar-custom .navbar-nav > .active > a:focus {
+  color: #c0c0c0;
+  background-color: #5b6367;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#5b6367), to(#727d83));
+  background-image: -webkit-linear-gradient(top, #5b6367, 0%, #727d83, 100%);
+  background-image: -moz-linear-gradient(top, #5b6367 0%, #727d83 100%);
+  background-image: linear-gradient(to bottom, #5b6367 0%, #727d83 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5b6367', endColorstr='#ff727d83', GradientType=0);
+}
+.navbar-custom .navbar-nav > .disabled > a,
+.navbar-custom .navbar-nav > .disabled > a:hover,
+.navbar-custom .navbar-nav > .disabled > a:focus {
+  color: #cccccc;
+  background-color: transparent;
+}
+.navbar-custom .navbar-toggle {
+  border-color: #dddddd;
+}
+.navbar-custom .navbar-toggle:hover,
+.navbar-custom .navbar-toggle:focus {
+  background-color: #dddddd;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+  background-color: #cccccc;
+}
+.navbar-custom .navbar-collapse,
+.navbar-custom .navbar-form {
+  border-color: #596266;
+}
+.navbar-custom .navbar-nav > .dropdown > a:hover .caret,
+.navbar-custom .navbar-nav > .dropdown > a:focus .caret {
+  border-top-color: #c0c0c0;
+  border-bottom-color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .open > a,
+.navbar-custom .navbar-nav > .open > a:hover,
+.navbar-custom .navbar-nav > .open > a:focus {
+  background-color: #5b6367;
+  color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .open > a .caret,
+.navbar-custom .navbar-nav > .open > a:hover .caret,
+.navbar-custom .navbar-nav > .open > a:focus .caret {
+  border-top-color: #c0c0c0;
+  border-bottom-color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .dropdown > a .caret {
+  border-top-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+@media (max-width: 767) {
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #c0c0c0;
+    background-color: transparent;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #c0c0c0;
+    background-color: #5b6367;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #cccccc;
+    background-color: transparent;
+  }
+}
+.navbar-custom .navbar-link {
+  color: #ffffff;
+}
+.navbar-custom .navbar-link:hover {
+  color: #c0c0c0;
+}
+</style>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -68,26 +187,39 @@
 
 
 				
-<div class="container" style="width: 100%">
-	<div class="row">
-		<div class="col-xs-1">
-			<label for="search"><h4>Search:</h4> </label>
-		</div>
-		<div class="col-xs-5">
-			<input type="text" id="inputPK" class="form-control"
-				placeholder="Search for something here">
-		</div>
-		<div class="col xs-6">
-		<a class="btn btn-success"
-						href="${pageContext.request.contextPath}/Course/listall"><spring:message
-								code="Search"  /></a>
-		</div>
-	</div>
-</div>
+
+<!-- 
+////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- 
+				 <div class="container" style="width: 100%"> -->
+				 <nav class="navbar navbar-custom" role="navigation" height=50px>
+					<div class="container-fluid"> 
+						<form class="navbar-form navbar-left" role="search"
+							action="listallsearchbyname" method="get">
+							<div class="form-group">
+								<label for="search"><h4 style="color:white">Search by :</h4> </label>
+								
+							</div>
+							<div class="input-group">
+
+								<input type="text" class="form-control" size="35"
+									placeholder="course name or courseID" name="searchcontent"
+									id="searchcontent">
+
+								
+							</div>
+							<button type="submit" class="btn btn-success" size="25">Search</button>
+						</form>
+					 </div>
+					</nav>  
+
+
+ <!-- 
+				</div>  -->
 
 
 
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+				<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 
 <div class="table-responsive">
@@ -95,12 +227,12 @@
 		<thead>
 			<tr>
 			
-			    <th><spring:message code="fieldLabel.courseid" /></th>
+			    <th><spring:message code="fieldLabel.courseid" /></th>			    
+			    <th>Course Name</th>
 				<th>Lecture Name</th>
 				<th><spring:message code="fieldLabel.startdate" /></th>
 				<th><spring:message code="fieldLabel.enddate" /></th>
 				<th><spring:message code="fieldLabel.credits" /></th>
-				<th><spring:message code="fieldLabel.size" /></th>
 				<th>Current Enrollment</th>
 
 
@@ -110,12 +242,12 @@
 			<c:forEach var="course" items="${courselist}">
 				<tr class="listRecord">
 					<td>${course.courseId}</td>
+					<td>${course.courseName}</td>
 					<td>${course.lecturerDetails.firstName} ${ course.lecturerDetails.lastName}</td>
 					<td>${course.startDate}</td>
 					<td>${course.endDate}</td>
 					<td>${course.credits}</td>
-					<td>${course.size}</td>
-					<td>${course.currentEnrollment}</td>
+					<td>${course.currentEnrollment}/${course.size}</td>
 					
 				</tr>
 
