@@ -72,8 +72,8 @@
 							Lecturers</a></li>
 					<li id="sidebarCourse"><a href="managecourse">Manage
 							Courses</a></li>
-					<li id="sidebarEnrolment"><a
-						href="manageenrolment">Manage Enrolment</a></li>
+					<li id="sidebarEnrolment"><a href="manageenrolment">Manage
+							Enrolment</a></li>
 				</ul>
 
 			</div>
@@ -129,34 +129,36 @@
 						<div class="container"></div>
 					</div>
 
-					<div id="searchcount" name="searchcount" style="display:none"><h5> Your search returned ${dataList.size() } results</h5></div>
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th id="tableheader1"><h4>#</h4></th>
-									<th><h4>First Name</h4></th>
-									<th><h4>Last Name</h4></th>
-									<th><h4>Status</h4></th>
-									<th><h4></h4></th>
+					<div id="searchcount" name="searchcount" style="display: none">
+						<h5>Your search returned ${dataList.size() } results</h5>
+					</div>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th id="tableheader1"><h4>#</h4></th>
+								<th><h4>First Name</h4></th>
+								<th><h4>Last Name</h4></th>
+								<th><h4>Status</h4></th>
+								<th><h4></h4></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="object" items="${dataList}">
+								<tr class="listRecord">
+									<td>${object.lecturerId}</td>
+									<td>${object.firstName}</td>
+									<td>${object.lastName}</td>
+									<td>${object.status}</td>
+									<td><button class="btn btn-primary"
+											onclick="EditRecord('${object.lecturerId}')">Edit</button>
+										<button class="btn btn-danger"
+											onclick="DeleteRecord('${object.lecturerId}')">Delete</button></td>
 								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="object" items="${dataList}">
-									<tr class="listRecord">
-										<td>${object.lecturerId}</td>
-										<td>${object.firstName}</td>
-										<td>${object.lastName}</td>
-										<td>${object.status}</td>
-										<td><button class="btn btn-primary"
-												onclick="EditRecord('${object.lecturerId}')">Edit</button>
-											<button class="btn btn-danger"
-												onclick="DeleteRecord('${object.lecturerId}')">Delete</button></td>
-									</tr>
-								</c:forEach>
+							</c:forEach>
 
-							</tbody>
-						</table>
-					
+						</tbody>
+					</table>
+
 				</div>
 				<div id="editcontent" style="display: none">
 					<form id="formEditRecord" method="post">
@@ -184,12 +186,60 @@
 								placeholder="User password" value="" autofocus>
 						</div>
 						<br> <br>
+
+						
 						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
 						<button class="btn btn-danger" onclick="BackToPrevious()">Cancel
 						</button>
 					</form>
+					
+					<div id="lecturercourses" name="lecturercourses">
+					<br><br>
+							<h3>
+								<b><u>${data.lastName }, ${data.firstName }</u></b> is teaching
+								the following ${enroldata.size() } courses
+							</h3>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th><h4>Course Id</h4></th>
+										<th><h4>Course Name</h4></th>
+										<th><h4>From / To</h4></th>
+										<th><h4>Enrolment / Capacity</h4></th>
+										<th><h4>Reassign To Another Lecturer</h4></th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="enrol" items="${enroldata}">
+										<tr class="listRecord">
+											<td>${enrol.courseId}</td>
+											<td>${enrol.courseName}</td>
+											<td>From: ${enrol.startDate} <br> To: ${enrol.endDate}</td>
+											<td>${enrol.currentEnrollment} / ${enrol.size}</td>
+											<td><label for="changelecturerpicker" class="control-label">Lecturer
+													ID:</label>
+												<div>
+													<select id="changelecturerpicker${enrol.courseId}" name="changelecturerpicker"
+														class="selectpicker show-tick form-control"
+														data-live-search="true" style="width:500px">
+														<c:forEach var="lecturer" items="${lecturerList}">
+															<option
+																data-subtext="${lecturer.lastName }, ${lecturer.firstName }">${lecturer.lecturerId }</option>
+														</c:forEach>
+													</select>
+												</div>
+
+												<button type="button" class="btn btn-info"
+													onclick="ChangeLecturer('${enrol.courseId}')">
+													Reassign</button></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+
+						</div>
 				</div>
 			</div>
 		</div>
@@ -212,6 +262,25 @@
 				<div class="modal-body">
 					<p>We couldn't find the page you were looking for. You will be
 						redirected in 3 seconds.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Successful transaction Modal -->
+	<div id="successActionModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Success</h4>
+				</div>
+				<div class="modal-body" id="successModalMessage">
+				
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -247,19 +316,19 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Confirm Deletion</h4>
+					<h4 class="modal-title">Confirm Inactivation of Lecturer Account</h4>
 				</div>
 				<form action="deletelecturer" method="post">
 					<div class="modal-body">
 
-						<p>The selected entry will be permanently deleted.</p>
+						<p>The selected account will be inactivated.</p>
 						<input id="deletethis" name="deletethis" class="form-control"
-							placeholder="Last Name" value="" required />
+							placeholder="Last Name" value="" required type="hidden"/>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						<button id="deletebtn" name="deletebtn" type="submit"
-							class="btn btn-danger">Delete</button>
+							class="btn btn-danger">Confirm</button>
 					</div>
 				</form>
 
@@ -412,6 +481,28 @@
 		
 		document.getElementById("deletethis").value = id;
 		$('#deleteModal').modal('toggle');
+	}
+	
+	function ChangeLecturer(courseId)
+	{
+		var lecturerId = document.getElementById("changelecturerpicker"+courseId).value;
+		console.log("lecturerId = "+ lecturerId);
+		console.log("CourseId = "+courseId);
+		var queryString = "lecturerId="+lecturerId+"&courseId="+courseId+"&returnTo="+qs['id'];
+		
+		window.location.href = "${pageContext.request.contextPath}/admin/reassignto?"+queryString;
+	}
+	
+	if (qs['actionstatus'] == "success")
+	{
+			document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
+			$('#successActionModal').modal('toggle');
+	}
+
+	if (qs['actionstatus'] == "createsuccess")
+	{
+			document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
+			$('#successActionModal').modal('toggle');
 	}
 	
 
