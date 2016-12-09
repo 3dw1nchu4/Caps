@@ -92,15 +92,15 @@
 	<table class="table table-striped">
 		<thead>
 				<tr class="listHeading">
-				<th>courseId</th>
-				<th>lecture name</th>
-				<th>startDate</th>
-				<th>endDate</th>
-				<th>credit</th>
-				<th>size</th>
-				<th>currentEnrollment</th>
+				<th>Course Id</th>
+				<th>Lecture Name</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Credit</th>
+				<th>Size</th>
+				<th>Current Enrollment</th>
 				
-				<th>enrolling for</th>
+				<th>Enrolling For</th>
 			</tr>
 		</thead>
 		<tbody>

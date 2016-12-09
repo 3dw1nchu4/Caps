@@ -102,7 +102,7 @@
 				<th><spring:message code="fieldLabel.coursename" /></th>
 				<th><spring:message code="fieldLabel.grade" /></th>
 				<th><spring:message code="fieldLabel.earncredit" /></th>
-				<th>STATUS</th>
+				<th>Status</th>
 
 			</tr>
 		</thead>
