@@ -135,8 +135,7 @@
 						<thead>
 							<tr>
 								<th id="tableheader1"><h4>#</h4></th>
-								<th><h4>First Name</h4></th>
-								<th><h4>Last Name</h4></th>
+								<th><h4>Lecturer Name</h4></th>
 								<th><h4>Status</h4></th>
 								<th><h4></h4></th>
 							</tr>
@@ -145,8 +144,8 @@
 							<c:forEach var="object" items="${dataList}">
 								<tr class="listRecord">
 									<td>${object.lecturerId}</td>
-									<td>${object.firstName}</td>
-									<td>${object.lastName}</td>
+									<td>${object.lastName}, ${object.firstName}</td>
+									
 									<td>${object.status}</td>
 									<td><button class="btn btn-primary"
 											onclick="EditRecord('${object.lecturerId}')">Edit</button>
