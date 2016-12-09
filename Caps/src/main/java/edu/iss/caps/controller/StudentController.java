@@ -215,5 +215,45 @@ public class StudentController {
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
+	
+	@RequestMapping(value = "/listgradesearchbyname", method = RequestMethod.GET)
+	public ModelAndView searchStudentforgr(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
+			HttpServletRequest request) {
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		ModelAndView mav = new ModelAndView("list-grade");
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		// ArrayList<Course> lctList = cs.findbylecid(s);
+		List<Enrolment> searchList = new ArrayList<Enrolment>();
+		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
+		
+
+//		List<Course> courseTemp = new ArrayList<Course>();
+//		
+//
+//		for (Course c : course) {
+//			if (eService.findungraded(s, c.getCourseId()).size() != 0) {
+//				courseTemp.add(c);
+//			}
+//		}
+
+		int bn = 0;
+		String s2 = "";
+		for (Enrolment l : grades) {
+			bn = (l.getCourses().getCourseId());
+			s2 = Integer.toString(bn);
+			if (l.getCourses().getCourseName().toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+
+			else if (s2.toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+		}
+
+		mav.addObject("grlist", searchList);
+		mav.addObject("datacount", searchList.size());
+		return mav;
+	}
 		
 }
