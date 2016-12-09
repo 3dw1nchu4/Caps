@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.iss.caps.model.Course;
 import edu.iss.caps.model.Enrolment;
 import edu.iss.caps.model.StudentDetail;
+import edu.iss.caps.model.User;
 import edu.iss.caps.service.CourseService;
 //import edu.iss.caps.service.StudentService;
 import edu.iss.caps.service.EnrolmentService;
@@ -46,8 +47,8 @@ public class StudentController {
 //	}
 	@RequestMapping(value="/sec",method = RequestMethod.GET)
 	public String testMestod(HttpServletRequest request){
-//	    request.getSession().setAttribute("name", "S001");
-	    
+	    User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
 	    
 	    return "sec";
 	  }
@@ -59,8 +60,8 @@ public class StudentController {
 		
 		ModelAndView mav = new ModelAndView("course-available");
 		List<Course> courselist = cService.findAllCourses();
-		Object sid=request.getSession().getAttribute("name");
-		String s=(String) sid;
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
 		List<Enrolment> grades = eService.findCourseBySID(s);
 		
 		
@@ -94,8 +95,8 @@ public class StudentController {
 	public ModelAndView studentviewgrade(HttpServletRequest request) {
 		
 		ModelAndView mav = new ModelAndView("list-grade");
-		Object sid=request.getSession().getAttribute("name");
-		String s=(String) sid;
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
 		
 		
@@ -110,7 +111,6 @@ public class StudentController {
 	public ModelAndView enrolling(@ModelAttribute Course course, BindingResult result,HttpServletRequest request,
 			@PathVariable int courseId, final RedirectAttributes redirectAttributes) {
 
-		   request.getSession().setAttribute("name", "S001");
 		
 		   Course c = cService.findCourse(courseId);
 		   String message ="";
@@ -118,9 +118,9 @@ public class StudentController {
 		   
 
 		if (c.getSize()>c.getCurrentEnrollment()) {
-			Object sid=request.getSession().getAttribute("name");
-			String studentid=(String) sid;
-		    StudentDetail studentDetail =sService.findStudentById(studentid);
+			User u = (User) request.getSession().getAttribute("user");
+			String s = u.getUserId();
+		    StudentDetail studentDetail =sService.findStudentById(s);
   		    eService.createEnrollment(studentDetail, c);/////////need to check in eservice
   		    cService.increasecourseEnrolment(c);/////////need to check in cservice
   		    

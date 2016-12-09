@@ -9,6 +9,6 @@
 <body>
 Session set..
 
-<h1>"${sessionScope.name}"</h1>
+<h1>"${sessionScope.user}"</h1>
 </body>
 </html>

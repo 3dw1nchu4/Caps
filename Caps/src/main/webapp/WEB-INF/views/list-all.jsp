@@ -53,7 +53,7 @@
 						href="${pageContext.request.contextPath}/Course/listall">view all courses
 							</a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Course/grade">Grade a course
+						href="${pageContext.request.contextPath}/Course/grade">Grade of Courses
 							</a></li><li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/a">enrollment
 							</a></li>
@@ -63,7 +63,8 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 			
-				<h2 class="sub-header" id="sectiontitle">Section title</h2>
+			<h2 class="sub-header" id="sectiontitle">Hello your Student ID is "${sessionScope.user.userId}"</h2>
+
 
 
 				
@@ -96,8 +97,6 @@
 			
 			    <th><spring:message code="fieldLabel.courseid" /></th>
 				<th>LECTURE NAME</th>
-			
-				
 				<th><spring:message code="fieldLabel.startdate" /></th>
 				<th><spring:message code="fieldLabel.enddate" /></th>
 				<th><spring:message code="fieldLabel.credits" /></th>
