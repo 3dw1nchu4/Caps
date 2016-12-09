@@ -50,7 +50,6 @@ public class AdminController
 	@Autowired
 	EnrolmentService enrolmentService;
 
-	
 	@RequestMapping(value = "/managestudent", method = RequestMethod.GET)
 	public ModelAndView manageStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -67,10 +66,26 @@ public class AdminController
 				if (e.getStudentDetails().getStudentId().toLowerCase().contains(id))
 				{
 					enrolList2.add(e);
-
 				}
 			}
+			
+			ArrayList<Course> courseList = cseService.findAllCourses();
+			ArrayList<Course> courseListTemp = new ArrayList<Course>();
+			for (Course c : courseList)
+			{
+				if (c.getStatus().equals("Open"))
+				{
+						courseListTemp.add(c);
+				}
+			}
+			
+			for (Enrolment e : enrolList2)
+			{
+				courseListTemp.remove(e.getCourses());
+			}
 
+
+			mav.addObject("courseavailable", courseListTemp);
 			mav.addObject("enroldata", enrolList2);
 			mav.addObject("data", student);
 			return mav;
@@ -101,6 +116,8 @@ public class AdminController
 		String firstName = requestParams.get("firstName");
 		String lastName = requestParams.get("lastName");
 		String password = requestParams.get("password");
+		String email = requestParams.get("emailinput");
+		String status = "Active";
 		String role = "Student";
 
 		User user = new User(id, password, role);
@@ -113,7 +130,7 @@ public class AdminController
 		@SuppressWarnings("deprecation")
 		Date d = new Date(2012, 10, 20);
 
-		StudentDetail student = new StudentDetail(id, firstName, lastName, d);
+		StudentDetail student = new StudentDetail(id, firstName, lastName, d,status ,email);
 		student.setStatus("Active");
 		studentService.createStduent(student);
 
@@ -128,6 +145,7 @@ public class AdminController
 		String firstName = requestParams.get("firstName");
 		String lastName = requestParams.get("lastName");
 		String password = requestParams.get("password");
+		String email = requestParams.get("emailinput");
 		String role = "Student";
 
 		if (password.length() > 1) // If password not keyed in, no update
@@ -141,6 +159,7 @@ public class AdminController
 		StudentDetail student = studentService.findStudentById(id);
 		student.setFirstName(firstName);
 		student.setLastName(lastName);
+		student.setEmail(email);
 		studentService.changeStudent(student);
 
 		return "redirect:managestudent?actionstatus=success";
@@ -163,11 +182,32 @@ public class AdminController
 			@RequestParam Map<String, String> requestParams)
 	{
 		int id = Integer.parseInt(requestParams.get("removethis"));
+		String studentId= requestParams.get("removethisbyId");
 		Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
 		enrolment.setStatus("Removed");
 		enrolment.setGrade("N/A");
+		
 		enrolmentService.updateEnrolment(enrolment);
-		return "redirect:managestudent?actionstatus=success";
+		AddCourseEnrolmentCounter(enrolment.getCourses(),false);
+		
+		return "redirect:managestudent?actionstatus=success&id="+studentId;
+	}
+
+	// add course for student
+	@RequestMapping(value = "/addcoursetostudent", method = RequestMethod.GET)
+	public String addCourseToStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+		String studentId = requestParams.get("studentId");
+		String courseTitle = requestParams.get("courseId");
+		String [] sArray = courseTitle.split(" -");
+		int courseId = Integer.parseInt(sArray[0]);
+		Course course = cseService.findCourse(courseId);
+		
+		StudentDetail studentDetail = studentService.findStudentById(studentId);
+		
+		enrolmentService.createEnrollment(studentDetail, course);
+		AddCourseEnrolmentCounter(course,true);
+		return "redirect:managestudent?actionstatus=success&id="+studentId;
 	}
 
 	// search student
@@ -373,18 +413,18 @@ public class AdminController
 	@RequestMapping(value = "/reassignto", method = RequestMethod.GET)
 	public String reassignCourseTo(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-		
+
 		String lecturerId = requestParams.get("lecturerId");
 		int courseId = Integer.parseInt(requestParams.get("courseId"));
 		String returnTo = requestParams.get("returnTo");
-		
+
 		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
 		Course course = cseService.findCourse(courseId);
-		
+
 		course.setLecturerDetails(lecturer);
 		cseService.changeCourse(course);
-		
-		return "redirect:managelecturer?id="+returnTo+"&actionstatus=success";
+
+		return "redirect:managelecturer?id=" + returnTo + "&actionstatus=success";
 	}
 
 	//// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE
@@ -549,7 +589,7 @@ public class AdminController
 		return mav;
 	}
 
-// To get date formatted from string
+	// To get date formatted from string
 	@SuppressWarnings("deprecation")
 	private static Date ConvertToDate(String dateString)
 	{
@@ -561,6 +601,20 @@ public class AdminController
 		}
 		Date date = new Date(dateArray.get(0) - 1900, dateArray.get(1), dateArray.get(2));
 		return date;
+	}
+	
+	private void AddCourseEnrolmentCounter(Course c, Boolean b)
+	{
+		if (b)
+		{
+			c.setCurrentEnrollment(c.getCurrentEnrollment() +1);
+			cseService.changeCourse(c);
+		}
+		else
+		{
+			c.setCurrentEnrollment(c.getCurrentEnrollment() -1);
+			cseService.changeCourse(c);
+		}
 	}
 
 }

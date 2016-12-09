@@ -168,8 +168,8 @@
 						<h2 class="form-signin-heading">Edit Record</h2>
 						<br>
 						<div id="formhead" name="formhead">
-							<h3>This course is taught by ${data.lecturerDetails.lastName },
-								${data.lecturerDetails.firstName }</h3>
+							<h3>This course is taught by <b><u>${data.lecturerDetails.lastName },
+								${data.lecturerDetails.firstName }</u></b></h3>
 						</div>
 						<div>
 							<br>

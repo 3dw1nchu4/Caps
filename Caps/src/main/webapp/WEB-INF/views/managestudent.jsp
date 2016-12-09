@@ -179,25 +179,38 @@
 								autofocus>
 						</div>
 						<div style="width: 40%">
+							<label for="emailinput">Email: </label> <input type="text"
+								id="emailinput" name="emailinput" class="form-control"
+								placeholder="Email" value="${data.email }" required autofocus>
+						</div>
+						<div style="width: 40%">
 							<label for="password">Password: </label> <input type="text"
 								id="password" name="password" class="form-control"
-								placeholder="User password" value="" autofocus>
+								placeholder="User password" value="" autofocus> <br>
 						</div>
-						<br> <br>
-						<div id="studentcourses" name="studentcourses">
+
+						<button id="submitbutton" class="btn btn-success" type="submit">Update
+							Details</button>
+						<button type="button" class="btn btn-danger"
+							onclick="BackToPrevious()">Cancel</button>
+					</form>
+
+					<div class="row" id="studentcourses" name="studentcourses">
+						<br>
+
+						<div class="col-sm-8 col-xs-12">
 							<h3>
 								<b><u>${data.lastName }, ${data.firstName }</u></b> is enrolled
 								in ${enroldata.size() } courses
 							</h3>
 							<table class="table table-striped">
+
 								<thead>
 									<tr>
-										<th><h4>Course Name</h4></th>
+										<th><h4>Course Names</h4></th>
 										<th><h4>Status</h4></th>
 										<th><h4>Grade</h4></th>
 										<th><h4>Earned Credits</h4></th>
-
-
 									</tr>
 								</thead>
 								<tbody>
@@ -216,15 +229,27 @@
 									</c:forEach>
 								</tbody>
 							</table>
-
 						</div>
-						<!-- removed the type="submit" property for testing-->
-						<button id="submitbutton" class="btn btn-success" type="submit">Update
-							Records</button>
-						<button type="button" class="btn btn-danger" onclick="BackToPrevious()">Cancel
-						</button>
-					</form>
+						<div class="jumbotron col-sm-4 col-xs-12">
+							<h3>Add a course:</h3>
+							<div>
+								<select id="addstudentpicker" name="addstudentpicker"
+									class="selectpicker show-tick form-control"
+									data-live-search="true">
+									<option></option>
+									<c:forEach var="course" items="${courseavailable}">
+										<option>${course.courseId } - ${course.courseName }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div>
+								<br> <br>
+								<button class="btn btn-warning" type="button"
+									onclick="AddCourse('${data.studentId}')">Add Course</button>
+							</div>
+						</div>
 
+					</div>
 				</div>
 			</div>
 		</div>
@@ -232,7 +257,7 @@
 	<br>
 	<br>
 	<br>
-	</div>
+
 
 
 	<!-- DISPLAY MODALS -->
@@ -264,9 +289,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Success</h4>
 				</div>
-				<div class="modal-body" id="successModalMessage">
-				
-				</div>
+				<div class="modal-body" id="successModalMessage"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
@@ -301,14 +324,15 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Confirm Inactivation of Student Account</h4>
+					<h4 class="modal-title">Confirm Inactivation of Student
+						Account</h4>
 				</div>
 				<form action="deletestudent" method="post">
 					<div class="modal-body">
 
 						<p>The selected student account will be inactivated.</p>
 						<input id="deletethis" name="deletethis" class="form-control"
-							placeholder="Last Name" value="" required type="hidden"/>
+							placeholder="Last Name" value="" required type="hidden" />
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -319,6 +343,33 @@
 
 			</div>
 
+		</div>
+	</div>
+
+	<!-- Confirm Remove from Enrolment Modal -->
+	<div id="removeEnrolmentModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Confirm Deletion</h4>
+				</div>
+				<form action="removestudentenrolment" method="post">
+					<div class="modal-body">
+
+						<p>The selected entry will be permanently deleted.</p>
+						<input id="removethis" name="removethis" class="form-control"
+							 value="" required type="hidden"/>
+						<input id="removethisbyId" name="removethisbyId" class="form-control"
+							value="" required type="hidden"/>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button id="deletebtn" name="deletebtn" type="submit"
+							class="btn btn-danger">Delete</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 
@@ -386,9 +437,7 @@
 		{
 			document.getElementById("id").readOnly = true;
 			document.getElementById("formEditRecord").action = "updatestudent";
-			document.getElementById("submitbutton").innerHTML = "Update Record";
-			
-			
+			document.getElementById("submitbutton").innerHTML = "Update Record";			
 		} else
 		{
 			document.getElementById("formEditRecord").action = "createstudent";
@@ -421,7 +470,6 @@
 	{
 		//Attaches correct delete event to button
 		console.log("event attached");
-		
 		document.getElementById("deletethis").value = id;
 		$('#deleteModal').modal('toggle');
 	}
@@ -437,6 +485,21 @@
 	{
 			document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
 			$('#successActionModal').modal('toggle');
+	}
+	
+	function AddCourse(studentId)
+	{
+		console.log(studentId);
+		console.log(document.getElementById("addstudentpicker").value);
+		var course = document.getElementById("addstudentpicker").value;
+		window.location.href = "${pageContext.request.contextPath}/admin/addcoursetostudent?studentId="+studentId+"&courseId="+course;
+	}
+	
+	function RemoveEnrolment(enrolId)
+	{
+		document.getElementById("removethis").value = enrolId;
+		document.getElementById("removethisbyId").value = qs['id'];
+		 $('#removeEnrolmentModal').modal('toggle');
 	}
 	
 
