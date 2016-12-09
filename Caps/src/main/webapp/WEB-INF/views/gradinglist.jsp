@@ -37,9 +37,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/byid">View Course
-							Taught </a></li>
+					
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View Course
 							Enrolement </a></li>
@@ -89,7 +87,7 @@
 										<th><spring:message code="fieldLabel.name" /></th>
 										<th><spring:message code="fieldLabel.coursename" /></th>
 										<th><spring:message code="fieldLabel.grade" /></th>
-										<th><spring:message code="fieldLabel.operation" /></th>
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -112,7 +110,7 @@
 													<option>E</option>
 													<option>F</option>
 											</select>
-											<input  type="submit" name = "submit">
+											<input class="btn btn-primary" type="submit" name = "submit" value="Grade">
 											</form:form>
 											</td>
 											
@@ -159,6 +157,25 @@
 	</div>
 	</div>
 	</div>
+	
+		<!-- Successful transaction Modal -->
+	<div id="successActionModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Success</h4>
+				</div>
+				<div class="modal-body" id="successModalMessage">
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -173,5 +190,31 @@
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
+	
+	var qs = (function(a)
+			{
+				if (a == "")
+					return
+					{};
+				var b =
+				{};
+				for (var i = 0; i < a.length; ++i)
+				{
+					var p = a[i].split('=', 2);
+					if (p.length == 1)
+						b[p[0]] = "";
+					else
+						b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+				}
+				return b;
+			})(window.location.search.substr(1).split('&'));
+	
+	
+	if (qs['actionstatus'] == "success")
+	{
+			document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
+			$('#successActionModal').modal('toggle');
+	}
+
 </script>
 </html>
