@@ -42,12 +42,12 @@ public class EnrolmentImpl implements EnrolmentService {
 	
 
 
-	@Override
-	public ArrayList<Enrolment> findcompleted(int id) {
-		// TODO Auto-generated method stub
-		return scRepository.findcompleted();
-	}
-	
+//	@Override
+//	public ArrayList<Enrolment> findcompleted(int id) {
+//		// TODO Auto-generated method stub
+//		return scRepository.findcompleted(id);
+//	}
+//	
 	@Override
 	public List<Enrolment> findstudentbylecturerid(String s) {
 		// TODO Auto-generated method stub

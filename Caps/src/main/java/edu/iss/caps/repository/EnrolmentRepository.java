@@ -60,7 +60,7 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer>{
 	@Query("SELECT w FROM Enrolment w WHERE w.grade is null")
 	ArrayList<Enrolment> findungraded();
 
-	ArrayList<Enrolment> findcompleted();
+//	ArrayList<Enrolment> findcompleted();
 	
 	
 	
