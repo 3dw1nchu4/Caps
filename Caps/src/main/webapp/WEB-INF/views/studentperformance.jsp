@@ -125,7 +125,7 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th><h4></h4><spring:message code="fieldLabel.Studentid" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.Studentid" /></h4></th>
 										<th><h4><spring:message code="fieldLabel.name" /></h4></th>
 
 
