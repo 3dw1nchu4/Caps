@@ -86,21 +86,21 @@ insert into caps.users values
 ('L005','pw','Lecturer');
 
 insert into caps.studentdetails values
-('S001','Z S','Sum','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S002','Linda','Chen','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S003','Chun Xiao','Ji','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S004','Gogul','Kanan','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S005','Sandi','Lin','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S006','Odin','Zaw','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S007','Edwin','Chua','2016/11/27','Active', ‘sumzhanseng@gmail.com’),
-('S008','Joe','Wu','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S009','John','Smith','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S010','Snow','White','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S011','Evil','Stepmom','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S012','Prince','Charming','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S013','Mu','Lan','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S014','Ariel','Tan','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
-('S015','Cinderella','Lee','2016/11/27','Active', ‘sumzhanseng@gmail.com’);
+('S001','Z S','Sum','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S002','Linda','Chen','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S003','Chun Xiao','Ji','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S004','Gogul','Kanan','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S005','Sandi','Lin','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S006','Odin','Zaw','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S007','Edwin','Chua','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S008','Joe','Wu','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S009','John','Smith','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S010','Snow','White','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S011','Evil','Stepmom','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S012','Prince','Charming','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S013','Mu','Lan','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S014','Ariel','Tan','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S015','Cinderella','Lee','2016/11/27','Active','sumzhanseng@gmail.com');
 
 insert into caps.lecturerdetails values
 ('L001','Derek','Kiong','Active'),
@@ -124,25 +124,19 @@ insert into caps.Enrolments values
 (null,'S006',1,'A',8,'Passed'),
 (null,'S007',1,'A',8,'Passed'),
 (null,'S008',1,'A',8,'Passed'),
-(null,'S004',2,’A’,0,'Enrolled'),
-(null,'S005',2, ’B’,0,'Enrolled'),
-(null,'S006',2,’A’,8,'Passed'),
-(null,'S001',3,’A’,0,'Enrolled'),
-(null,'S004',3,’C’,0,'Enrolled'),
-(null,'S005',3,’A’,8,'Passed');
-(null,'S006',3,’B’,8,'Passed');
-(null,'S007',3,’F’,0,'Failed');
-(null,'S008',4,’A’,4,'Passed');
-(null,'S009',4,’B’,4,'Passed');
-(null,'S010',3,’C’,4,'Passed');
-(null,'S011',4,’F’,0,'Failed');
-(null,'S012',2,’A’,8,'Passed');
-(null,'S013',1,’B’,8,'Passed');
-(null,'S014',3, ’B’,0,'Enrolled');
-(null,'S015',4, ’B’,0,'Enrolled');
-
-
-/*defaut value for caps.courses currently return null when null in entered
-please reconsider writing a derived attribute for caps.studentcourse column instead of a earned credit
-*/
-
+(null,'S004',2,'A',0,'Enrolled'),
+(null,'S005',2,'B',0,'Enrolled'),
+(null,'S006',2,'A',8,'Passed'),
+(null,'S001',3,'A',0,'Enrolled'),
+(null,'S004',3,'C',0,'Enrolled'),
+(null,'S005',3,'A',8,'Passed'),
+(null,'S006',3,'B',8,'Passed'),
+(null,'S007',3,'F',0,'Failed'),
+(null,'S008',4,'A',4,'Passed'),
+(null,'S009',4,'B',4,'Passed'),
+(null,'S010',3,'C',4,'Passed'),
+(null,'S011',4,'F',0,'Failed'),
+(null,'S012',2,'A',8,'Passed'),
+(null,'S013',1,'B',8,'Passed'),
+(null,'S014',3,'B',0,'Enrolled'),
+(null,'S015',4,'B',0,'Enrolled');
