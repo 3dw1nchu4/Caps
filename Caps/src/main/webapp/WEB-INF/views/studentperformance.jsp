@@ -161,6 +161,11 @@
 															<spring:message code="${role.status}" />
 														</p>
 													</c:when>
+													<c:otherwise>
+													<p class="btn btn-warning">
+															<spring:message code="${role.status}" />
+														</p>
+													</c:otherwise>
 
 												</c:choose></td>
 										</tr>
