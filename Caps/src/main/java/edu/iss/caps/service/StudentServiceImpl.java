@@ -56,20 +56,20 @@ public class StudentServiceImpl implements StudentService{
 		
 		ArrayList<Enrolment> courseList =eRepository.findcompletedgradesbysid(studentId);
 		//Todo:correct logic
-		int totalCredits=getTotalCredits(courseList);
+		float totalCredits=getTotalCredits(courseList);
 		float gpa = 0;
 		
 		for(Enrolment e: courseList){
-			int credit=e.getCourses().getCredits();
+			float credit=e.getCourses().getCredits();
 			String grade=e.getGrade();
-			int gradeNumeric=getGradePt(grade);
-			gpa= gpa+(credit/totalCredits)*gradeNumeric;
+			float gradeNumeric=getGradePt(grade);
+			gpa= gpa+credit/totalCredits*gradeNumeric;
 		}	
 		return gpa;
 	}
 	
-	private int getTotalCredits(ArrayList<Enrolment> el){
-		int total=0;
+	private float getTotalCredits(ArrayList<Enrolment> el){
+		float total=0;
 		for(Enrolment e:el){
 			total=total+e.getCourses().getCredits();
 		}
@@ -93,7 +93,7 @@ public class StudentServiceImpl implements StudentService{
 		if (grade.equals("E")) {
 			gradePt = 1;
 		}
-		if (grade.equals("B")) {
+		if (grade.equals("F")) {
 			gradePt = 0;
 		}
 
