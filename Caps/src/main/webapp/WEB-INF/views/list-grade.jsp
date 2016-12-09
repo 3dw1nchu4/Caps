@@ -57,9 +57,9 @@
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/listall">view all courses
 							</a></li>
-					<li id="sidebarStudent"><a
+					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/grade">Grade a course
-							</a></li><li class="active" id="sidebarStudent"><a
+							</a></li><li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Course/a">enrollment
 							</a></li>
 				</ul>

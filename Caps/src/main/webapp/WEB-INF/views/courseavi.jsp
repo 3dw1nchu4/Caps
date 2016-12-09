@@ -1,5 +1,6 @@
 
 
+<%@page import="edu.iss.caps.model.Course"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -50,9 +51,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Lec/byid">View Course
-							Taught </a></li>
+
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolement </a></li>
@@ -128,29 +127,26 @@
 										<th><spring:message code="fieldLabel.coursename" /></th>
 										<th><spring:message code="fieldLabel.credits" /></th>
 										<th><spring:message code="fieldLabel.cenroll" /></th>
+										<th><spring:message code="fieldLabel.stgr" /></th>
 
 
 									</tr>
 								</thead>
 								<tbody>
 									<c:set var="count" value="0" scope="page" />
-									<c:forEach var="role" items="${Enlist}">
+									<c:forEach var="role" items="${Enlist}" varStatus="loop">
 										<tr class="listRecord">
 											<td>${role.courseId}</td>
 											<td>${role.courseName}</td>
 											<td>${role.credits}</td>
-										<td>${cou} ${count}</td>
-											<c:set var="count" value="${count + 1}" scope="page"/>
-										<%-- 	<%
-											count =0;
-											${cou};
-											${count};
-											%> --%>
+											<td>${role.currentEnrollment}</td>
+
+										
 											<td align="center"><c:set var="sta" scope="session"
-													value="${role.currentEnrollment}" /> <c:choose>
+													value="${cou[loop.index]}" /> <c:choose>
 													<c:when test="${sta==0}">
 														<p class="btn btn-primary disabled">
-															<spring:message code="${role.currentEnrollment}" />
+															<spring:message code="${cou[loop.index]}" />
 															<br>( view all )
 														</p>
 
@@ -158,12 +154,16 @@
 													<c:otherwise>
 														<a class="btn btn-primary"
 															href="${pageContext.request.contextPath}/Lec/viewsp/${role.courseId}"><spring:message
-																code="${role.currentEnrollment}" /><br>( view all
-															)</a>
+																code="${cou[loop.index]}" /><br>( view all )</a>
 
 													</c:otherwise>
 
-												</c:choose>
+												</c:choose></td>
+											<%-- 	<%
+											count =0;
+											${cou};
+											${count};
+											%> --%>
 										</tr>
 
 
@@ -171,6 +171,10 @@
 										</tr>
 
 									</c:forEach>
+
+
+
+
 								</tbody>
 							</table>
 						</div>
