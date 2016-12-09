@@ -73,7 +73,7 @@
 		</div>
 		<div class="col-xs-5">
 			<input type="text" id="inputPK" class="form-control"
-				placeholder="Search for something here">
+				placeholder="Search by course name or id here">
 		</div>
 		<div class="col xs-6">
 		<a class="btn btn-success"
