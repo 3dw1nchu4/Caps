@@ -139,7 +139,8 @@ public class StudentController {
 			
 			request.setAttribute("course", c);
 			request.setAttribute("student", studentDetail);
-			RequestDispatcher rd = request.getRequestDispatcher(":redirect/send");
+			String redir=request.getContextPath();
+			RequestDispatcher rd = request.getRequestDispatcher("/email");
 			rd.include(request, response);
 
 			

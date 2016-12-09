@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.iss.caps.model.Course;
 import edu.iss.caps.model.StudentDetail;
@@ -31,16 +32,18 @@ import javax.mail.internet.MimeMessage;
 
 
 @Controller
+
 public class EmailController {
 	Properties mailServerProperties;
 	javax.mail.Session getMailSession;
 	MimeMessage generateMailMessage;
 	@Autowired
 	private StudentService sService;
-	@RequestMapping(value = "/send")
+	@RequestMapping(value = "/email")
 	public void generateAndSendEmail(HttpServletRequest request) throws AddressException, MessagingException {
 		
-		
+		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		try{
 		//Object sid=request.getSession().getAttribute("name");
 		//String studentid=(String) sid;
 		Course c = (Course) request.getAttribute("course");
@@ -54,7 +57,7 @@ public class EmailController {
 		// Step1
 		System.out.println("\n 1st ===> setup Mail Server Properties..");
 		mailServerProperties = System.getProperties();
-		mailServerProperties.put("mail.smtp.port", "587");
+		mailServerProperties.put("mail.smtp.port", "25");
 		mailServerProperties.put("mail.smtp.auth", "true");
 		mailServerProperties.put("mail.smtp.starttls.enable", "true");
 		System.out.println("Mail Server Properties have been setup successfully..");
@@ -79,7 +82,9 @@ public class EmailController {
 		// if you have 2FA enabled then provide App Specific Password
 		transport.connect("smtp.gmail.com", "sa43team7@gmail.com", "Password6");
 		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
-		transport.close();
+		transport.close();} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 
 		
 	}
