@@ -24,21 +24,25 @@ public class StudentDetail {
 	private Date enrolmentDate;
 	@Column(name="Status")
 	private String status;
+	@Column(name="Email")
+	private String email;
 	
 	public StudentDetail(){
 		
 	}
 
-	
 
-	public StudentDetail(String studentId, String firstName, String lastName, Date enrolmentDate)
-	{
+	public StudentDetail(String studentId, String firstName, String lastName, Date enrolmentDate, String status,
+			String email) {
 		super();
 		this.studentId = studentId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.enrolmentDate = enrolmentDate;
+		this.status = status;
+		this.email = email;
 	}
+
 
 
 	public String getStudentId() {
@@ -99,6 +103,15 @@ public class StudentDetail {
 	}
 
 
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -128,15 +141,11 @@ public class StudentDetail {
 	}
 
 
-
 	@Override
 	public String toString() {
 		return "StudentDetail [studentId=" + studentId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", enrolmentDate=" + enrolmentDate + ", status=" + status + "]";
+				+ ", enrolmentDate=" + enrolmentDate + ", status=" + status + ", email=" + email + "]";
 	}
 
-
-
-	
 	
 }
