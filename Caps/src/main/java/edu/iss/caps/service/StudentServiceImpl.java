@@ -60,7 +60,11 @@ public class StudentServiceImpl implements StudentService{
 		float gpa = 0;
 		
 		for(Enrolment e: courseList){
+//			if () {
+//				
+//			}
 			float credit=e.getCourses().getCredits();
+			
 			String grade=e.getGrade();
 			float gradeNumeric=getGradePt(grade);
 			gpa= gpa+credit/totalCredits*gradeNumeric;
