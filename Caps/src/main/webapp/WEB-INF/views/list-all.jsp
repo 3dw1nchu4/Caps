@@ -229,7 +229,7 @@
 			
 			    <th><spring:message code="fieldLabel.courseid" /></th>			    
 			    <th>Course Name</th>
-				<th>Lecture Name</th>
+				<th>Lecturer Name</th>
 				<th><spring:message code="fieldLabel.startdate" /></th>
 				<th><spring:message code="fieldLabel.enddate" /></th>
 				<th><spring:message code="fieldLabel.credits" /></th>

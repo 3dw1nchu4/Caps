@@ -143,7 +143,7 @@ public class StudentController {
   		    eService.createEnrollment(studentDetail, c);/////////need to check in eservice
   		    cService.increasecourseEnrolment(c);/////////need to check in cservice
   		    
-		    message = "You have sucessfully enrolled with NO. " + courseId + " course. We have send you a email, please check it!!! ";
+		    message = "You have sucessfully enrolled with <" + c.getCourseName() + ">. We have send you a email, please check it!!! ";
 			redirectAttributes.addFlashAttribute("message", message);
 			
 			request.setAttribute("course", c);
@@ -255,5 +255,58 @@ public class StudentController {
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
+	
+	@RequestMapping(value = "/asearch", method = RequestMethod.GET)
+	public ModelAndView searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
+			HttpServletRequest request) {
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		ModelAndView mav = new ModelAndView("course-available");
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		List<Course> searchList = new ArrayList<Course>();
+		List<Course> courselist = cService.findAllCourses();
+
+//		List<Course> courseTemp = new ArrayList<Course>();
+//		
+//
+//		for (Course c : course) {
+//			if (eService.findungraded(s, c.getCourseId()).size() != 0) {
+//				courseTemp.add(c);
+//			}
+//		}
+
+//		ModelAndView mav = new ModelAndView("course-available");
+//		List<Course> courselist = cService.findAllCourses();
+
+		List<Enrolment> grades = eService.findCourseBySID(s);
+		
+		
+			for (Enrolment enrolment : grades) {
+				courselist.remove(enrolment.getCourses());
+			}
+		
+//		
+//		mav.addObject("courseavailable", courselist);
+//		return mav;
+		
+		int bn = 0;
+		String s2 = "";
+		for (Course l : courselist) {
+			bn = (l.getCourseId());
+			s2 = Integer.toString(bn);
+			if (l.getCourseName().toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+
+			else if (s2.toLowerCase().contains(searchContent)) {
+				searchList.add(l);
+			}
+		}
+
+		mav.addObject("courseavailable", searchList);
+		mav.addObject("datacount", searchList.size());
+		return mav;
+	}
+	
 		
 }

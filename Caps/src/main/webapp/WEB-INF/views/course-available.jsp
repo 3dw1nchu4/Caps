@@ -182,24 +182,28 @@
 			
 				<h2 class="sub-header" id="sectiontitle"><p class="text-danger">Hello your Student ID is "${sessionScope.user.userId}"</p></h2>
 
+			
 
-				
-<div class="container" style="width: 100%">
-	<div class="row">
-		<div class="col-xs-1">
-			<label for="search"><h4>Search:</h4> </label>
-		</div>
-		<div class="col-xs-5">
-			<input type="text" id="inputPK" class="form-control"
-				placeholder="Search by course name or id here">
-		</div>
-		<div class="col xs-6">
-		<a class="btn btn-success"
-						href="${pageContext.request.contextPath}/Course/listall"><spring:message
-								code="Search"  /></a>
-		</div>
-	</div>
-</div>
+ <nav class="navbar navbar-custom" role="navigation" height=50px>
+					<div class="container-fluid"> 
+						<form class="navbar-form navbar-left" role="search"
+							action="asearch" method="get">
+							<div class="form-group">
+								<label for="search"><h4 style="color:white">Search by :</h4> </label>
+								
+							</div>
+							<div class="input-group">
+
+								<input type="text" class="form-control" size="35"
+									placeholder="course name or courseID" name="searchcontent"
+									id="searchcontent">
+
+								
+							</div>
+							<button type="submit" class="btn btn-success" size="25">Search By:</button>
+						</form>
+					 </div>
+					</nav>  
 
 
 
@@ -211,11 +215,11 @@
 		<thead>
 				<tr class="listHeading">
 				<th>Course Id</th>
-				<th>Lecture Name</th>
+				<th>Course Name</th>
+				<th>Lecturer Name</th>
 				<th>Start Date</th>
 				<th>End Date</th>
 				<th>Credit</th>
-				<th>Size</th>
 				<th>Current Enrollment</th>
 				
 				<th>Enrolling</th>
@@ -225,12 +229,12 @@
 			<c:forEach var="c" items="${courseavailable}">
 				<tr class="listRecord">
 					<td>${c.courseId}</td>
+					<td>${c.courseName}</td>
 					<td>${c.lecturerDetails.firstName} ${ c.lecturerDetails.lastName}</td>
 					<td>${c.startDate}</td>
 					<td>${c.endDate}</td>
 					<td>${c.credits}</td>
-					<td>${c.size}</td>
-					<td>${c.currentEnrollment}</td>
+					<td>${c.currentEnrollment}/${c.size}</td>
 					
 					
 				    <td><div class="col xs-6">
