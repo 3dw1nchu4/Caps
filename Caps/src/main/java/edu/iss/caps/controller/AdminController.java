@@ -597,6 +597,23 @@ public class AdminController
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
+	
+	// remove student from enrolment via course
+	@RequestMapping(value = "/removestudentenrolmentviacourse", method = RequestMethod.POST)
+	public String removeStudentFromEnrolmentViaCourse(Locale locale, Model model,
+			@RequestParam Map<String, String> requestParams)
+	{
+		int id = Integer.parseInt(requestParams.get("removethis"));
+		String courseId= requestParams.get("removethisbyId");
+		Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
+		enrolment.setStatus("Removed");
+		enrolment.setGrade("N/A");
+		
+		enrolmentService.updateEnrolment(enrolment);
+		AddCourseEnrolmentCounter(enrolment.getCourses(),false);
+		
+		return "redirect:managecourse?actionstatus=success&id="+courseId;
+	}
 
 	// To get date formatted from string
 	@SuppressWarnings("deprecation")

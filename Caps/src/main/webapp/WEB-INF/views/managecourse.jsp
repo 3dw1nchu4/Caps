@@ -135,7 +135,6 @@
 								<th><h4>Course ID</h4></th>
 								<th><h4>Course Name</h4></th>
 								<th><h4>Lecturer</h4></th>
-								<th><h4>Max Size</h4></th>
 								<th><h4>Currently enrolled</h4></th>
 								<th><h4>Course Status</h4></th>
 							</tr>
@@ -147,8 +146,7 @@
 									<td>${object.courseName}</td>
 									<td>${object.lecturerDetails.lastName},
 										${object.lecturerDetails.firstName}</td>
-									<td>${object.size}</td>
-									<td>${object.currentEnrollment}</td>
+									<td>${object.currentEnrollment}/ ${object.size}</td>
 									<td>${object.status}</td>
 									<td><button class="btn btn-primary"
 											onclick="EditRecord('${object.courseId}')"
@@ -242,40 +240,47 @@
 							</select>
 						</div>
 
-						<div>
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th><h4>Student ID</h4></th>
-										<th><h4>Student Name</h4></th>
-										<th><h4>Grade Received</h4></th>
-										<th><h4>Status</h4></th>
-										<th><h4></h4></th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="enrolment" items="${enrolmentList}">
-										<tr class="listRecord">
-											<td>${enrolment.studentDetails.studentId}</td>
-											<td>${enrolment.studentDetails.lastName},
-												${enrolment.studentDetails.firstName}</td>
-											<td>${enrolment.grade}</td>
-											<td>${enrolment.status}</td>
-										</tr>
-									</c:forEach>
 
-								</tbody>
-							</table>
-						</div>
 						<br> <br>
 						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
 						<button type="button" class="btn btn-danger"
 							onclick="BackToPrevious()">Cancel</button>
-
+						<br>
+						<br>
 					</form>
+					<div class="jumbotron">
+					<h3>A total of ${enrolmentList.size()} student records were found for this course</h3>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th><h4>Student ID</h4></th>
+									<th><h4>Student Name</h4></th>
+									<th><h4>Grade Received</h4></th>
+									<th><h4>Student Status</h4></th>
+									<th><h4></h4></th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="enrolment" items="${enrolmentList}">
+									<tr class="listRecord">
+										<td>${enrolment.studentDetails.studentId}</td>
+										<td>${enrolment.studentDetails.lastName},
+											${enrolment.studentDetails.firstName}</td>
+										<td>${enrolment.grade}</td>
+										<td>${enrolment.status}</td>
+										<td><button type="button" class="btn btn-info"
+												onclick="RemoveEnrolment('${enrolment.enrolmentId}')"
+												<c:if test="${enrolment.status.contains('Passed') || enrolment.status.contains('Failed') || enrolment.status.contains('Removed')}"> disabled
+													</c:if>>
+												Remove from Course</button></td>
+									</tr>
+								</c:forEach>
 
+							</tbody>
+						</table>
+					</div>
 				</div>
 
 
@@ -370,6 +375,33 @@
 
 			</div>
 
+		</div>
+	</div>
+
+	<!-- Confirm Remove from Enrolment Modal -->
+	<div id="removeEnrolmentModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Confirm Deletion</h4>
+				</div>
+				<form action="removestudentenrolmentviacourse" method="post">
+					<div class="modal-body">
+
+						<p>The selected entry will be permanently deleted.</p>
+						<input id="removethis" name="removethis" class="form-control"
+							value="" required type="hidden" /> <input id="removethisbyId"
+							name="removethisbyId" class="form-control" value="" required
+							type="hidden" />
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button id="deletebtn" name="deletebtn" type="submit"
+							class="btn btn-danger">Delete</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 
@@ -496,6 +528,14 @@
 		document.getElementById("deletethis").value = id;
 		$('#deleteModal').modal('toggle');
 	}
+	
+	function RemoveEnrolment(enrolId)
+	{
+		document.getElementById("removethis").value = enrolId;
+		document.getElementById("removethisbyId").value = qs['id'];
+		 $('#removeEnrolmentModal').modal('toggle');
+	}
+	
 	
 
 	
