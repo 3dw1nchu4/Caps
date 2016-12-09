@@ -134,7 +134,7 @@ public class StudentController {
   		    eService.createEnrollment(studentDetail, c);/////////need to check in eservice
   		    cService.increasecourseEnrolment(c);/////////need to check in cservice
   		    
-		    message = "You have sucessfully enrolled with NO. " + courseId + " course ";
+		    message = "You have sucessfully enrolled with NO. " + courseId + " course. We have send you a email, please check it!!! ";
 			redirectAttributes.addFlashAttribute("message", message);
 			
 			request.setAttribute("course", c);
