@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -82,15 +83,69 @@ public class Lecturercontroller {
 //	}
 
 
-
+//---------------------------------------------------------------------------------
 	// 2.view all course to select.
 	@RequestMapping(value = "/viewallenrole", method = RequestMethod.GET)
-	public ModelAndView viewallcourseenrole() {
+	public ModelAndView viewallcourseenrole(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest req) {
+		PagedListHolder<Course> courseList = null;
+
+		String type = pathVariablesMap.get("type");
+
+		if (null == type) {
+			// First Request, Return first set of list
+			List<Course> course = cs.findAllCourses();
+
+			courseList = new PagedListHolder<Course>();
+			courseList.setSource(course);
+			courseList.setPageSize(5);
+
+			req.getSession().setAttribute("Enlist", courseList);
+
+			printPageDetails(courseList);
+
+		} else if ("next".equals(type)) {
+			// Return next set of list
+			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("Enlist");
+
+			courseList.nextPage();
+
+			printPageDetails(courseList);
+
+		} else if ("prev".equals(type)) {
+			// Return previous set of list
+			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("Enlist");
+
+			courseList.previousPage();
+
+			printPageDetails(courseList);
+
+		} else {
+			// Return specific index set of list
+			System.out.println("type:" + type);
+
+			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("Enlist");
+
+			int pageNum = Integer.parseInt(type);
+
+			courseList.setPage(pageNum);
+
+			printPageDetails(courseList);
+		}
+		
 		ModelAndView mav = new ModelAndView("enroleview");
-		List<Course> course = cs.findAllCourses();
-		mav.addObject("Enlist", course);
 		return mav;
 	}
+	private void printPageDetails(PagedListHolder Enlist) {
+
+		System.out.println("curent page - productList.getPage() :" + Enlist.getPage());
+
+		System.out.println("Total Num of pages - productList.getPageCount :" + Enlist.getPageCount());
+
+		System.out.println("is First page - productList.isFirstPage :" + Enlist.isFirstPage());
+
+		System.out.println("is Last page - productList.isLastPage :" + Enlist	.isLastPage());
+	}
+	//--------------------------------------------------------
 
 	// search courseid & course name(viewalleenrole) [2]
 	@RequestMapping(value = "/2searchbyname", method = RequestMethod.GET)
@@ -119,6 +174,7 @@ public class Lecturercontroller {
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
+	
 	//2.2 view all student enroled
 	@RequestMapping(value = "/enrole", method = RequestMethod.GET)
 	public ModelAndView employeeListPage(HttpServletRequest request) {
