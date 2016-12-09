@@ -443,13 +443,22 @@ public class AdminController
 				tempList.add(l);
 			}
 		}
-
+		
 		try
 		{
 			int id = Integer.parseInt(requestParams.get("id"));
 			ModelAndView mav = new ModelAndView("managecourse");
 			Course course = cseService.findCourse(id);
-
+			try
+			{
+				ArrayList<Enrolment> enrolmentList = enrolmentService.findbycid(id);
+				mav.addObject("enrolmentList", enrolmentList);
+			}
+			catch (Exception e)
+			{
+				
+			}
+			
 			mav.addObject("lecturerList", tempList);
 			mav.addObject("data", course);
 			return mav;

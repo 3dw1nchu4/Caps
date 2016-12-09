@@ -78,7 +78,8 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 
-				<h2 class="sub-header" id="sectiontitle" name="sectiontitle">Manage Student Records</h2>
+				<h2 class="sub-header" id="sectiontitle" name="sectiontitle">Manage
+					Student Records</h2>
 
 				<div id="mainbody" style="width: 100%">
 
@@ -168,8 +169,10 @@
 						<h2 class="form-signin-heading">Edit Record</h2>
 						<br>
 						<div id="formhead" name="formhead">
-							<h3>This course is taught by <b><u>${data.lecturerDetails.lastName },
-								${data.lecturerDetails.firstName }</u></b></h3>
+							<h3>
+								This course is taught by <b><u>${data.lecturerDetails.lastName },
+										${data.lecturerDetails.firstName }</u></b>
+							</h3>
 						</div>
 						<div>
 							<br>
@@ -239,24 +242,50 @@
 							</select>
 						</div>
 
+						<div>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th><h4>Student ID</h4></th>
+										<th><h4>Student Name</h4></th>
+										<th><h4>Grade Received</h4></th>
+										<th><h4>Status</h4></th>
+										<th><h4></h4></th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="enrolment" items="${enrolmentList}">
+										<tr class="listRecord">
+											<td>${enrolment.studentDetails.studentId}</td>
+											<td>${enrolment.studentDetails.lastName},
+												${enrolment.studentDetails.firstName}</td>
+											<td>${enrolment.grade}</td>
+											<td>${enrolment.status}</td>
+										</tr>
+									</c:forEach>
 
-
-
+								</tbody>
+							</table>
+						</div>
 						<br> <br>
 						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
 						<button type="button" class="btn btn-danger"
 							onclick="BackToPrevious()">Cancel</button>
+
 					</form>
+
 				</div>
+
+
+
 			</div>
 		</div>
+
+		<br> <br> <br>
 	</div>
-	<br>
-	<br>
-	<br>
-	</div>
+	<div></div>
 
 
 	<!-- DISPLAY MODALS -->
