@@ -1,9 +1,13 @@
 package edu.iss.caps.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 //import javax.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -109,7 +113,7 @@ public class StudentController {
 	
 	@RequestMapping(value = "/enrol/{courseId}", method = RequestMethod.GET)
 	public ModelAndView enrolling(@ModelAttribute Course course, BindingResult result,HttpServletRequest request,
-			@PathVariable int courseId, final RedirectAttributes redirectAttributes) {
+			@PathVariable int courseId, final RedirectAttributes redirectAttributes,HttpServletResponse response) throws ServletException, IOException {
 
 		
 		   Course c = cService.findCourse(courseId);
@@ -127,6 +131,10 @@ public class StudentController {
 		    message = "You have sucessfully enrolled with NO. " + courseId + " course ";
 			redirectAttributes.addFlashAttribute("message", message);
 			
+			request.setAttribute("course", c);
+			request.setAttribute("student", studentDetail);
+			RequestDispatcher rd = request.getRequestDispatcher(":redirect/send");
+			rd.include(request, response);
 			
 			
 			
@@ -136,6 +144,7 @@ public class StudentController {
 			
 		}
 		request.getSession().setAttribute("message", message);
+		
 //		Session session = SetAttribute("message", );
 		ModelAndView mav = new ModelAndView("redirect:/Course/bar");
 		
