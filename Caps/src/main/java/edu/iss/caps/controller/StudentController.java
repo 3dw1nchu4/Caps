@@ -141,6 +141,7 @@ public class StudentController {
 			request.setAttribute("student", studentDetail);
 			RequestDispatcher rd = request.getRequestDispatcher(":redirect/send");
 			rd.include(request, response);
+
 			
 			
 		}else {
