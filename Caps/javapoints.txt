@@ -1,0 +1,69 @@
+All
+All names to join instead of first name and last name separately in the views.
+Footer "powered by team7" is a <a> which refreshes the page.
+Home display home page
+
+
+/admin/managelecturer
+Change "#" to LecturerId in jsp
+Magnifying icon and search buttons have same functions. Remove the icon.
+after clicking All account status, Disabled user has "Disable" button enable. Change it to enable?
+need to think about what to do with users after disable
+On click "Create New", Header displays edit record
+creating repeated ID replaces lecturer
+Creating new lecturer and updating without password is possible
+
+
+/admin/managestudents
+Magnifying icon and search buttons have same functions. Remove the icon.
+Deleting student from course doesnt change count of courses enrolled in. Consider hard delete.
+REGEX for email
+creating repeated ID replaces student
+
+/admin/manage course
+On click "Create New", Header displays "Manage Student Records" and "Edit Record"
+Disable "enrolled students" field for create, just initiate from 0.
+Credit field missing
+Need validation for dates before and after 
+Edit course: LecturerID not binded to the view. No validation for lecturer ID make it required.
+
+
+
+UserService
+Exceptions for non matching userid and pw
+
+
+
+Student
+/Course/listall
+Show coursename, drop size and current enrolment fields
+Show coursename
+Search bar under construction
+Change message for course
+
+/Course/grades
+Show course credit instead of earned credit
+
+/Course/a
+Don't include closed courses
+
+////////////////////////////
+Tested 
+Admin
+Disable Lecturer?
+Edit Lecturer 
+Create new Lecturer X
+Search lecturer
+Reassigning Lecturer
+Search student
+Removing from courses X
+
+
+Student
+
+
+
+//////////////////////
+Statuses
+Course- Open, Close
+Enrolment- Enrolled, Failed, Passed
