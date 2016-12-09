@@ -95,13 +95,14 @@
 			<tr>
 			
 			    <th><spring:message code="fieldLabel.courseid" /></th>
-				<th><spring:message code="fieldLabel.coursename" /></th>
+				<th>LECTURE NAME</th>
 			
-				<th><spring:message code="fieldLabel.credits" /></th>
+				
 				<th><spring:message code="fieldLabel.startdate" /></th>
 				<th><spring:message code="fieldLabel.enddate" /></th>
+				<th><spring:message code="fieldLabel.credits" /></th>
 				<th><spring:message code="fieldLabel.size" /></th>
-				<th>currentEnrollment</th>
+				<th>CURRENT ENROLLMENT</th>
 
 
 			</tr>
