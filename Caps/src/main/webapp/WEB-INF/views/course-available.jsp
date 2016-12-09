@@ -49,12 +49,12 @@
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Course/listall">view all courses
+						href="${pageContext.request.contextPath}/Course/listall">View All Courses
 							</a></li>
 					<li id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Course/grade">Grade of Courses
+						href="${pageContext.request.contextPath}/Course/grade">Course Grades
 							</a></li><li class="active" id="sidebarStudent"><a
-						href="${pageContext.request.contextPath}/Course/a">enrollment
+						href="${pageContext.request.contextPath}/Course/a">Enrollment
 							</a></li>
 				</ul>
 

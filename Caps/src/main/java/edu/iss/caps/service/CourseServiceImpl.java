@@ -60,7 +60,6 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	
-	
 	@Override
 	public int calcredit(String g, int cid) {
 		// TODO Auto-generated method stub
@@ -86,6 +85,7 @@ public class CourseServiceImpl implements CourseService {
 	public ArrayList<Course> findbynotcop(String studentId){
 		return cr.findbynotcop(studentId);
 	}
+	
 	@Override
 	public void increasecourseEnrolment( Course course) {
 		
@@ -93,14 +93,7 @@ public class CourseServiceImpl implements CourseService {
 		int ce=a+1;
 		course.setCurrentEnrollment(ce);
 	    cr.saveAndFlush(course);
-
-	
 			
 		}
-
-
-
-
-
 
 }

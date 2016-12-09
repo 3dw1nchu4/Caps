@@ -22,7 +22,6 @@ public class Course {
 	private String courseName;
 	@Column(name = "Credits")
 	private int credits;
-
 	@Column(name = "StartDate")
 	private Date startDate;
 	@Column(name="EndDate")
@@ -57,8 +56,6 @@ public class Course {
 		this.size = size;
 		this.lecturerDetails = lecturerDetails;
 	}
-
-
 
 	public int getCourseId() {
 		return courseId;
@@ -124,19 +121,13 @@ public class Course {
 		this.size = size;
 	}
 	
-	
-	
 	public String getStatus() {
 		return status;
 	}
 
-
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
 
 	@Override
 	public int hashCode() {

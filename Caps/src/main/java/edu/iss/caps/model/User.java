@@ -83,6 +83,4 @@ public class User {
 		return "User [userId=" + userId + ", password=" + password + ", role=" + role + "]";
 	}
 	
-	
-
 }

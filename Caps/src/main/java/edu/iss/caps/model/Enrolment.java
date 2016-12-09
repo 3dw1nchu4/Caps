@@ -41,9 +41,6 @@ public class Enrolment {
 		
 	}
 
-	
-
-
 	public Enrolment(int enrolmentId, String grade, Integer earnedCredit, String status, Course courses,
 			StudentDetail studentDetails) {
 		super();
@@ -54,9 +51,6 @@ public class Enrolment {
 		this.courses = courses;
 		this.studentDetails = studentDetails;
 	}
-
-
-
 
 	public String getGrade() {
 		return grade;
@@ -90,41 +84,22 @@ public class Enrolment {
 		this.studentDetails = studentDetails;
 	}
 
-	
-	
 	public int getEnrolmentId() {
 		return enrolmentId;
 	}
 
-
-
-
 	public void setEnrolmentId(int enrolmentId) {
 		this.enrolmentId = enrolmentId;
 	}
-
-
-
 
 	public String getStatus() {
 		return status;
 	}
 
 
-
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
-
-
-
-	
-
-
-
 
 	@Override
 	public int hashCode() {
@@ -133,9 +108,6 @@ public class Enrolment {
 		result = prime * result + enrolmentId;
 		return result;
 	}
-
-
-
 
 	@Override
 	public boolean equals(Object obj) {

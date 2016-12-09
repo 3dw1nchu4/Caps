@@ -23,16 +23,11 @@ public interface CourseService {
 
 	List<Course> findbycid(int id);
 
-
-
 	int calcredit(String g, int cid);
 
 	String makestatus(String g);
 
 	void increasecourseEnrolment(Course c);
 	
-
-//	String makestatus(int cred);
-
 
 }

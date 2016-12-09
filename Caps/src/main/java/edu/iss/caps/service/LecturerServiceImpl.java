@@ -55,5 +55,4 @@ public class LecturerServiceImpl implements LecturerService{
 		ldRepository.delete(lecturer);
 	}
 
-
 }

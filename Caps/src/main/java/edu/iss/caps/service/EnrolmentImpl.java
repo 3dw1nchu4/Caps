@@ -20,7 +20,6 @@ public class EnrolmentImpl implements EnrolmentService {
 	private EnrolmentRepository scRepository;
 	private CourseRepository courseRepository;
 
-
 	public ArrayList<Enrolment> findAllCoursesAttending() {
 		// TODO Auto-generated method stub
 		ArrayList<Enrolment> scList = (ArrayList<Enrolment>)scRepository.findAll();
@@ -41,12 +40,6 @@ public class EnrolmentImpl implements EnrolmentService {
 	}
 
 
-//	@Override
-//	public ArrayList<Enrolment> findcompleted(int id) {
-//		// TODO Auto-generated method stub
-//		return scRepository.findcompleted(id);
-//	}
-//	
 	@Override
 	public List<Enrolment> findstudentbylecturerid(String s) {
 		// TODO Auto-generated method stub
@@ -98,11 +91,6 @@ public class EnrolmentImpl implements EnrolmentService {
 	Enrolment e = new Enrolment();
 	e.setStudentDetails(studentDetail);
 	e.setStatus("Enrolled");
-//	int a = course.getCurrentEnrollment();
-//	int ce=a+1;
-//	course.setCurrentEnrollment(ce);
-//	 courseRepository.saveAndFlush(course);
-
 	
 	     e.setCourses(course);
 	     
@@ -115,9 +103,5 @@ public class EnrolmentImpl implements EnrolmentService {
 		// TODO Auto-generated method stub
 		return scRepository.findcompletedgradesbysid(studentId);
 	}
-
-
-	
-
 
 }

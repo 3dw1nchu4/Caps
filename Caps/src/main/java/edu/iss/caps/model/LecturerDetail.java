@@ -61,7 +61,6 @@ public class LecturerDetail {
 	}
 	
 	
-
 	public String getStatus() {
 		return status;
 	}
@@ -100,9 +99,5 @@ public class LecturerDetail {
 		return "LecturerDetail [lecturerId=" + lecturerId + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", status=" + status + "]";
 	}
-
-
-	
-	
 
 }
