@@ -19,7 +19,7 @@ public interface CourseService {
 	
 	ArrayList<Course> findbylecid(String lectureID);
 
-	
+	ArrayList<Course> findbynotcop(String studentId);
 
 	List<Course> findbycid(int id);
 
@@ -28,6 +28,9 @@ public interface CourseService {
 	int calcredit(String g, int cid);
 
 	String makestatus(String g);
+
+	void increasecourseEnrolment(Course c);
+	
 
 //	String makestatus(int cred);
 

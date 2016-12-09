@@ -47,6 +47,7 @@ public class AdminController
 	StudentService studentService;
 	@Autowired
 	EnrolmentService enrolmentService;
+
 /*
 	@RequestMapping(value = "/")
 	public String testMestod(HttpSession session)
@@ -266,7 +267,7 @@ public class AdminController
 
 	// CREATE NEW
 	@RequestMapping(value = "/createlecturer", method = RequestMethod.POST)
-	public ModelAndView createLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	public String createLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 
 		String id = requestParams.get("id");
@@ -283,11 +284,8 @@ public class AdminController
 		LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
 		lecturer.setStatus("Active");
 		lecturerService.createLecturer(lecturer);
-		ModelAndView mav = new ModelAndView("managelecturer");
-
-		LecturerDetail lecturer1 = lecturerService.findLecturerById(id);
-		mav.addObject("data", lecturer1);
-		return mav;
+		
+		return "redirect:managelecturer";
 	}
 
 	// Update Existing
@@ -370,16 +368,141 @@ public class AdminController
 	}
 
 ////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
-	@RequestMapping(value = "/manage", params = "manage=course", method = RequestMethod.GET)
-	public ModelAndView manage3(Locale locale, Model model)
+	@RequestMapping(value = "/managecourse", method = RequestMethod.GET)
+	public ModelAndView manageCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-		ModelAndView mav = new ModelAndView("managecourse");
-		List<Course> cseList = cseService.findAllCourses();
-		mav.addObject("dataList", cseList);
-		return mav;
+		try
+		{
+			int id = Integer.parseInt(requestParams.get("id"));
+			ModelAndView mav = new ModelAndView("managecourse");
+			Course course = cseService.findCourse(id);
+			mav.addObject("data", course);
+			return mav;
+		} catch (Exception e)
+		{
+			ModelAndView mav = new ModelAndView("managecourse");
+			List<Course> cseList = cseService.findAllCourses();
+			List<Course> tempList = new ArrayList<Course>();
+			
+			for (Course c : cseList)
+			{
+				if (c.getStatus().toLowerCase().contains("open"))
+				{
+					tempList.add(c);
+				}
+			}
+
+			mav.addObject("dataList", tempList);
+			return mav;
+		}
+	}
+	
+	
+	// CREATE NEW
+	@RequestMapping(value = "/createcourse", method = RequestMethod.POST)
+	public String createCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+
+		String cseName = requestParams.get("cseName");
+		String lecturerId = requestParams.get("lecturerId");
+		@SuppressWarnings("deprecation")
+		Date startDate = new Date(2016, 11, 20);
+		@SuppressWarnings("deprecation")
+		Date endDate = new Date(2016, 12, 20);
+		//Date endDate = Date(requestParams.get("endDate"));
+		//Date endDate = Date(requestParams.get("startDate"));
+		int size = Integer.parseInt(requestParams.get("size"));
+		String status = requestParams.get("status");
+		int currentEnrollment = 0;
+		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
+		
+		Course course = new Course();
+		course.setCourseName(cseName);
+		course.setSize(size);
+		course.setStatus(status);
+		course.setStartDate(startDate);
+		course.setEndDate(endDate);
+		course.setLecturerDetails(lecturer);
+		course.setCurrentEnrollment(currentEnrollment);
+	
+
+		cseService.createCourse(course);
+		return "redirect:managecourse";
 	}
 
-	@RequestMapping(value = "/manage", params = "manage=enrolment", method = RequestMethod.GET)
+	// Update Existing
+	@RequestMapping(value = "/updatecourse", method = RequestMethod.POST)
+	public String updateCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+		int id = Integer.parseInt(requestParams.get("id"));
+		String cseName = requestParams.get("cseName");
+		int size = Integer.parseInt(requestParams.get("size"));
+		String status = requestParams.get("status");
+
+		Course course = cseService.findCourse(id);
+		course.setCourseName(cseName);
+		course.setSize(size);
+		course.setStatus(status);
+		
+		cseService.changeCourse(course);
+		return "redirect:managecourse";
+	}
+
+	// delete course
+	@RequestMapping(value = "/deletecourse", method = RequestMethod.POST)
+	public String deleteCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+		int id = Integer.parseInt(requestParams.get("deletethis"));
+		Course course = cseService.findCourse(id);
+		course.setStatus("Closed");
+		cseService.changeCourse(course);
+		return "redirect:managecourse";
+	}
+
+	@RequestMapping(value = "/searchcourse", method = RequestMethod.GET)
+	public ModelAndView searchCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	{
+		String searchContent = requestParams.get("searchcontent").toLowerCase();
+		String coursestatus = requestParams.get("accountstatus").toLowerCase();
+		if (coursestatus.contains("all"))
+		{
+			coursestatus = "";
+		}
+		ModelAndView mav = new ModelAndView("managecourse");
+		ArrayList<Course> lctList = cseService.findAllCourses();
+		List<Course> searchList = new ArrayList<Course>();
+		for (Course l : lctList)
+		{
+			if (Integer.toString(l.getCourseId()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
+			} else if (l.getCourseName().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
+			} else if (l.getLecturerDetails().getLecturerId().toLowerCase().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
+			} else if ((l.getLecturerDetails().getFirstName().toLowerCase() + " " + l.getLecturerDetails().getLastName().toLowerCase()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
+			} else if ((l.getLecturerDetails().getLastName().toLowerCase() + " " + l.getLecturerDetails().getFirstName().toLowerCase()).contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
+			}
+		}
+
+		mav.addObject("dataList", searchList);
+		mav.addObject("datacount", searchList.size());
+		return mav;
+	}
+	
+////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
+	@RequestMapping(value = "/manageenrolment", params = "manage=enrolment", method = RequestMethod.GET)
 	public ModelAndView manage4(Locale locale, Model model)
 	{
 		ModelAndView mav = new ModelAndView("manageenrolment");

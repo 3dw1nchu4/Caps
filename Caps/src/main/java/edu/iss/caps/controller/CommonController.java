@@ -44,6 +44,7 @@ public class CommonController {
 				break;
 		case "Lecturer": mav=new ModelAndView("redirect:/Lec/byid");
 				break;
+		case "Student": mav=new ModelAndView("redirect:/Course/listall");
 		}
 		return mav;
 	}

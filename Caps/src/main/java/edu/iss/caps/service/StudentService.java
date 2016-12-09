@@ -14,6 +14,7 @@ public interface StudentService {
 	StudentDetail changeStudent(StudentDetail student);
 
 	void removeStudent(StudentDetail student);
-
+	
+	float calcStudentGPA(String studentId);
 
 }

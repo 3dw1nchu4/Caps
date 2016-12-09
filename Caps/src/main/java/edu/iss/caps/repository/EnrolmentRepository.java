@@ -37,21 +37,30 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer>{
 	@Query("SELECT w FROM Enrolment w WHERE w.grade is null AND( w.courses.lecturerDetails.lecturerId = :lid AND w.courses.courseId = :cid)")
 	ArrayList<Enrolment> findungraded(@Param("lid") String LecId,@Param("cid") int id);
 	
-	@Query("SELECT w FROM Enrolment w WHERE w.grade is not null")
-	ArrayList<Enrolment> findcompleted();
+	@Query("SELECT w FROM Enrolment w WHERE w.grade is not null AND w.studentDetails.studentId = :sid")
+	ArrayList<Enrolment> findcompletedgradesbysid(@Param("sid") String studentid);
 
 	@Query("SELECT w FROM Enrolment w WHERE w.grade is not null AND w.courses.courseId = :lid ")
-	List<Enrolment> findcompletedbyid(@Param("lid") int cid);
+	ArrayList<Enrolment> findcompletedbyid(@Param("lid") int cid);
 
 
 	@Query("SELECT sc from Enrolment sc WHERE sc.courses.courseId = :sid AND sc.courses.lecturerDetails.lecturerId = :lid")
 	ArrayList<Enrolment> findbycid(@Param("sid") int courseId,@Param("lid") String LecId );
+
+
+	@Query("SELECT e from Enrolment e WHERE e.studentDetails.studentId = :sid")
+	ArrayList<Enrolment> findCourseBySID(@Param("sid") String StudentID);
 	
 	
 	
 	@Query("select count(courseId) from Enrolment w where w.grade is not null AND w.courses.courseId = :sid ")
 	int countungraded (@Param("sid") int courseId);
 	
+	
+	@Query("SELECT w FROM Enrolment w WHERE w.grade is null")
+	ArrayList<Enrolment> findungraded();
+
+	ArrayList<Enrolment> findcompleted();
 	
 	
 	

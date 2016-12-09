@@ -62,35 +62,35 @@
 </head>
 <body>
 	<div id="header"></div>
+
 	<div class="container-fluid">
 		<div class="row">
+		<!-- For SIDE NAVIGATION -->
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
 					<li id="sidebarStudent"><a href="managestudent">Manage
 							Students</a></li>
 					<li id="sidebarLecturer"><a href="managelecturer">Manage
 							Lecturers</a></li>
-					<li id="sidebarCourse"><a href="managecourse">Manage
+					<li id="sidebarCourse"><a href="javascript:Manage('course')">Manage
 							Courses</a></li>
 					<li id="sidebarEnrolment"><a
-						href="manageenrolment">Manage Enrolment</a></li>
+						href="javascript:Manage('enrolment')">Manage Enrolment</a></li>
 				</ul>
 
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
-
+				<!-- SECTION TITLE -->
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
-
+				<!-- Main Body -->
 				<div id="mainbody" style="width: 100%">
 
 					<div class="container" style="width: 100%">
-
+				<!-- Search bar -->
 						<nav class="navbar navbar-default" role="navigation">
 						<div class="container-fluid">
-							<!--  div class="navbar-header">
-								<a class="navbar-brand" href="#">Search</a>
-							</div>-->
+
 
 							<form class="navbar-form navbar-left" role="search"
 								action="searchlecturer" method="get">
@@ -128,7 +128,7 @@
 
 						<div class="container"></div>
 					</div>
-
+<!-- RESULTS DATA TABLE -->
 					<div id="searchcount" name="searchcount" style="display:none"><h5> Your search returned ${dataList.size() } results</h5></div>
 						<table class="table table-striped">
 							<thead>
@@ -217,56 +217,10 @@
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
-
 		</div>
 	</div>
 
-	<!-- Not logged in Modal -->
-
-	<div id="redirectLoginModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Login required</h4>
-				</div>
-				<div class="modal-body">
-					<p>The page you tried to access requires you to be logged in.
-						You will be redirected to the login page.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-
-		</div>
-	</div>
-	<!-- Confirm deletion Modal -->
-	<div id="deleteModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Confirm Deletion</h4>
-				</div>
-				<form action="deletelecturer" method="post">
-					<div class="modal-body">
-
-						<p>The selected entry will be permanently deleted.</p>
-						<input id="deletethis" name="deletethis" class="form-control"
-							placeholder="Last Name" value="" required />
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button id="deletebtn" name="deletebtn" type="submit"
-							class="btn btn-danger">Delete</button>
-					</div>
-				</form>
-
-			</div>
-
-		</div>
-	</div>
+	
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -296,124 +250,6 @@
 	});
 
 
-	var url = window.location.href;
-
-	var qs = (function(a)
-	{
-		if (a == "")
-			return
-			{};
-		var b =
-		{};
-		for (var i = 0; i < a.length; ++i)
-		{
-			var p = a[i].split('=', 2);
-			if (p.length == 1)
-				b[p[0]] = "";
-			else
-				b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-		}
-		return b;
-	})(window.location.search.substr(1).split('&'));
-	
-
-	try
-	{
-		if (url.includes("student"))
-		{
-			document.getElementById("sidebarStudent").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Student ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Student Records";
-	
-		} else if (url.includes("lecturer"))
-		{
-			document.getElementById("sidebarLecturer").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Lecturer ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Lecturer Records";
-	
-		} else if (url.includes("course"))
-		{
-			document.getElementById("sidebarCourse").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Course ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Course Records";
-	
-		} else if (url.includes("enrolment"))
-		{
-			document.getElementById("sidebarEnrolment").className = "active";
-			document.getElementById("tableheader1").innerHTML = "Enrolment ID";
-			document.getElementById("sectiontitle").innerHTML = "Manage Enrolment Records";
-	
-		} 
-
-	}
-	catch (err)
-	{
-		console.log("no query string");
-		RedirectToLogin();
-	}
-	
-	if (qs['searchcontent'] != null)
-	{
-		document.getElementById("searchcontent").value = qs['searchcontent'];
-		document.getElementById("searchcount").style.display = "block";
-	}
-	if (qs['accountstatus'] != null)
-	{
-		document.getElementById("accountstatus").value = qs['accountstatus'];
-	}
-	
-	
-	if (url.includes("id="))
-	{
-		document.getElementById("mainbody").style.display = "none";
-		document.getElementById("editcontent").style.display = "block";
-		
-		if (qs['id'] !="create")
-		{
-			document.getElementById("id").readOnly = true;
-			document.getElementById("formEditRecord").action = "updatelecturer";
-			document.getElementById("submitbutton").innerHTML = "Update Record";
-		} else
-		{
-			document.getElementById("formEditRecord").action = "createlecturer";
-			document.getElementById("submitbutton").innerHTML = "Create New Record";
-		}
-	}
-
-	function EditRecord(id) //Edit button
-	{
-		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer?id="+id;
-	}
-
-	function Manage(recordtype)
-	{
-		window.location.href = url + "?userrole=" + qs['userrole'] + "&manage="
-				+ recordtype;
-	}
-	
-	function BackToPrevious()
-	{
-		window.location.href = "${pageContext.request.contextPath}/admin/managelecturer";
-	}
-	
-	function RedirectToLogin()
-	{
-		$('#redirectLoginModal').modal('toggle');
-		window.setTimeout(function()
-		{
-			window.location = "login.jsp";
-		}, 3000);
-	}
-	
-	function DeleteRecord(id)
-	{
-		//Attaches correct delete event to button
-		console.log("event attached");
-		
-		document.getElementById("deletethis").value = id;
-		$('#deleteModal').modal('toggle');
-	}
-	
 
 	
 </script>

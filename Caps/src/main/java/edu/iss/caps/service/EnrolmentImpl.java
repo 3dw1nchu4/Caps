@@ -7,7 +7,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import edu.iss.caps.model.Course;
 import edu.iss.caps.model.Enrolment;
+import edu.iss.caps.model.StudentDetail;
+import edu.iss.caps.repository.CourseRepository;
 import edu.iss.caps.repository.EnrolmentRepository;
 
 @Service
@@ -15,6 +18,7 @@ public class EnrolmentImpl implements EnrolmentService {
 	
 	@Resource
 	private EnrolmentRepository scRepository;
+	private CourseRepository courseRepository;
 
 
 	public ArrayList<Enrolment> findAllCoursesAttending() {
@@ -39,7 +43,7 @@ public class EnrolmentImpl implements EnrolmentService {
 
 
 	@Override
-	public ArrayList<Enrolment> findcompleted() {
+	public ArrayList<Enrolment> findcompleted(int id) {
 		// TODO Auto-generated method stub
 		return scRepository.findcompleted();
 	}
@@ -65,7 +69,7 @@ public class EnrolmentImpl implements EnrolmentService {
 
 
 	@Override
-	public List<Enrolment> findcompletedbyid(int id) {
+	public ArrayList<Enrolment> findcompletedbyid(int id) {
 		// TODO Auto-generated method stub
 		return scRepository.findcompletedbyid(id);
 	}
@@ -84,7 +88,36 @@ public class EnrolmentImpl implements EnrolmentService {
 	}
 
 	
+	//joe////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public ArrayList<Enrolment> findCourseBySID(String sid){
+		return scRepository.findCourseBySID(sid);
+	}
+
+////////////////////////////////////////joe//////////////////////////////////////
+	@Override
+	public void createEnrollment(StudentDetail studentDetail, Course course) {
+	Enrolment e = new Enrolment();
+	e.setStudentDetails(studentDetail);
+	e.setStatus("Enrolled");
+//	int a = course.getCurrentEnrollment();
+//	int ce=a+1;
+//	course.setCurrentEnrollment(ce);
+//	 courseRepository.saveAndFlush(course);
+
 	
+	     e.setCourses(course);
+	     
+		 scRepository.saveAndFlush(e);
+//		
+		
+	}
+	@Override
+	public ArrayList<Enrolment> findcompletedgradesbysid(String studentId) {
+		// TODO Auto-generated method stub
+		return scRepository.findcompletedgradesbysid(studentId);
+	}
+
 
 	
 

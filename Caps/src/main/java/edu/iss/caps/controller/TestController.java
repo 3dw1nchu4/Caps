@@ -38,7 +38,8 @@ public class TestController {
 	@Autowired
 	private UserService us;
 	
-
+	
+	
 	@RequestMapping(value = "/1")
 	@ResponseBody
 	public String test() {
@@ -94,4 +95,17 @@ public class TestController {
 		}
 		return s;
 	}
+	
+	@RequestMapping(value = "/6")
+	@ResponseBody
+	public String test6() {
+		
+		String s="S002";
+		Float gpa= ss.calcStudentGPA(s);
+		
+		//return gpa.toString();
+		return gpa.toString();
+	}
+
+	
 }
