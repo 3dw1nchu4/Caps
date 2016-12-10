@@ -192,6 +192,7 @@
 
 		</div>
 	</div>
+	
 	</div>
 
 	<footer
@@ -203,7 +204,7 @@
 <script>
 	$(function() {
 		$("#header").load(
-				"${pageContext.request.contextPath}/resources/header.html");
+				"${pageContext.request.contextPath}/resources/header.jsp?idlogedin=L001");
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});

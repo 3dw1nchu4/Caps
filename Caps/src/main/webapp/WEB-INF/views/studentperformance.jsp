@@ -199,7 +199,7 @@
 <script>
 	$(function() {
 		$("#header").load(
-				"${pageContext.request.contextPath}/resources/header.html");
+				"${pageContext.request.contextPath}/resources/header.jsp");
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});

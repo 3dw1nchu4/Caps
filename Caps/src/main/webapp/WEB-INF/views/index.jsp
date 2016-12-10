@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title></title>
+<title>Home</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -15,15 +15,108 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--  additional custom styles -->
-<link rel="stylesheet" href="resources/mystyle.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/mystyle.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+#event {
+	padding-top: 25px;
+}
+
+#news {
+	padding-top: 50px;
+}
+
+#about {
+	padding-top: 50px;
+}
+</style>
+<!--Navigation bar mobile responsive-->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+<div class="container-fluid">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+			data-target="#myNavbar">
+			<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+				class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand"
+			href="${pageContext.request.contextPath}/home/index?#ssh">CAPS</a>
+
+	</div>
+	<div class="collapse navbar-collapse" id="myNavbar">
+
+		<ul class="nav navbar-nav">
+			<li id="navbarHome"><a
+				href="${pageContext.request.contextPath}/home/index?#ssh">Home</a></li>
+
+			<%
+				if (session.getAttribute("user") == null || session.getAttribute("user").equals("")) {
+				}
+				else{
+			%>
+			<li id="navbarrole"><a
+				href="${pageContext.request.contextPath}/home/movein">${role}</a></li>
+			<%
+				}
+			%>
+
+
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
+			<li><a
+				href="${pageContext.request.contextPath}/home/index?#event">Events</a></li>
+			<li><a
+				href="${pageContext.request.contextPath}/home/index?#news">News</a></li>
+			<li><a
+				href="${pageContext.request.contextPath}/home/index?#about">About
+					us</a></li>
+
+
+			<%-- <li id="navbarUser"><a href="#" style="max-width: 100%"><span
+						class="glyphicon glyphicon-user"></span> ${role}</a>
+						</li>  --%>
+
+			<%
+				if (session.getAttribute("user") == null || session.getAttribute("user").equals("")) {
+			%>
+
+			<li id="navbarLogin"><a
+				href="${pageContext.request.contextPath}/home/login"
+				data-toggle="login" data-placement="auto" title="Login"
+				style="max-width: 100%"><span class="glyphicon glyphicon-log-in"></span>
+					Login</a></li>
+
+			<%
+				} else {
+			%>
+			<li id="navbarLogout"><a
+				href="${pageContext.request.contextPath}/home/logout"
+				data-toggle="logout" data-placement="auto" title="Logout"
+				style="max-width: 100%"><span
+					class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+
+			<%
+				}
+			%></li>
+
+		</ul>
+	</div>
+</div>
+</nav>
+
+
+
+
 
 
 </head>
 <body>
-	<div id="header"></div>
-	<div>
+	<div id="ssh">
+		<br> <br>
 		<div id="myCarousel" class="carousel slide" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
@@ -37,22 +130,26 @@
 			<div class="carousel-inner" role="listbox">
 
 				<div class="item active">
-					<img src="pic/21.jpg" alt="Chania" width="100%">
+					<img src="${pageContext.request.contextPath}/resources/pic/21.jpg"
+						alt="Chania" width="100%">
 				</div>
 
 				<div class="item">
-					<img src="pic/22.jpg" alt="Chania" width="100%">
+					<img src="${pageContext.request.contextPath}/resources/pic/22.jpg"
+						alt="Chania" width="100%">
 					<div class="carousel-caption">
 						<h3>The bird</h3>
 					</div>
 				</div>
 
 				<div class="item">
-					<img src="pic/23.jpg" alt="Flower" width="100%">
+					<img src="${pageContext.request.contextPath}/resources/pic/23.jpg"
+						alt="Flower" width="100%">
 				</div>
 
 				<div class="item">
-					<img src="pic/24.jpg" alt="Flower" width="100%">
+					<img src="${pageContext.request.contextPath}/resources/pic/24.jpg"
+						alt="Flower" width="100%">
 					<div class="carousel-caption">
 						<h3>Flowers</h3>
 
@@ -117,9 +214,11 @@
 
 				<br>
 				<div class="t7-card-8" style="height: 300px;">
-					<img class="mySlides" src="pic/cheat1.jpg"
+					<img class="mySlides"
+						src="${pageContext.request.contextPath}/resources/pic/cheat1.jpg"
 						style="width: 100%; height: 290px"> <img class="mySlides"
-						src="pic/cheat2.jpg" style="width: 100%; height: 300px">
+						src="${pageContext.request.contextPath}/resources/pic/cheat2.jpg"
+						style="width: 100%; height: 300px">
 
 				</div>
 
@@ -139,7 +238,7 @@
 								<h2 class="form-signin-heading">Please sign in</h2>
 								<label for="inputEmail" class="sr-only">Email address</label> <input
 									type="email" id="inputEmail" class="form-control"
-									placeholder="Email address" required autofocus> <label
+									placeholder="Email address" required> <label
 									for="inputPassword" class="sr-only">Password</label> <input
 									type="password" id="inputPassword" class="form-control"
 									placeholder="Password" required>
@@ -171,30 +270,36 @@
 				<br>
 				<div class="row">
 					<div class="col-sm-6 ">
-						<img src="pic/a.jpg" alt="Norway" style="width: 100%">
+						<img src="${pageContext.request.contextPath}/resources/pic/a.jpg"
+							alt="Norway" style="width: 100%">
 
 						<div class="t7-container t7-center t7-blue t7-card-8">
 							<br>
-							<p>The Troll's tongue in Hardanger, Norway</p>
-							<p>The Troll's tongue in Hardanger, Norway</p>
+							<p>
+								<B>NUS prof to chair </B>
+							</p>
+							<p>Prof Barry Halliwell will help to steer biomedical
+								research efforts in Singapore at the Agency from 1 January 2017</p>
 
 						</div>
 						<br>
 					</div>
 					<div class="col-sm-6">
-						<img src="pic/b.jpg" alt="Norway" style="width: 100%">
+						<img src="${pageContext.request.contextPath}/resources/pic/b.jpg"
+							alt="Norway" style="width: 100%">
 
 						<div class="t7-container t7-center t7-blue t7-card-8">
 							<br>
-							<p>The Troll's tongue in Hardanger, Norway</p>
-							<p>The Troll's tongue in Hardanger, Norway</p>
+							<p>
+								<b>Caring through music</b>
+							</p>
+							<p>Our Yong Siew Toh Conservatory of Music alumnus and
+								award-winning conductor.</p>
 						</div>
 
 					</div>
 				</div>
-				<br>
-				<button class="t7-btn t7-right">More News</button>
-				<br> <br>
+				<br> <br> <br>
 			</div>
 
 			<div class="col-sm-6 ">
@@ -204,12 +309,14 @@
 						<h6 class="t7-right">(Mouse over to play/pause)</h6>
 					</h3>
 				</div>
-				
+
 				<br>
 				<div id="videosList">
 					<div class="video">
 						<video loop audio muted width="100%" height="300" autoplay>
-						<source src="pic/bit.mp4" type="video/mp4"></video>
+						<source
+							src="${pageContext.request.contextPath}/resources/pic/bit.mp4"
+							type="video/mp4"></video>
 					</div>
 				</div>
 			</div>
@@ -242,7 +349,7 @@
 				<br>
 				<div class="t7-card-8 t7-container">
 					<br> <i class="fa fa-map-marker" style="font-size: 25px;"></i>
-					Chicago, US<br> <br> <i class="fa fa-phone"
+					Singapore 119077<br> <br> <i class="fa fa-phone"
 						style="font-size: 25px;"> </i> Phone: +00 151515<br>( Enquiry
 					Line :Monday - Friday : 9:00am to 4:00pm)<br> <br> <i
 						class="fa fa-envelope" style="font-size: 25px;"> </i> Email:
@@ -325,19 +432,27 @@
 	<br>
 	<br>
 
-	<footer
-		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
-	<div id="footer"></div>
-	</footer>
+
+	<div class="t7-container t7-grey">
+		<br>
+		<div class="">
+			<a href="#" class="t7-btn t7-padding-large t7-margin-bottom t7-right"><i
+				class="fa fa-arrow-up w3-margin-right"></i> To the top</a>
+			<p>Powered by Team 7</p>
+		</div>
+	</div>
+
+
 
 </body>
 
 <script>
-	$(function() {
-		$("#header").load("resources/header.html");
-		$("#footer").load("resources/footer.html");
-	});
-
+$(function() {
+	$("#header").load(
+			"${pageContext.request.contextPath}/resources/header.jsp");
+	$("#footer").load(
+			"${pageContext.request.contextPath}/resources/footer.html");
+});
 	var myIndex = 0;
 	carousel();
 

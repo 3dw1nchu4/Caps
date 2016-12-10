@@ -32,20 +32,26 @@
 				action="${pageContext.request.contextPath}/home/authenticate">
 				<h2 class="form-signin-heading">Please sign in</h2>
 				<label for="userid" class="sr-only"></label>
-				<form:input class="form-control" placeholder="UserId" id="userid" path="userId"/><br>
+				<form:input class="form-control" placeholder="UserId" id="userid"
+					path="userId" />
+				<br>
 				<label for="inputPassword" class="sr-only"></label>
-				<form:input class="form-control" placeholder="Password" id="inputPassword" path="password"/>
+				<form:input class="form-control" placeholder="Password"
+					id="inputPassword" path="password" />
 				<div class="checkbox">
 					<label> <input type="checkbox" value="remember-me">
 						Remember me
 					</label>
 				</div>
 				<!-- removed the type="submit" property for testing, redirect function for testing only -->
-				<form:button class="btn btn-lg btn-primary btn-block" name="submit" type="submit" value="s">
+				<form:button class="btn btn-lg btn-primary btn-block" name="submit"
+					type="submit" value="s">
 				Sign in</form:button>
 			</form:form>
 
-				<footer
+		</div>
+	</div>
+	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
 	<div id="footer"></div>
 	</footer>

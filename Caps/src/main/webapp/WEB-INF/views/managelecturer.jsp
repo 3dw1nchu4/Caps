@@ -347,7 +347,7 @@
 <script>
 	$(function()
 	{
-		$("#header").load("${pageContext.request.contextPath}/resources/header.html");
+		$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
 		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
 	});
 

@@ -59,6 +59,7 @@ public class Lecturercontroller {
 	@RequestMapping(value = "/viewallenrole", method = RequestMethod.GET)
 	public ModelAndView viewallcourseenrole() {
 		ModelAndView mav = new ModelAndView("enroleview");
+
 		List<Course> course = cs.findAllCourses();
 		mav.addObject("Enlist", course);
 		return mav;
@@ -91,12 +92,16 @@ public class Lecturercontroller {
 	// 1.1 view my course only.
 	@RequestMapping(value = "/mycourseenrole", method = RequestMethod.GET)
 	public ModelAndView mycourseenrole(HttpServletRequest request) {
-		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		ModelAndView mav = new ModelAndView("enroleview");
-		List<Course> course = cs.findbylecid(s);
-		mav.addObject("Enlist", course);
-		return mav;
+		try {
+			User u = (User) request.getSession().getAttribute("user");
+			String s = u.getUserId();
+			ModelAndView mav = new ModelAndView("enroleview");
+			List<Course> course = cs.findbylecid(s);
+			mav.addObject("Enlist", course);
+			return mav;
+		} catch (Exception e) {
+			return new ModelAndView("redirect:/home/login");
+		}
 	}
 
 	// 1.2 view all student enroled / with search
@@ -133,22 +138,26 @@ public class Lecturercontroller {
 	@RequestMapping(value = "/viewalltograde", method = RequestMethod.GET)
 	public ModelAndView viewalltograde(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("courseforgrading");
-		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		List<Course> course = cs.findbylecid(s);
-		List<Course> courseTemp = new ArrayList<Course>();
-		// List<Enrolment> enrolmentList = new ArrayList<Enrolment>();
+		try {
+			User u = (User) request.getSession().getAttribute("user");
+			String s = u.getUserId();
+			List<Course> course = cs.findbylecid(s);
+			List<Course> courseTemp = new ArrayList<Course>();
+			// List<Enrolment> enrolmentList = new ArrayList<Enrolment>();
 
-		for (Course c : course) {
-			if (ens.findungraded(s, c.getCourseId()).size() != 0) {
-				courseTemp.add(c);
+			for (Course c : course) {
+				if (ens.findungraded(s, c.getCourseId()).size() != 0) {
+					courseTemp.add(c);
+				}
 			}
+
+			// mav.addObject("Enlist2", courseTemp);
+
+			mav.addObject("Enlist", courseTemp);
+			return mav;
+		} catch (Exception e) {
+			return new ModelAndView("redirect:/home/login");
 		}
-
-		// mav.addObject("Enlist2", courseTemp);
-
-		mav.addObject("Enlist", courseTemp);
-		return mav;
 	}
 
 	// search in 2.1 [for course name and id]
@@ -157,7 +166,9 @@ public class Lecturercontroller {
 			HttpServletRequest request) {
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		ModelAndView mav = new ModelAndView("courseforgrading");
-		User u = (User) request.getSession().getAttribute("user");
+		 try {
+			 User u = (User) request.getSession().getAttribute("user");
+	
 		String s = u.getUserId();
 		// ArrayList<Course> lctList = cs.findbylecid(s);
 		List<Course> searchList = new ArrayList<Course>();
@@ -188,6 +199,9 @@ public class Lecturercontroller {
 		mav.addObject("Enlist", searchList);
 		mav.addObject("datacount", searchList.size());
 		return mav;
+		 }catch (Exception e) {
+				return new ModelAndView("redirect:/home/login");
+			}
 	}
 
 	// 2.2 grade a student
@@ -195,7 +209,7 @@ public class Lecturercontroller {
 	public ModelAndView searchgradeastudent(@PathVariable int id, HttpServletRequest request,
 			@RequestParam Map<String, String> requestParams) {
 		ModelAndView mav = new ModelAndView("gradinglist");
-		User u = (User) request.getSession().getAttribute("user");
+	try{	User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 
 		// ArrayList<Enrolment> lctList = ens.findungraded(s, id);
@@ -221,6 +235,9 @@ public class Lecturercontroller {
 		}
 		mav.addObject("Enlist", lctList);
 		return mav;
+	}catch (Exception e) {
+		return new ModelAndView("redirect:/home/login");
+	}
 	}
 
 	// 3.2 view all student performance / search for all students.
@@ -321,7 +338,7 @@ public class Lecturercontroller {
 	// 3.1 view my course for viewing performance
 	@RequestMapping(value = "/mycourse", method = RequestMethod.GET)
 	public ModelAndView mycourse(HttpServletRequest request) {
-		User u = (User) request.getSession().getAttribute("user");
+		try {User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		ModelAndView mav = new ModelAndView("courseavi");
 		List<Course> course = cs.findbylecid(s);
@@ -334,12 +351,16 @@ public class Lecturercontroller {
 		mav.addObject("cou", ar);
 
 		return mav;
+		}
+		catch (Exception e) {
+			return new ModelAndView("redirect:/home/login");
+		}
 	}
 
 	// update the grade.. (2.2)
 	@RequestMapping(value = "/grade/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request) {
-		User u = (User) request.getSession().getAttribute("user");
+	try{	User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		String g = request.getParameter("glist");
 		String id = request.getParameter("sd");
@@ -355,6 +376,10 @@ public class Lecturercontroller {
 		List<Course> course = cs.findbylecid(s);
 		// mav.addObject("Enlist", course);
 		return "redirect:" + cid + "?actionstatus=0";
+	}
+	catch (Exception e) {
+		return "redirect:/home/login";
+	}
 	}
 
 }
