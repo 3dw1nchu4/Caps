@@ -219,7 +219,7 @@
 						</div>
 						<div style="width: 40%">
 							<label for="size">Max Size: </label> <input type="text" id="size"
-								name="size" class="form-control" placeholder="First Name"
+								name="size" class="form-control" placeholder="Maximum class size"
 								value="${data.size }" required autofocus>
 						</div>
 						<div style="width: 40%">
@@ -227,7 +227,7 @@
 								type="text" id="currentEnrollment" name="currentEnrollment"
 								class="form-control" placeholder="New enrolments default to 0"
 								value="${data.currentEnrollment }" autofocus
-								<c:if test='${data.size > 1 }'>readonly </c:if>> <br>
+								readonly > <br>
 						</div>
 						<div style="width: 40%">
 							<label for="status">Course Status: </label> <select name="status"
@@ -250,15 +250,15 @@
 						<br>
 						<br>
 					</form>
-					<div class="jumbotron">
+					<div id="ShowStudentsInCourse" class="jumbotron">
 					<h3>A total of ${enrolmentList.size()} student records were found for this course</h3>
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th><h4>Student ID</h4></th>
-									<th><h4>Student Name</h4></th>
-									<th><h4>Grade Received</h4></th>
-									<th><h4>Student Status</h4></th>
+									<th><h4>Student ID</h4><br></th>
+									<th><h4>Student Name</h4><h6>(Click to view student record)</h6></th>
+									<th><h4>Grade Received</h4><br></th>
+									<th><h4>Student Status</h4><br></th>
 									<th><h4></h4></th>
 								</tr>
 							</thead>
@@ -266,8 +266,8 @@
 								<c:forEach var="enrolment" items="${enrolmentList}">
 									<tr class="listRecord">
 										<td>${enrolment.studentDetails.studentId}</td>
-										<td>${enrolment.studentDetails.lastName},
-											${enrolment.studentDetails.firstName}</td>
+										<td><a href="managestudent?id=${enrolment.studentDetails.studentId}">${enrolment.studentDetails.lastName},
+											${enrolment.studentDetails.firstName}</a></td>
 										<td>${enrolment.grade}</td>
 										<td>${enrolment.status}</td>
 										<td><button type="button" class="btn btn-info"
@@ -485,6 +485,8 @@
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
 			document.getElementById("startDate").readonly= false;
 			document.getElementById("formhead").style.display= "none";
+			document.getElementById("ShowStudentsInCourse").style.display= "none"
+			
 			
 		}
 	}

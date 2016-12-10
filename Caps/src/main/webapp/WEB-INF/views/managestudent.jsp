@@ -159,36 +159,58 @@
 				</div>
 
 				<div id="editcontent" style="display: none">
-					<form id="formEditRecord" method="post">
+					<form id="formEditRecord" method="POST">
 						<h3 class="form-signin-heading">Edit Record</h3>
-						<div style="width: 40%">
-							<label for="id">Student ID: </label> <input type="text" id="id"
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
+								<label for="id">Student ID: </label> <input type="text" id="id"
 								name="id" class="form-control" value="${data.studentId }"
-								placeholder="Unique ID" required autofocus>
+								placeholder="Unique ID (eg. S1234)" required autofocus>
+							</div>
+							<div class = "col-lg-4 col-xs-12">
+								<label for="emailinput">Email: </label> <input type="email"
+								id="emailinput" name="emailinput" class="form-control"
+								placeholder="Email" value="${data.email }" required autofocus>
+							</div>
 						</div>
-						<div style="width: 40%">
+						<div class="row"><br></div>
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
 							<label for="firstName">First Name: </label> <input type="text"
 								id="firstName" name="firstName" class="form-control"
 								placeholder="First Name" value="${data.firstName }" required
-								autofocus>
+								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
+							</div>
+							<div class = "col-lg-3 col-xs-8">
+							<label for="dateinput">Enrolment Date: </label> <input
+								type="text" id="dateinput" name="dateinput" class="form-control"
+								placeholder="Enrolment Date (YYYY-MM-DD)"
+								value="${data.enrolmentDate }" required
+								pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"
+								title="Date format (YYYY-MM-DD)" autofocus>
+							</div>
+							<div class = "col-lg-1 col-xs-4">
+							<label style="visibility:hidden">ds </label>
+								<button type="button" class="btn btn-default" onclick="DateToday()">Today</button>
+							</div>
 						</div>
-						<div style="width: 40%">
+						<div class="row"></div>
+						<div class="row">
+						<div class = "col-lg-4 col-xs-12">
 							<label for="lastName">Last Name: </label> <input type="text"
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
-								autofocus>
+								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
 						</div>
-						<div style="width: 40%">
-							<label for="emailinput">Email: </label> <input type="text"
-								id="emailinput" name="emailinput" class="form-control"
-								placeholder="Email" value="${data.email }" required autofocus>
 						</div>
-						<div style="width: 40%">
-							<label for="password">Password: </label> <input type="text"
-								id="password" name="password" class="form-control"
-								placeholder="User password" value="" autofocus> <br>
+						<div class="row"><br></div>
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
+								<label for="password">Password: </label> <input type="password"
+									id="password" name="password" class="form-control"
+									placeholder="User password (Required for new accounts/ Optional when updating)" value="" autofocus> <br>
+							</div>
 						</div>
-
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Details</button>
 						<button type="button" class="btn btn-danger"
@@ -198,7 +220,7 @@
 					<div class="row" id="studentcourses" name="studentcourses">
 						<br>
 
-						<div class="col-sm-8 col-xs-12">
+						<div class="jumbotron col-sm-7 col-xs-12">
 							<h3>
 								<b><u>${data.lastName }, ${data.firstName }</u></b> is enrolled
 								in ${enroldata.size() } courses
@@ -207,16 +229,16 @@
 
 								<thead>
 									<tr>
-										<th><h4>Course Names</h4></th>
-										<th><h4>Status</h4></th>
-										<th><h4>Grade</h4></th>
-										<th><h4>Earned Credits</h4></th>
+										<th><h4>Course Name</h4><h6>(Click to view course details)</h6></th>
+										<th><h4>Status</h4><br></th>
+										<th><h4>Grade</h4><br></th>
+										<th><h4>Earned Credits</h4><br></th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="enrol" items="${enroldata}">
 										<tr class="listRecord">
-											<td>${enrol.courses.courseName}</td>
+											<td><a href="managecourse?id=${enrol.courses.courseId}">${enrol.courses.courseName}</a></td>
 											<td>${enrol.status}</td>
 											<td>${enrol.grade}</td>
 											<td>${enrol.earnedCredit}</td>
@@ -230,7 +252,8 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="jumbotron col-sm-4 col-xs-12">
+						<div class="col-sm-1"></div>
+						<div class="jumbotron col-sm-4 col-xs-12" style="background-color:darkgrey">
 							<h3>Add a course:</h3>
 							<div>
 								<select id="addstudentpicker" name="addstudentpicker"
@@ -359,9 +382,9 @@
 
 						<p>The selected entry will be permanently deleted.</p>
 						<input id="removethis" name="removethis" class="form-control"
-							 value="" required type="hidden"/>
-						<input id="removethisbyId" name="removethisbyId" class="form-control"
-							value="" required type="hidden"/>
+							value="" required type="hidden" /> <input id="removethisbyId"
+							name="removethisbyId" class="form-control" value="" required
+							type="hidden" />
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -502,7 +525,13 @@
 		 $('#removeEnrolmentModal').modal('toggle');
 	}
 	
-
+	function DateToday()
+	{
+		var utc = new Date().toJSON().slice(0,10);
+		document.getElementById("dateinput").value = utc;
+		console.log(utc);
+		
+	}
 	
 </script>
 </html>

@@ -161,40 +161,49 @@
 				<div id="editcontent" style="display: none">
 					<form id="formEditRecord" method="post">
 						<h2 class="form-signin-heading">Edit Record</h2>
-						<div style="width: 40%">
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
 							<label for="id">Lecturer ID: </label> <input type="text" id="id"
 								name="id" class="form-control" value="${data.lecturerId }"
 								placeholder="Unique ID" required autofocus>
+							</div>
 						</div>
-						<div style="width: 40%">
+						<div class="row"><br></div>
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
 							<label for="firstName">First Name: </label> <input type="text"
 								id="firstName" name="firstName" class="form-control"
 								placeholder="First Name" value="${data.firstName }" required
-								autofocus>
+								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
+							</div>
 						</div>
-						<div style="width: 40%">
+						<div class="row"><br></div>
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
 							<label for="lastName">Last Name: </label> <input type="text"
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
-								autofocus>
+								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
+							</div>
 						</div>
-						<div style="width: 40%">
-							<label for="password">Password: </label> <input type="text"
+						<div class="row"><br></div>
+						<div class="row">
+							<div class = "col-lg-4 col-xs-12">
+							<label for="password">Password: </label> <input type="password"
 								id="password" name="password" class="form-control"
-								placeholder="User password" value="" autofocus>
+								placeholder="User password (Required for new accounts)" value="" autofocus>
+							</div>
 						</div>
 						<br> <br>
 
-
-						<!-- removed the type="submit" property for testing-->
 						<button id="submitbutton" class="btn btn-success" type="submit">Update
 							Records</button>
 						<button type="button" class="btn btn-danger"
 							onclick="BackToPrevious()">Cancel</button>
 					</form>
-
-					<div id="lecturercourses" name="lecturercourses">
-						<br> <br>
+					<div class="row"><br> <br></div>
+					<div class="jumbotron" id="lecturercourses" name="lecturercourses">
+						
 						<h3>
 							<b><u>${data.lastName }, ${data.firstName }</u></b> is teaching
 							the following ${enroldata.size() } courses
@@ -202,18 +211,18 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th><h4>Course Id</h4></th>
-									<th><h4>Course Name</h4></th>
-									<th><h4>From / To</h4></th>
-									<th><h4>Course Size</h4></th>
-									<th><h4>Reassign To Another Lecturer</h4></th>
+									<th><h4>Course Id</h4><br></th>
+									<th><h4>Course Name</h4><h6>(Click to view course details)</h6></th>
+									<th><h4>From / To</h4><br></th>
+									<th><h4>Course Size</h4><br></th>
+									<th><h4>Reassign To Another Lecturer</h4><br></th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach var="enrol" items="${enroldata}">
 									<tr class="listRecord">
 										<td>${enrol.courseId}</td>
-										<td>${enrol.courseName}</td>
+										<td><a href="managecourse?id=${enrol.courseId}">${enrol.courseName}</a></td>
 										<td>From: ${enrol.startDate} <br> To:
 											${enrol.endDate}
 										</td>
@@ -407,6 +416,8 @@
 		{
 			document.getElementById("formEditRecord").action = "createlecturer";
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
+			document.getElementById("lecturercourses").style.display = "none";
+			
 		}
 	}
 

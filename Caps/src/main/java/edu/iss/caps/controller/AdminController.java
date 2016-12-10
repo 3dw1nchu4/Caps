@@ -58,7 +58,8 @@ public class AdminController
 			String id = requestParams.get("id").toLowerCase();
 			ModelAndView mav = new ModelAndView("managestudent");
 			StudentDetail student = studentService.findStudentById(id);
-
+			
+			// retrieves list of courses student is enrolled in
 			ArrayList<Enrolment> enrolList = enrolmentService.findAllCoursesAttending();
 			List<Enrolment> enrolList2 = new ArrayList<Enrolment>();
 			for (Enrolment e : enrolList)
@@ -68,28 +69,28 @@ public class AdminController
 					enrolList2.add(e);
 				}
 			}
-			
+
+			// lists all courses available for student to enrol in
 			ArrayList<Course> courseList = cseService.findAllCourses();
 			ArrayList<Course> courseListTemp = new ArrayList<Course>();
 			for (Course c : courseList)
 			{
 				if (c.getStatus().equals("Open"))
 				{
-						courseListTemp.add(c);
+					courseListTemp.add(c);
 				}
 			}
-			
+			//removes courses student is already enrolled in
 			for (Enrolment e : enrolList2)
 			{
 				courseListTemp.remove(e.getCourses());
 			}
 
-
 			mav.addObject("courseavailable", courseListTemp);
 			mav.addObject("enroldata", enrolList2);
-			mav.addObject("data", student);
+			mav.addObject("data", student); //adds specific student detail to response
 			return mav;
-		} catch (Exception e)
+		} catch (Exception e) // catches requestParams.get("id") null pointer exception, lists all students
 		{
 			ModelAndView mav = new ModelAndView("managestudent");
 			ArrayList<StudentDetail> lctList = studentService.findAllStudents();
@@ -117,20 +118,22 @@ public class AdminController
 		String lastName = requestParams.get("lastName");
 		String password = requestParams.get("password");
 		String email = requestParams.get("emailinput");
+		String dateString = requestParams.get("dateinput");
 		String status = "Active";
 		String role = "Student";
+		
+		Date enrolmentDate = ConvertToDate(dateString);
 
+		// create user
 		User user = new User(id, password, role);
 		userService.createUser(user);
-
+		
+		//verifies that user is successfully created
 		User userTemp = userService.findUser(id);
-		id = userTemp.getUserId();
-
-		// for testing purposes
-		@SuppressWarnings("deprecation")
-		Date d = new Date(2012, 10, 20);
-
-		StudentDetail student = new StudentDetail(id, firstName, lastName, d,status ,email);
+		String id2 = userTemp.getUserId();
+		
+		// create student with reference to user
+		StudentDetail student = new StudentDetail(id2, firstName, lastName, enrolmentDate, status, email);
 		student.setStatus("Active");
 		studentService.createStduent(student);
 
@@ -182,15 +185,15 @@ public class AdminController
 			@RequestParam Map<String, String> requestParams)
 	{
 		int id = Integer.parseInt(requestParams.get("removethis"));
-		String studentId= requestParams.get("removethisbyId");
+		String studentId = requestParams.get("removethisbyId");
 		Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
 		enrolment.setStatus("Removed");
 		enrolment.setGrade("N/A");
-		
+
 		enrolmentService.updateEnrolment(enrolment);
-		AddCourseEnrolmentCounter(enrolment.getCourses(),false);
-		
-		return "redirect:managestudent?actionstatus=success&id="+studentId;
+		AddCourseEnrolmentCounter(enrolment.getCourses(), false);
+
+		return "redirect:managestudent?actionstatus=success&id=" + studentId;
 	}
 
 	// add course for student
@@ -199,15 +202,21 @@ public class AdminController
 	{
 		String studentId = requestParams.get("studentId");
 		String courseTitle = requestParams.get("courseId");
-		String [] sArray = courseTitle.split(" -");
+		String[] sArray = courseTitle.split(" -");
 		int courseId = Integer.parseInt(sArray[0]);
 		Course course = cseService.findCourse(courseId);
-		
-		StudentDetail studentDetail = studentService.findStudentById(studentId);
-		
-		enrolmentService.createEnrollment(studentDetail, course);
-		AddCourseEnrolmentCounter(course,true);
-		return "redirect:managestudent?actionstatus=success&id="+studentId;
+
+		//only allows student to be enrolled for course if course is not full
+		if (course.getCurrentEnrollment() < course.getSize())
+		{
+			StudentDetail studentDetail = studentService.findStudentById(studentId);
+			enrolmentService.createEnrollment(studentDetail, course);
+			AddCourseEnrolmentCounter(course, true);
+			return "redirect:managestudent?actionstatus=success&id=" + studentId;
+		} else
+		{
+			return "redirect:managestudent?actionstatus=coursefull&id=" + studentId;
+		}
 	}
 
 	// search student
@@ -275,6 +284,7 @@ public class AdminController
 			ModelAndView mav = new ModelAndView("managelecturer");
 			LecturerDetail lecturer = lecturerService.findLecturerById(id);
 
+			//adds list of "Open" courses taught by the lecturer
 			ArrayList<Course> enrolList = cseService.findbylecid(id);
 			ArrayList<Course> enrolList2 = new ArrayList<Course>();
 			for (Course e : enrolList)
@@ -286,9 +296,9 @@ public class AdminController
 			}
 			mav.addObject("lecturerList", tempList);
 			mav.addObject("enroldata", enrolList2);
-			mav.addObject("data", lecturer);
+			mav.addObject("data", lecturer); // add lecturer details to MAV
 			return mav;
-		} catch (Exception e)
+		} catch (Exception e) // catches requestParams.get("id") null pointer exception, lists all lecturers
 		{
 			ModelAndView mav = new ModelAndView("managelecturer");
 			ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
@@ -443,7 +453,7 @@ public class AdminController
 				tempList.add(l);
 			}
 		}
-		
+
 		try
 		{
 			int id = Integer.parseInt(requestParams.get("id"));
@@ -453,12 +463,11 @@ public class AdminController
 			{
 				ArrayList<Enrolment> enrolmentList = enrolmentService.findbycid(id);
 				mav.addObject("enrolmentList", enrolmentList);
-			}
-			catch (Exception e)
+			} catch (Exception e)
 			{
-				
+
 			}
-			
+
 			mav.addObject("lecturerList", tempList);
 			mav.addObject("data", course);
 			return mav;
@@ -597,25 +606,25 @@ public class AdminController
 		mav.addObject("datacount", searchList.size());
 		return mav;
 	}
-	
+
 	// remove student from enrolment via course
 	@RequestMapping(value = "/removestudentenrolmentviacourse", method = RequestMethod.POST)
 	public String removeStudentFromEnrolmentViaCourse(Locale locale, Model model,
 			@RequestParam Map<String, String> requestParams)
 	{
 		int id = Integer.parseInt(requestParams.get("removethis"));
-		String courseId= requestParams.get("removethisbyId");
+		String courseId = requestParams.get("removethisbyId");
 		Enrolment enrolment = enrolmentService.findbyEnrolmentId(id);
 		enrolment.setStatus("Removed");
 		enrolment.setGrade("N/A");
-		
+
 		enrolmentService.updateEnrolment(enrolment);
-		AddCourseEnrolmentCounter(enrolment.getCourses(),false);
-		
-		return "redirect:managecourse?actionstatus=success&id="+courseId;
+		AddCourseEnrolmentCounter(enrolment.getCourses(), false);
+
+		return "redirect:managecourse?actionstatus=success&id=" + courseId;
 	}
 
-	// To get date formatted from string
+	// To get date formatted from string (year -1900, & for some reason, month-1 is required as well
 	@SuppressWarnings("deprecation")
 	private static Date ConvertToDate(String dateString)
 	{
@@ -625,20 +634,19 @@ public class AdminController
 		{
 			dateArray.add(Integer.parseInt(s));
 		}
-		Date date = new Date(dateArray.get(0) - 1900, dateArray.get(1), dateArray.get(2));
+		Date date = new Date(dateArray.get(0) - 1900, dateArray.get(1)-1, dateArray.get(2));
 		return date;
 	}
-	
+
 	private void AddCourseEnrolmentCounter(Course c, Boolean b)
 	{
 		if (b)
 		{
-			c.setCurrentEnrollment(c.getCurrentEnrollment() +1);
+			c.setCurrentEnrollment(c.getCurrentEnrollment() + 1);
 			cseService.changeCourse(c);
-		}
-		else
+		} else
 		{
-			c.setCurrentEnrollment(c.getCurrentEnrollment() -1);
+			c.setCurrentEnrollment(c.getCurrentEnrollment() - 1);
 			cseService.changeCourse(c);
 		}
 	}
