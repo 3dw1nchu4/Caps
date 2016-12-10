@@ -421,33 +421,54 @@
 
 	var url = window.location.href;
 
-	var qs = (function(a)
+	try
 	{
-		if (a == "")
-			return
-			{};
-		var b =
-		{};
-		for (var i = 0; i < a.length; ++i)
+		var qs = (function(a)
 		{
-			var p = a[i].split('=', 2);
-			if (p.length == 1)
-				b[p[0]] = "";
-			else
-				b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-		}
-		return b;
-	})(window.location.search.substr(1).split('&'));
-	
-	
-	if (qs['searchcontent'] != null)
-	{
-		document.getElementById("searchcontent").value = qs['searchcontent'];
-		document.getElementById("searchcount").style.display = "block";
+			if (a == "")
+				return
+				{};
+			var b =
+			{};
+			for (var i = 0; i < a.length; ++i)
+			{
+				var p = a[i].split('=', 2);
+				if (p.length == 1)
+					b[p[0]] = "";
+				else
+					b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+			}
+			return b;
+		})(window.location.search.substr(1).split('&'));
 	}
-	if (qs['accountstatus'] != null)
+	catch (err)
 	{
-		document.getElementById("accountstatus").value = qs['accountstatus'];
+		console.log("no qs");
+	}
+	
+	try
+	{
+		if (qs['searchcontent'] != null)
+		{
+			document.getElementById("searchcontent").value = qs['searchcontent'];
+			document.getElementById("searchcount").style.display = "block";
+		}
+	}
+	catch (err)
+	{
+		console.log("no search content");
+	}
+	
+	try
+	{
+		if (qs['accountstatus'] != null)
+		{
+			document.getElementById("accountstatus").value = qs['accountstatus'];
+		}
+	}
+	catch (err)
+	{
+		console.log("no search content");
 	}
 	
 	
@@ -497,17 +518,23 @@
 		$('#deleteModal').modal('toggle');
 	}
 	
+	try
+	{
+		if (qs['actionstatus'] == "success")
+		{
+				document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
+				$('#successActionModal').modal('toggle');
+		}
 	
-	if (qs['actionstatus'] == "success")
-	{
-			document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
-			$('#successActionModal').modal('toggle');
+		if (qs['actionstatus'] == "createsuccess")
+		{
+				document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
+				$('#successActionModal').modal('toggle');
+		}
 	}
-
-	if (qs['actionstatus'] == "createsuccess")
+	catch (err)
 	{
-			document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
-			$('#successActionModal').modal('toggle');
+		console.log("no action status");
 	}
 	
 	function AddCourse(studentId)
