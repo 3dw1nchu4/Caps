@@ -205,7 +205,7 @@
 <script>
 	$(function() {
 		$("#header").load(
-				"${pageContext.request.contextPath}/resources/header.jsp?idlogedin=L001");
+				"${pageContext.request.contextPath}/resources/header.jsp");
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});

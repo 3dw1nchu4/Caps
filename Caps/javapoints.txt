@@ -67,3 +67,13 @@ Student
 Statuses
 Course- Open, Close
 Enrolment- Enrolled, Failed, Passed
+
+
+
+
+
+//check for all type of errors and exception put try catch.
+
+/grade/3-->seng 
+
+

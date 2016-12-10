@@ -58,21 +58,15 @@ public class Lecturercontroller {
 	private StudentService sds;
 
 	// 1.view all course to select enrole details
-	
+
 	@RequestMapping(value = "/viewallenrole", method = RequestMethod.GET)
-	public ModelAndView viewallcourseenrole(HttpServletRequest request, HttpSession session)throws ServletException {
-	
+	public ModelAndView viewallcourseenrole() {
+
 		ModelAndView mav = new ModelAndView("enroleview");
-		User u = (User) request.getSession().getAttribute("user");
-		try{
-		String s = u.getUserId(); 
-		request.getSession().setAttribute("username", s);
-		}catch (Exception e) {
-		}
 		List<Course> course = cs.findAllCourses();
 		mav.addObject("Enlist", course);
 		return mav;
-		}
+	}
 
 	// 1.[search] search courseid & course name(viewalleenrole)
 	@RequestMapping(value = "/2searchbyname", method = RequestMethod.GET)
@@ -101,16 +95,17 @@ public class Lecturercontroller {
 	// 1.1 view my course only.
 	@RequestMapping(value = "/mycourseenrole", method = RequestMethod.GET)
 	public ModelAndView mycourseenrole(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("enroleview");
 		try {
 			User u = (User) request.getSession().getAttribute("user");
 			String s = u.getUserId();
-			ModelAndView mav = new ModelAndView("enroleview");
 			List<Course> course = cs.findbylecid(s);
 			mav.addObject("Enlist", course);
-			return mav;
 		} catch (Exception e) {
-			return new ModelAndView("redirect:/home/login");
 		}
+
+		return mav;
+
 	}
 
 	// 1.2 view all student enroled / with search
@@ -119,7 +114,6 @@ public class Lecturercontroller {
 			@RequestParam Map<String, String> requestParams) {
 		ModelAndView mav = new ModelAndView("enrolelist");
 		ArrayList<Enrolment> lctList = ens.findbycid(id);
-
 		List<Enrolment> searchList = new ArrayList<Enrolment>();
 		if (requestParams.get("searchcontent") != null && !requestParams.get("searchcontent").isEmpty()) {
 			String searchContent = requestParams.get("searchcontent").toLowerCase();
@@ -159,58 +153,58 @@ public class Lecturercontroller {
 					courseTemp.add(c);
 				}
 			}
-
-			// mav.addObject("Enlist2", courseTemp);
-
 			mav.addObject("Enlist", courseTemp);
-			return mav;
 		} catch (Exception e) {
-			return new ModelAndView("redirect:/home/login");
+
 		}
+		return mav;
+
 	}
 
 	// search in 2.1 [for course name and id]
 	@RequestMapping(value = "/1searchbyname", method = RequestMethod.GET)
 	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
 			HttpServletRequest request) {
-		String searchContent = requestParams.get("searchcontent").toLowerCase();
+
 		ModelAndView mav = new ModelAndView("courseforgrading");
-		 try {
-			 User u = (User) request.getSession().getAttribute("user");
-	
-		String s = u.getUserId();
-		// ArrayList<Course> lctList = cs.findbylecid(s);
-		List<Course> searchList = new ArrayList<Course>();
+		try {
+			String searchContent = requestParams.get("searchcontent").toLowerCase();
+			User u = (User) request.getSession().getAttribute("user");
 
-		List<Course> course = cs.findbylecid(s);
-		List<Course> courseTemp = new ArrayList<Course>();
+			String s = u.getUserId();
+			// ArrayList<Course> lctList = cs.findbylecid(s);
+			List<Course> searchList = new ArrayList<Course>();
 
-		for (Course c : course) {
-			if (ens.findungraded(s, c.getCourseId()).size() != 0) {
-				courseTemp.add(c);
+			List<Course> course = cs.findbylecid(s);
+			List<Course> courseTemp = new ArrayList<Course>();
+
+			for (Course c : course) {
+				if (ens.findungraded(s, c.getCourseId()).size() != 0) {
+					courseTemp.add(c);
+				}
 			}
+
+			int bn = 0;
+			String s2 = "";
+			for (Course l : courseTemp) {
+				bn = (l.getCourseId());
+				s2 = Integer.toString(bn);
+				if (l.getCourseName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+
+				else if (s2.toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+			}
+
+			mav.addObject("Enlist", searchList);
+			mav.addObject("datacount", searchList.size());
+
+		} catch (Exception e) {
+
 		}
-
-		int bn = 0;
-		String s2 = "";
-		for (Course l : courseTemp) {
-			bn = (l.getCourseId());
-			s2 = Integer.toString(bn);
-			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			}
-
-			else if (s2.toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			}
-		}
-
-		mav.addObject("Enlist", searchList);
-		mav.addObject("datacount", searchList.size());
 		return mav;
-		 }catch (Exception e) {
-				return new ModelAndView("redirect:/home/login");
-			}
 	}
 
 	// 2.2 grade a student
@@ -218,14 +212,19 @@ public class Lecturercontroller {
 	public ModelAndView searchgradeastudent(@PathVariable int id, HttpServletRequest request,
 			@RequestParam Map<String, String> requestParams) {
 		ModelAndView mav = new ModelAndView("gradinglist");
-	try{	User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
+		String searchContent = null;
+		String s = null;
+		try {
+			User u = (User) request.getSession().getAttribute("user");
+			s = u.getUserId();
+			searchContent = requestParams.get("searchcontent").toLowerCase();
+		} catch (Exception e) {
 
-		// ArrayList<Enrolment> lctList = ens.findungraded(s, id);
+		}
 		List<Enrolment> lctList = ens.findungraded(s, id);
 		List<Enrolment> searchList = new ArrayList<Enrolment>();
 		if (requestParams.get("searchcontent") != null && !requestParams.get("searchcontent").isEmpty()) {
-			String searchContent = requestParams.get("searchcontent").toLowerCase();
+
 			for (Enrolment l : lctList) {
 
 				if (l.getStudentDetails().getFirstName().toLowerCase().contains(searchContent)) {
@@ -244,9 +243,6 @@ public class Lecturercontroller {
 		}
 		mav.addObject("Enlist", lctList);
 		return mav;
-	}catch (Exception e) {
-		return new ModelAndView("redirect:/home/login");
-	}
 	}
 
 	// 3.2 view all student performance / search for all students.
@@ -315,80 +311,91 @@ public class Lecturercontroller {
 	@RequestMapping(value = "/searchviewallcr", method = RequestMethod.GET)
 	public ModelAndView searchviewallcr(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
 			HttpServletRequest request) {
-		String searchContent = requestParams.get("searchcontent").toLowerCase();
-		ModelAndView mav = new ModelAndView("courseavi");
-		ArrayList<Course> lctList = cs.findAllCourses();
-		List<Course> searchList = new ArrayList<Course>();
-		int bn = 0;
-		String s2 = "";
-		for (Course l : lctList) {
-			bn = (l.getCourseId());
-			s2 = Integer.toString(bn);
-			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-				searchList.add(l);
+		String searchContent = null;
+		List<Course> searchList = null;
+		ModelAndView mav = null;
+		try {
+			searchContent = requestParams.get("searchcontent").toLowerCase();
+			mav = new ModelAndView("courseavi");
+			ArrayList<Course> lctList = cs.findAllCourses();
+			searchList = new ArrayList<Course>();
+			int bn = 0;
+			String s2 = "";
+			for (Course l : lctList) {
+				bn = (l.getCourseId());
+				s2 = Integer.toString(bn);
+				if (l.getCourseName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+
+				else if (s2.toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
 			}
 
-			else if (s2.toLowerCase().contains(searchContent)) {
-				searchList.add(l);
+			mav.addObject("Enlist", searchList);
+			ArrayList<Integer> ar = new ArrayList<Integer>();
+			for (Course num : searchList) {
+				ar.add(ens.countungraded(num.getCourseId()));
 			}
-		}
+			mav.addObject("cou", ar);
 
-		mav.addObject("Enlist", searchList);
-		ArrayList<Integer> ar = new ArrayList<Integer>();
-		for (Course num : searchList) {
-			ar.add(ens.countungraded(num.getCourseId()));
+			mav.addObject("datacount", searchList.size());
+		} catch (Exception e) {
 		}
-		mav.addObject("cou", ar);
-
-		mav.addObject("datacount", searchList.size());
+		
 		return mav;
 	}
 
 	// 3.1 view my course for viewing performance
 	@RequestMapping(value = "/mycourse", method = RequestMethod.GET)
 	public ModelAndView mycourse(HttpServletRequest request) {
-		try {User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		ModelAndView mav = new ModelAndView("courseavi");
-		List<Course> course = cs.findbylecid(s);
-		mav.addObject("Enlist", course);
-		ArrayList<Integer> ar = new ArrayList<Integer>();
-		for (Course num : course) {
-			ar.add(ens.countungraded(num.getCourseId()));
+		ModelAndView mav =null;
+		try {
+			User u = (User) request.getSession().getAttribute("user");
+			String s = u.getUserId();
+			mav = new ModelAndView("courseavi");
+			List<Course> course = cs.findbylecid(s);
+			mav.addObject("Enlist", course);
+			ArrayList<Integer> ar = new ArrayList<Integer>();
+			for (Course num : course) {
+				ar.add(ens.countungraded(num.getCourseId()));
+			}
+
+			mav.addObject("cou", ar);
+
+			
+		} catch (Exception e) {
+			
 		}
-
-		mav.addObject("cou", ar);
-
 		return mav;
-		}
-		catch (Exception e) {
-			return new ModelAndView("redirect:/home/login");
-		}
 	}
 
 	// update the grade.. (2.2)
 	@RequestMapping(value = "/grade/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request) {
-	try{	User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		String g = request.getParameter("glist");
-		String id = request.getParameter("sd");
-		int cid = Integer.parseInt(request.getParameter("couid"));
-		int cred = cs.calcredit(g, cid);
-		String newstatus = cs.makestatus(g);
-		int enroleid = Integer.parseInt(request.getParameter("enid"));
-		Enrolment en = ens.findbyEnrolmentId(enroleid);
-		en.setGrade(g);
-		en.setEarnedCredit(cred);
-		en.setStatus(newstatus);
-		ens.updateEnrolment(en);
-		List<Course> course = cs.findbylecid(s);
-		// mav.addObject("Enlist", course);
+		int cid =0;
+		try {
+			User u = (User) request.getSession().getAttribute("user");
+			String s = u.getUserId();
+			String g = request.getParameter("glist");
+			String id = request.getParameter("sd");
+			 cid = Integer.parseInt(request.getParameter("couid"));
+			int cred = cs.calcredit(g, cid);
+			String newstatus = cs.makestatus(g);
+			int enroleid = Integer.parseInt(request.getParameter("enid"));
+			Enrolment en = ens.findbyEnrolmentId(enroleid);
+			en.setGrade(g);
+			en.setEarnedCredit(cred);
+			en.setStatus(newstatus);
+			ens.updateEnrolment(en);
+			List<Course> course = cs.findbylecid(s);
+			// mav.addObject("Enlist", course);
+			
+		} catch (Exception e) {
+			
+		}
 		return "redirect:" + cid + "?actionstatus=0";
-	}
-	catch (Exception e) {
-		return "redirect:/home/login";
-	}
 	}
 
 }
