@@ -45,6 +45,7 @@
 
 </head>
 <body>
+
 	<div id="header"></div>
 	<div class="container-fluid">
 		<div class="row">
@@ -107,7 +108,7 @@
 					</nav>
 
 				</div>
-
+				
 				<div id="searchcount" name="searchcount" style="display: none">
 					<h5>Your search returned ${Enlist.size() } results</h5>
 				</div>
@@ -192,7 +193,7 @@
 
 		</div>
 	</div>
-	
+
 	</div>
 
 	<footer

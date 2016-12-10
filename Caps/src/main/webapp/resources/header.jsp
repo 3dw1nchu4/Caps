@@ -56,9 +56,7 @@
 				<!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
 				 <li id="logedinuser"><a href="#" style="max-width: 100%"><span
 						class="glyphicon glyphicon-user"></span>
-					<%= request.getParameter("idlogedin")
-					%>
-					
+					<%=session.getAttribute("username")%>
 						
 						</a></li>
 				<!--<li id="navbarLogin"><a href="login.html" data-toggle="login"

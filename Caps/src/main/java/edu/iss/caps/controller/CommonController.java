@@ -80,20 +80,19 @@ public class CommonController {
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(Model model, WebRequest request, SessionStatus status) {
+	public String logout(Model model, HttpSession session) {
 		// User u = (User) request.getSession().getAttribute("user");
 
-		status.setComplete();
-		request.removeAttribute("user", WebRequest.SCOPE_SESSION);
+//		status.setComplete();
+//		request.removeAttribute("user", WebRequest.SCOPE_SESSION);
+		session.invalidate();
 		return "redirect:/home/index?action=logout";
 
 	}
-	
-	
+
 	@RequestMapping(value = "/movein", method = RequestMethod.GET)
-	public ModelAndView movein( HttpSession session)
-			throws FailedAuthentication {
-	
+	public ModelAndView movein(HttpSession session) throws FailedAuthentication {
+
 		ModelAndView mav = new ModelAndView("login");
 		String move = null;
 		try {
@@ -102,7 +101,7 @@ public class CommonController {
 		} catch (Exception e) {
 			move = "dontgo";
 		}
-		switch( move) {
+		switch (move) {
 		case "Admin":
 			mav = new ModelAndView("redirect:/admin/managelecturer");
 			break;
@@ -112,10 +111,17 @@ public class CommonController {
 		case "Student":
 			mav = new ModelAndView("redirect:/Course/listall");
 			break;
-			default:
-				mav = new ModelAndView("redirect:/home/login");
-			
+		default:
+			mav = new ModelAndView("redirect:/home/login");
+
 		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/map", method = RequestMethod.GET)
+
+	public ModelAndView map(HttpSession session) {
+		ModelAndView mav = new ModelAndView("map");
 		return mav;
 	}
 

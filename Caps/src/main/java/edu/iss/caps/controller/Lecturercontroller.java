@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.persistence.Convert;
-
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import edu.iss.caps.exception.FailedAuthentication;
 import edu.iss.caps.model.Course;
 import edu.iss.caps.model.Enrolment;
 import edu.iss.caps.model.LecturerDetail;
@@ -56,14 +58,21 @@ public class Lecturercontroller {
 	private StudentService sds;
 
 	// 1.view all course to select enrole details
+	
 	@RequestMapping(value = "/viewallenrole", method = RequestMethod.GET)
-	public ModelAndView viewallcourseenrole() {
+	public ModelAndView viewallcourseenrole(HttpServletRequest request, HttpSession session)throws ServletException {
+	
 		ModelAndView mav = new ModelAndView("enroleview");
-
+		User u = (User) request.getSession().getAttribute("user");
+		try{
+		String s = u.getUserId(); 
+		request.getSession().setAttribute("username", s);
+		}catch (Exception e) {
+		}
 		List<Course> course = cs.findAllCourses();
 		mav.addObject("Enlist", course);
 		return mav;
-	}
+		}
 
 	// 1.[search] search courseid & course name(viewalleenrole)
 	@RequestMapping(value = "/2searchbyname", method = RequestMethod.GET)
