@@ -1,7 +1,52 @@
 <!--Navigation bar mobile responsive-->
 
-
+<%@page import="edu.iss.caps.model.User"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- For dropdown select -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js"></script>
+
+
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!--  additional custom styles -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/mystyle.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="${pageContext.request.contextPath}/resources/dashboard.css"
+	rel="stylesheet">
+
+
+</head>
+<body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -17,46 +62,44 @@
 
 			<ul class="nav navbar-nav">
 				<li id="navbarHome"><a href="${pageContext.request.contextPath}/home/index">Home</a></li>
-			<!-- 	<li id="navbarAdmin" class="dropdown"><a
+				<li id="navbarAdmin" class="dropdown" style="display:none"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#">Admin
 						Menu<span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="adminmgt.html?manage=student">Manage Students</a></li>
-						<li><a href="adminmgt.html?manage=lecturer">Manage
+						<li><a href="${pageContext.request.contextPath}/admin/managestudent">Manage Students</a></li>
+						<li><a href="${pageContext.request.contextPath}/admin/managelecturer">Manage
 								Lecturers</a></li>
-						<li><a href="adminmgt.html?manage=course">Manage Courses</a></li>
-						<li><a href="adminmgt.html?manage=enrolment">Manage
-								Enrolment</a></li>
+						<li><a href="${pageContext.request.contextPath}/admin/managecourse">Manage Courses</a></li>
 					</ul></li>
-				<li id="navbarStudent" class="dropdown"><a
+				<li id="navbarStudent" class="dropdown" style="display:none"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#">Student
 						Menu<span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="studentgrades.html">Grades and GPA</a></li>
-						<li><a href="studentcourses.html">View Courses</a></li>
-						<li><a href="studentenrol.html">Enrol for a Course</a></li>
+						<li><a href="${pageContext.request.contextPath}/Course/listall">View All Courses</a></li>
+						<li><a href="${pageContext.request.contextPath}/Course/grade">Course Grades</a></li>
+						<li><a href="${pageContext.request.contextPath}/Course/a">Enrollment</a></li>
 					</ul></li>
-				<li id="navbarLecturer" class="dropdown"><a
+				<li id="navbarLecturer" class="dropdown" style="display:none"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#">Lecturer
 						Menu<span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="lecturercourses.html">View Courses Taught</a></li>
-						<li><a href="lecturerviewenrolment.html">View Course
+						<li><a href="${pageContext.request.contextPath}/Lec/viewallenrole">View Course
 								Enrolment</a></li>
-						<li><a href="lecturergradecse.html">Grade a Course</a></li>
-						<li><a href="lecturerviewperf.html">View a Student
+						<li><a href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade a Course</a></li>
+						<li><a href="${pageContext.request.contextPath}/Lec/viewallcr">View a Student
 								Performance</a></li>
 					</ul></li>
--->
 			</ul> 
 			<ul class="nav navbar-nav navbar-right">
 				<!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
 				 <li id="logedinuser"><a href="#" style="max-width: 100%"><span
 						class="glyphicon glyphicon-user"></span>
-					<%=session.getAttribute("username")%>
+				<% User u = (User) request.getSession().getAttribute("user") ; %>
+				<%= u.getUserId() %>
+					
 						
 						</a></li>
 				<!--<li id="navbarLogin"><a href="login.html" data-toggle="login"
@@ -71,110 +114,27 @@
 	</div>
 </nav>
 <br>
+</body>
 
 
-<!-- 
 <script>
 	var url = window.location.pathname
-	if (url.includes("index"))
-	{
-		document.getElementById("navbarHome").className = "active";
-	} else if (url.includes("adminmgt"))
-	{
-		document.getElementById("navbarAdmin").className = "active";
-	} else if (url.includes("student"))
-	{
-		document.getElementById("navbarStudent").className = "active";
-	} else if (url.includes("lecturer"))
-	{
-		document.getElementById("navbarLecturer").className = "active";
-	} else if (url.includes("login"))
-	{
-		document.getElementById("navbarLogin").className = "active";
-	}
-
-	//breaks down query string for use
-
-	var qs = (function(a)
-	{
-		if (a == "")
-			return
-			{};
-		try
-		{
-			var b =
-			{};
-
-			for (var i = 0; i < a.length; ++i)
-			{
-				var p = a[i].split('=', 2);
-				if (p.length == 1)
-					b[p[0]] = "";
-				else
-					b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-			}
-			return b;
-		} catch (err)
-		{
-
-			document.getElementById("navbarAdmin").style.display = "none";
-			document.getElementById("navbarStudent").style.display = "none";
-			document.getElementById("navbarLecturer").style.display = "none";
-			userloggedout();
-
-		}
-	})(window.location.search.substr(1).split('&'));
-
+	console.log(url);
 	
-	try
+	 if (url.includes("/caps/admin/"))
 	{
-	console.log(qs["userrole"]); // testing purposes
+		document.getElementById("navbarAdmin").style.display = "block";
+	} else if (url.includes("/caps/Course/"))
+	{
+		document.getElementById("navbarStudent").style.display = "block";
 
-		if (qs["userrole"] == "admin")
-		{
-			document.getElementById("navbarAdmin").style.display = "initial";
-			document.getElementById("navbarStudent").style.display = "none";
-			document.getElementById("navbarLecturer").style.display = "none";
-			userloggedin();
-		} else if (qs["userrole"] == "student")
-		{
-			document.getElementById("navbarAdmin").style.display = "none";
-			document.getElementById("navbarStudent").style.display = "initial";
-			document.getElementById("navbarLecturer").style.display = "none";
-			userloggedin();
-		} else if (qs["userrole"] == "lecturer")
-		{
-			document.getElementById("navbarAdmin").style.display = "none";
-			document.getElementById("navbarStudent").style.display = "none";
-			document.getElementById("navbarLecturer").style.display = "initial";
-			userloggedin();
-		} else
-		{
-			document.getElementById("navbarAdmin").style.display = "none";
-			document.getElementById("navbarStudent").style.display = "none";
-			document.getElementById("navbarLecturer").style.display = "none";
-			userloggedout();
-		}
-	}
-	catch (err)
+	} else if (url.includes("/caps/Lec/"))
 	{
-		document.getElementById("navbarAdmin").style.display = "none";
-		document.getElementById("navbarStudent").style.display = "none";
-		document.getElementById("navbarLecturer").style.display = "none";
-		userloggedout();
-	}
+		document.getElementById("navbarLecturer").style.display = "block";
+	} 
 
-	function userloggedin()
-	{
-		document.getElementById("navbarUser").style.display = "initial";
-		document.getElementById("navbarLogout").style.display = "initial";
-		document.getElementById("navbarLogin").style.display = "none";
-	}
 
-	function userloggedout()
-	{
-		document.getElementById("navbarUser").style.display = "none";
-		document.getElementById("navbarLogout").style.display = "none";
-		document.getElementById("navbarLogin").style.display = "initial";
-	}
-</script> -->
+
+</script> 
+
+</html>
