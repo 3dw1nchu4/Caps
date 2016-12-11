@@ -223,7 +223,7 @@
 				<th><spring:message code="fieldLabel.courseid" /></th>
 				<th><spring:message code="fieldLabel.coursename" /></th>
 				<th><spring:message code="fieldLabel.grade" /></th>
-				<th><spring:message code="fieldLabel.earncredit" /></th>
+				<th><spring:message code="fieldLabel.credits" /></th>
 				<th>Status</th>
 
 			</tr>
@@ -234,7 +234,7 @@
 					<td>${role.courses.courseId}</td>
 					<td>${role.courses.courseName}</td>
 					<td>${role.grade}</td>
-					<td>${role.earnedCredit}</td>
+					<td>${role.courses.credits}</td>
 					<td>${role.status}</td>
 				</tr>
 
