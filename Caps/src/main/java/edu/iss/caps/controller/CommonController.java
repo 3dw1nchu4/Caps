@@ -45,7 +45,7 @@ public class CommonController {
 		session.setAttribute("user", u);
 		switch (u.getRole()) {
 		case "Admin":
-			mav = new ModelAndView("redirect:/admin/managelecturer");
+			mav = new ModelAndView("redirect:/admin/managestudent");
 			break;
 		case "Lecturer":
 			mav = new ModelAndView("redirect:/Lec/viewallenrole");
@@ -73,7 +73,7 @@ public class CommonController {
 		} catch (Exception e) {
 			role = null;
 		}
-
+		mav.addObject("user", new User());
 		mav.addObject("role", role);
 
 		return mav;

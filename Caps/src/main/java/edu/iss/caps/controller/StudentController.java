@@ -68,9 +68,15 @@ public class StudentController {
 	public ModelAndView AvailablePage1(HttpServletRequest request) {
 		
 		ModelAndView mav = new ModelAndView("course-available");
+		try {
+
 		List<Course> courselist = cService.findAllCourses();
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
+
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
 		List<Enrolment> grades = eService.findCourseBySID(s);
 		
 		
@@ -80,6 +86,9 @@ public class StudentController {
 		
 		
 		mav.addObject("courseavailable", courselist);
+		} catch (Exception e) {
+
+		}
 		return mav;
 	}
 	
@@ -88,15 +97,26 @@ public class StudentController {
 	@RequestMapping(value = "/listall", method = RequestMethod.GET)
 	public ModelAndView CourseListPage(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("list-all");
+		try {
+
 		List<Course> courselist = cService.findAllCourses();
 		mav.addObject("courselist", courselist);
+		
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
+		
+		} catch (Exception e) {
+
+		}
 		return mav;
 	}
 	
 
 	
 
-///////chunxiao need to refine this part
 
 
 	
@@ -107,6 +127,10 @@ public class StudentController {
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
+		
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
 		
 		float gpa = sService.calcStudentGPA(s);
 		
@@ -142,8 +166,9 @@ public class StudentController {
 		    StudentDetail studentDetail =sService.findStudentById(s);
   		    eService.createEnrollment(studentDetail, c);/////////need to check in eservice
   		    cService.increasecourseEnrolment(c);/////////need to check in cservice
+  		    Course cs = cService.findCourse(courseId);
   		    
-		    message = "You have sucessfully enrolled with <" + c.getCourseName() + ">. We have send you a email, please check it!!! ";
+		    message = "You have sucessfully enrolled with " + cs.getCourseName() + "+. We have sent you an email, please check it. ";
 			redirectAttributes.addFlashAttribute("message", message);
 			
 			request.setAttribute("course", c);
@@ -155,7 +180,8 @@ public class StudentController {
 			
 			
 		}else {
-		    message = " NO. " + courseId + " course is aready full!!!";
+			 Course cs = cService.findCourse(courseId);
+		    message =  cs.getCourseName() + " course is already full.";
 			redirectAttributes.addFlashAttribute("message", message);		
 			
 		}
