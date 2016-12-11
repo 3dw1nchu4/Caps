@@ -139,7 +139,7 @@
 									
 									<td>${object.status}</td>
 									<td><button class="btn btn-primary"
-											onclick="EditRecord('${object.lecturerId}')">Edit</button>
+											onclick="EditRecord('${object.lecturerId}')" <c:if test="${object.status == 'Disabled'}">disabled</c:if>  >Edit</button>
 										<button class="btn btn-danger"
 											onclick="DeleteRecord('${object.lecturerId}')" <c:if test="${object.status == 'Disabled'}">disabled</c:if> >Disable</button></td>
 								</tr>
@@ -178,7 +178,6 @@
 								placeholder="Unique ID" required autofocus>
 							</div>
 						</div>
-						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 							<label for="firstName"><h4>First Name: </h4></label> <input type="text"
@@ -187,7 +186,6 @@
 								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
 							</div>
 						</div>
-						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 							<label for="lastName"><h4>Last Name: </h4></label> <input type="text"
@@ -196,7 +194,6 @@
 								autofocus pattern="[A-Za-z ]{2,}" title="Only uppercase and lowercase alphabets">
 							</div>
 						</div>
-						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 							<label for="password"><h4>Password: </h4></label> <input type="password"

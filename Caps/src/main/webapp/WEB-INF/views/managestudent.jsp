@@ -141,9 +141,9 @@
 									<td>${object.enrolmentDate}</td>
 									<td>${object.status}</td>
 									<td><button class="btn btn-primary"
-											onclick="EditRecord('${object.studentId}')">Edit</button>
+											onclick="EditRecord('${object.studentId}')" <c:if test="${object.status == 'Disabled'}">disabled</c:if> >Edit</button>
 										<button class="btn btn-danger"
-											onclick="DeleteRecord('${object.studentId}')">Disable</button></td>
+											onclick="DeleteRecord('${object.studentId}')" <c:if test="${object.status == 'Disabled'}">disabled</c:if>  >Disable</button></td>
 								</tr>
 							</c:forEach>
 
