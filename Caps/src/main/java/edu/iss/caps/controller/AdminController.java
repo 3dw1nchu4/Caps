@@ -588,9 +588,10 @@ public class AdminController
 		Date startDate = ConvertToDate(requestParams.get("startDate"));
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
 		
-		if (endDate.compareTo(startDate) > 0)
-		{
+
 		int size = Integer.parseInt(requestParams.get("size"));
+		if (endDate.compareTo(startDate) > 0 && size >0)
+		{
 		String status = "Open";
 		int currentEnrollment = 0;
 		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
