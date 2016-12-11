@@ -240,20 +240,34 @@
 								pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])">
 							</div>
 							</div>
+							<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="maxCredits"><h4>Course Credits: </h4></label> <input
-								type="number" id="maxCredits" name="maxCredits"
-								class="form-control" placeholder="Enter max credits for course"
-								value="${data.credits }" autofocus required
-								> 
+							<label for="maxCredits"><h4>Course Credits: </h4></label> 
+							
+							<select name="maxCredits"
+										id="accountstatus" class="selectpicker" required>
+											<c:if test="${data.credits ==4}">
+											<option value="4">4</option>
+											<option value="8">8</option>
+											</c:if>
+											
+											<c:if test="${data.credits !=4}">
+											<option value="8">8</option>
+											<option value="4">4</option>
+											
+											</c:if>
+										
+									</select>
 						</div>
 						</div>
 							<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 							<label for="size"><h4>Max Size: </h4></label> <input type="number" id="size"
 								name="size" class="form-control" placeholder="Maximum class size"
-								value="${data.size }" required autofocus required>
+								value="${data.size }"  required autofocus >
+
+								
 								</div>
 							</div>	
 							<div class="row">
