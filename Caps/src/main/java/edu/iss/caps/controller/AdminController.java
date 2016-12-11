@@ -325,7 +325,7 @@ public class AdminController
 			String id = requestParams.get("id");
 			ModelAndView mav = new ModelAndView("managelecturer");
 			LecturerDetail lecturer = lecturerService.findLecturerById(id);
-
+			tempList.remove(lecturer);
 			//adds list of "Open" courses taught by the lecturer
 			ArrayList<Course> enrolList = cseService.findbylecid(id);
 			ArrayList<Course> enrolList2 = new ArrayList<Course>();
@@ -620,7 +620,7 @@ public class AdminController
 	{
 		int id = Integer.parseInt(requestParams.get("id"));
 		String cseName = requestParams.get("cseName");
-		int size = Integer.parseInt(requestParams.get("size"));
+		int size = Integer.parseInt(requestParams.get("size"));		
 		String status = requestParams.get("status");
 		String lecturerId = requestParams.get("lecturerId");
 		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
@@ -628,10 +628,11 @@ public class AdminController
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
 		int maxCredits = Integer.parseInt(requestParams.get("maxCredits"));
 		
-		if (endDate.compareTo(startDate) > 0)
-		{
+
 			
 		Course course = cseService.findCourse(id);
+		if (endDate.compareTo(startDate) > 0 && size > course.getCurrentEnrollment())
+		{
 		course.setCourseName(cseName);
 		course.setSize(size);
 		course.setStatus(status);

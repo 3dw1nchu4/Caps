@@ -90,9 +90,9 @@
 									<label>Course Status: </label> <select name="accountstatus"
 										id="accountstatus" class="selectpicker">
 										<optgroup label="Account Status">
+											<option value="all">All</option>
 											<option value="open">Open</option>
 											<option value="closed">Closed</option>
-											<option value="all">All</option>
 										</optgroup>
 									</select>
 								</div>
@@ -202,6 +202,7 @@
 									<select id="lecturerId" name="lecturerId"
 										class="selectpicker show-tick form-control"
 										data-live-search="true">
+											<option>${data.lecturerDetails.lecturerId }</option>
 										<c:forEach var="lecturer" items="${lecturerList}">
 											<option
 												data-subtext="${lecturer.lastName }, ${lecturer.firstName }">${lecturer.lecturerId }</option>
@@ -556,7 +557,7 @@ $(function()
 	
 	if (qs['actionstatus'] == "failcuzofdate")
 	{
-		document.getElementById("failureModalMessage").innerHTML = "Record not created. End date must be after start date!";
+		document.getElementById("failureModalMessage").innerHTML = "Record not created. Please ensure that the end date is after the start date. Also, the maximum size should be less than the current enrolment.";
 		$('#failureActionModal').modal('toggle');
 	}
 
