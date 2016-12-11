@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -93,24 +94,82 @@ public class StudentController {
 	}
 	
 ///////////////////////////listall courses
-	
-	@RequestMapping(value = "/listall", method = RequestMethod.GET)
-	public ModelAndView CourseListPage(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("list-all");
-		try {
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = { "/listall/{type}", "/listall" }, method = RequestMethod.GET)
+	public ModelAndView all(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest request) {
 
-		List<Course> courselist = cService.findAllCourses();
-		mav.addObject("courselist", courselist);
+		PagedListHolder<Course> courseList = null;
+
+		String type = pathVariablesMap.get("type");
 		
 		User u = (User) request.getSession().getAttribute("user");
-		String s = u.getUserId();
-		StudentDetail studentDetail =sService.findStudentById(s);
+		String ss = u.getUserId();
+		StudentDetail studentDetail =sService.findStudentById(ss);
 		String sname = studentDetail.getFirstName();
 		request.setAttribute("student", sname);
-		
-		} catch (Exception e) {
+	
+/////////////////////////
+		if (null == type) {
+			List<Course> clist = cService.findAllCourses();
+			courseList = new PagedListHolder<Course>();
+			courseList.setSource(clist);
+			courseList.setPageSize(2);
+			// First Request, Return first set of list
+			
+			request.getSession().setAttribute("courseList", courseList);
 
+			printPageDetails(courseList);
+
+		} else if ("next".equals(type)) {
+			// Return next set of list
+			courseList = (PagedListHolder<Course>) request.getSession().getAttribute("courseList");
+
+			courseList.nextPage();
+
+			printPageDetails(courseList);
+
+		} else if ("prev".equals(type)) {
+			// Return previous set of list
+			courseList = (PagedListHolder<Course>) request.getSession().getAttribute("courseList");
+
+			courseList.previousPage();
+
+			printPageDetails(courseList);
+
+		} else {
+			// Return specific index set of list
+			System.out.println("type:" + type);
+
+			courseList = (PagedListHolder<Course>) request.getSession().getAttribute("courseList");
+
+			int pageNum = Integer.parseInt(type);
+
+			courseList.setPage(pageNum);
+
+			printPageDetails(courseList);
 		}
+
+/////////////////////
+		
+		
+//		try {
+//
+//			
+//			
+//			
+//		List<Course> courselist = cService.findAllCourses();
+//		mav.addObject("courselist", courselist);
+//		
+//		User u = (User) request.getSession().getAttribute("user");
+//		String ss = u.getUserId();
+//		StudentDetail studentDetail =sService.findStudentById(ss);
+//		String sname = studentDetail.getFirstName();
+//		request.setAttribute("student", sname);
+//		
+//		} catch (Exception e) {
+//
+//		}
+		ModelAndView mav = new ModelAndView("list-all");
 		return mav;
 	}
 	
@@ -203,46 +262,108 @@ public class StudentController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/listallsearchbyname", method = RequestMethod.GET)
-	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-			HttpServletRequest request) {
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = { "/listallsearchbyname/{type}", "/listallsearchbyname" }, method = RequestMethod.GET)
+	public ModelAndView searchStudentforgrd(Locale locale, Model model,@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest request, @RequestParam Map<String, String> requestParams) {
+
+	
+//	@RequestMapping(value = "/listallsearchbyname", method = RequestMethod.GET)
+//	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
+//			HttpServletRequest request) {
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
-		ModelAndView mav = new ModelAndView("list-all");
+	
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		// ArrayList<Course> lctList = cs.findbylecid(s);
 		List<Course> searchList = new ArrayList<Course>();
 
-		List<Course> course = cService.findAllCourses();
-		
-		
+		String type = pathVariablesMap.get("type");
+		PagedListHolder<Course> courseList = null;
 		StudentDetail studentDetail =sService.findStudentById(s);
 		String sname = studentDetail.getFirstName();
 		request.setAttribute("student", sname);
 		
-//		List<Course> courseTemp = new ArrayList<Course>();
-//		
+/////////////////////////
+		
+		if (null == type) {
+			List<Course> clist = cService.findAllCourses();
+			
+			/////////////////
+			
+			
+			int bn = 0;
+			String s2 = "";
+			for (Course l : clist) {
+				bn = (l.getCourseId());
+				s2 = Integer.toString(bn);
+				if (l.getCourseName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+
+				else if (s2.toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+				}
+			}
+			///////////////////
+			
+			
+			courseList = new PagedListHolder<Course>();
+			courseList.setSource(searchList);
+			courseList.setPageSize(2);
+			// First Request, Return first set of list
+			
+			request.getSession().setAttribute("courseList", courseList);
+
+			printPageDetails(courseList);
+
+		} else if ("next".equals(type)) {
+			// Return next set of list
+			courseList = (PagedListHolder<Course>) request.getSession().getAttribute("courseList");
+
+			courseList.nextPage();
+
+			printPageDetails(courseList);
+
+		} else if ("prev".equals(type)) {
+			// Return previous set of list
+			courseList = (PagedListHolder<Course>) request.getSession().getAttribute("courseList");
+
+			courseList.previousPage();
+
+			printPageDetails(courseList);
+
+		} else {
+			// Return specific index set of list
+			System.out.println("type:" + type);
+
+			courseList = (PagedListHolder<Course>) request.getSession().getAttribute("courseList");
+
+			int pageNum = Integer.parseInt(type);
+
+			courseList.setPage(pageNum);
+
+			printPageDetails(courseList);
+		}
+		
+		
+	//////////////////////////////////	
+		
+
+//		int bn = 0;
+//		String s2 = "";
+//		for (Course l : course) {
+//			bn = (l.getCourseId());
+//			s2 = Integer.toString(bn);
+//			if (l.getCourseName().toLowerCase().contains(searchContent)) {
+//				searchList.add(l);
+//			}
 //
-//		for (Course c : course) {
-//			if (eService.findungraded(s, c.getCourseId()).size() != 0) {
-//				courseTemp.add(c);
+//			else if (s2.toLowerCase().contains(searchContent)) {
+//				searchList.add(l);
 //			}
 //		}
 
-		int bn = 0;
-		String s2 = "";
-		for (Course l : course) {
-			bn = (l.getCourseId());
-			s2 = Integer.toString(bn);
-			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			}
-
-			else if (s2.toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			}
-		}
-
+		ModelAndView mav = new ModelAndView("list-all");
 		mav.addObject("courselist", searchList);
 		mav.addObject("datacount", searchList.size());
 		return mav;
@@ -343,9 +464,19 @@ public class StudentController {
 			}
 		}
 
-		mav.addObject("courseavailable", searchList);
-		mav.addObject("datacount", searchList.size());
+ 		mav.addObject("courseavailable", searchList);
+	    mav.addObject("datacount", searchList.size());
 		return mav;
+	}
+	public void printPageDetails(PagedListHolder LList) {
+
+		System.out.println("curent page - productList.getPage() :" + LList.getPage());
+
+		System.out.println("Total Num of pages - productList.getPageCount :" + LList.getPageCount());
+
+		System.out.println("is First page - productList.isFirstPage :" + LList.isFirstPage());
+
+		System.out.println("is Last page - productList.isLastPage :" + LList.isLastPage());
 	}
 	
 		
