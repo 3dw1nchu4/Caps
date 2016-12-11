@@ -142,8 +142,9 @@ public class StudentController {
 		    StudentDetail studentDetail =sService.findStudentById(s);
   		    eService.createEnrollment(studentDetail, c);/////////need to check in eservice
   		    cService.increasecourseEnrolment(c);/////////need to check in cservice
+  		    Course cs = cService.findCourse(courseId);
   		    
-		    message = "You have sucessfully enrolled with <" + c.getCourseName() + ">. We have send you a email, please check it!!! ";
+		    message = "You have sucessfully enrolled with " + cs.getCourseName() + "+. We have sent you an email, please check it. ";
 			redirectAttributes.addFlashAttribute("message", message);
 			
 			request.setAttribute("course", c);
@@ -155,7 +156,8 @@ public class StudentController {
 			
 			
 		}else {
-		    message = " NO. " + courseId + " course is aready full!!!";
+			 Course cs = cService.findCourse(courseId);
+		    message =  cs.getCourseName() + " course is already full.";
 			redirectAttributes.addFlashAttribute("message", message);		
 			
 		}
