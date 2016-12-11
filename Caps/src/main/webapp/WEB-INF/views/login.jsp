@@ -20,9 +20,20 @@
 <link rel="stylesheet" href="resources/mystyle.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+background-image: ${pageContext.request.contextPath}/resources/pic/loginpic.jpg; /*You will specify your image path here.*/
 
+-moz-background-size: cover;
+-webkit-background-size: cover;
+background-size: cover;
+background-position: top center !important;
+background-repeat: no-repeat !important;
+background-attachment: fixed;
+}
+</style>
 </head>
-<body>
+<body background="${pageContext.request.contextPath}/resources/pic/loginpic.jpg" style=" background-position: center center; background-size:     cover; background-repeat:no-repeat; ">
 
 	
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -40,8 +51,8 @@
 	<div class="collapse navbar-collapse" id="myNavbar">
 
 		<ul class="nav navbar-nav">
-			<li id="navbarHome"><a
-				href="${pageContext.request.contextPath}/home/index?#ssh">Home</a></li>
+			<%-- <li id="navbarHome"><a
+				href="${pageContext.request.contextPath}/home/index?#ssh">Home</a></li> --%>
 
 			<%
 				if (session.getAttribute("user") == null || session.getAttribute("user").equals("")) {
@@ -100,13 +111,13 @@
 </nav>
 
 	<div class="container" style="width: 50%; min-width: 300px">
-	<br><br>
-		<h1>Login</h1>
+	<div class="row"><br><br><br><br><br><br></div>
+		
 		<div class="jumbotron">
-
+<h2>Login</h2>
 			<form:form modelAttribute="user" method="POST"
 				action="${pageContext.request.contextPath}/home/authenticate">
-				<h2 class="form-signin-heading">Please sign in</h2>
+				<h3 class="form-signin-heading">Please sign in</h3>
 				<label for="userid" class="sr-only"></label>
 				<form:input class="form-control" placeholder="UserId" id="userid"
 					path="userId" required="true"/>
@@ -123,6 +134,7 @@
 				<form:button class="btn btn-lg btn-primary btn-block" name="submit"
 					type="submit" value="s">
 				Sign in</form:button>
+				<br>
 				<center>
 				<label><font color="red">${errorMsg}</font></label>
 				</center>
