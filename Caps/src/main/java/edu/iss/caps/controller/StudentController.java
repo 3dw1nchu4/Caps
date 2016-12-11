@@ -97,7 +97,7 @@ public class StudentController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = { "/listall/{type}", "/listall" }, method = RequestMethod.GET)
 	public ModelAndView all(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest request) {
-
+		try {
 		PagedListHolder<Course> courseList = null;
 
 		String type = pathVariablesMap.get("type");
@@ -147,37 +147,15 @@ public class StudentController {
 			courseList.setPage(pageNum);
 
 			printPageDetails(courseList);
+		}	
+
+		} catch (Exception e) {
+
 		}
 
-/////////////////////
-		
-		
-//		try {
-//
-//			
-//			
-//			
-//		List<Course> courselist = cService.findAllCourses();
-//		mav.addObject("courselist", courselist);
-//		
-//		User u = (User) request.getSession().getAttribute("user");
-//		String ss = u.getUserId();
-//		StudentDetail studentDetail =sService.findStudentById(ss);
-//		String sname = studentDetail.getFirstName();
-//		request.setAttribute("student", sname);
-//		
-//		} catch (Exception e) {
-//
-//		}
 		ModelAndView mav = new ModelAndView("list-all");
 		return mav;
 	}
-	
-
-	
-
-
-
 	
 	@RequestMapping(value = "/grade",method = RequestMethod.GET)
 	public ModelAndView studentviewgrade(HttpServletRequest request) {
