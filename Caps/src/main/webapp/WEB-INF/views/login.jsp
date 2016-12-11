@@ -47,6 +47,7 @@
 				<form:button class="btn btn-lg btn-primary btn-block" name="submit"
 					type="submit" value="s">
 				Sign in</form:button>
+				<label>${errorMsg}</label>
 			</form:form>
 
 		</div>
@@ -59,7 +60,7 @@
 </body>
 <script>
 	$(function() {
-		$("#header").load("resources/header.html");
+		$("#header").load("resources/header.jsp");
 		$("#footer").load("resources/footer.html");
 	});
 

@@ -68,24 +68,7 @@
 				<h2 class="sub-header" id="sectiontitle">Section title</h2>
 
 
-				
-<div class="container" style="width: 100%">
-	<div class="row">
-		<div class="col-xs-1">
-			<label for="search"><h4>Search:</h4> </label>
-		</div>
-		<div class="col-xs-5">
-			<input type="text" id="inputPK" class="form-control"
-				placeholder="Search for something here">
-		</div>
-		<div class="col xs-6">
-		<a class="btn btn-success"
-						href="${pageContext.request.contextPath}/Course/listall"><spring:message
-								code="Search"  /></a>
-		</div>
-	</div>
-</div>
-
+			
 
 	<h2>Your enrollment status : </h2> 
 	

@@ -14,10 +14,19 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-
 <!-- jQuery library -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+$(function()
+		{
+			$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
+			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+		});
+
+</script>
+
 
 <!-- For dropdown select -->
 <!-- Latest compiled and minified CSS -->
@@ -28,14 +37,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js"></script>
 
-
-<!-- Latest compiled JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!--  additional custom styles -->
 <link rel="stylesheet"
@@ -354,11 +356,6 @@
 
 </body>
 <script>
-	$(function()
-	{
-		$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
-		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
-	});
 
 	$(document).ready(function() {
 	    $('.selectpicker').selectpicker();
