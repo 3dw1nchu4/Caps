@@ -203,9 +203,9 @@
 								pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"
 								title="Date format (YYYY-MM-DD)" autofocus>
 							</div>
-							<div class = "col-lg-1 col-xs-4">
-							<label ><br><br> </label>
-								<button type="button" class="btn btn-default" onclick="DateToday()">Today</button>
+							<div class = "col-lg-1 col-xs-4"   >
+
+								<button style="display: table-cell; vertical-align: bottom" type="button" class="btn btn-default" onclick="DateToday()">Today</button>
 							</div>
 						</div>
 						<div class="row">
@@ -213,7 +213,7 @@
 							<label for="lastName"><h4>Last Name: </h4></label> <input type="text"
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
-								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
+								autofocus pattern="[A-Za-z ]{2,}" title="Only uppercase and lowercase alphabets">
 						</div>
 						</div>
 						<div class="row">

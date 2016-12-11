@@ -61,11 +61,11 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a href="managestudent">Manage
+					<li id="sidebarStudent"><a href="${pageContext.request.contextPath}/admin/managestudent">Manage
 							Students</a></li>
 					<li id="sidebarLecturer" class="active"><a
-						href="managelecturer">Manage Lecturers</a></li>
-					<li id="sidebarCourse"><a href="managecourse">Manage
+						href="${pageContext.request.contextPath}/admin/managelecturer">Manage Lecturers</a></li>
+					<li id="sidebarCourse"><a href="${pageContext.request.contextPath}/admin/managecourse">Manage
 							Courses</a></li>
 				</ul>
 
@@ -193,7 +193,7 @@
 							<label for="lastName"><h4>Last Name: </h4></label> <input type="text"
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
-								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
+								autofocus pattern="[A-Za-z ]{2,}" title="Only uppercase and lowercase alphabets">
 							</div>
 						</div>
 						<div class="row"><br></div>

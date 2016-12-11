@@ -61,11 +61,11 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent"><a href="managestudent">Manage
+					<li id="sidebarStudent"><a href="${pageContext.request.contextPath}/admin/managestudent">Manage
 							Students</a></li>
-					<li id="sidebarLecturer"><a href="managelecturer">Manage
+					<li id="sidebarLecturer"><a href="${pageContext.request.contextPath}/admin/managelecturer">Manage
 							Lecturers</a></li>
-					<li id="sidebarCourse" class="active"><a href="managecourse">Manage
+					<li id="sidebarCourse" class="active"><a href="${pageContext.request.contextPath}/admin/managecourse">Manage
 							Courses</a></li>
 				</ul>
 
