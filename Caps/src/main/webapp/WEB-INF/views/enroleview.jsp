@@ -44,6 +44,7 @@
 	rel="stylesheet">
 </head>
 <body>
+//////////////////////////////////////////////////////////////////////
 	<div id="header"></div>
 	<div class="container-fluid">
 		<div class="row">
@@ -106,6 +107,7 @@
 					</nav>
 
 				</div>
+				/////////////////////////////////
 
 				<div id="searchcount" name="searchcount" style="display: none">
 
@@ -125,13 +127,14 @@
 				</c:if>
 
 
-
+///////////////////////////////////////////////////////////////////////////////////////////
 				<c:if test="${(Error eq 'all') || (Error==null)}">
 					<h5>Your search returned ${courseList.getNrOfElements() }
 						results</h5>
-
+///////////////////////////////////
 					<div class="table-responsive">
 						<c:set var="pageListHolder" value="${courseList}" scope="session" />
+		////////////////////////////////////////////////////				
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -149,7 +152,7 @@
 							</thead>
 
 
-
+///////////////////////////////
 							<tbody>
 								<c:forEach var="role" items="${pageListHolder.pageList}">
 									<tr class="listRecord">
@@ -179,7 +182,9 @@
 
 								</c:forEach>
 							</tbody>
+							///////////
 						</table>
+						/////////////////////////////////////
 						<div>
 							<span style="float: left;"> <c:choose>
 									<c:when test="${pageListHolder.firstPage}">Prev</c:when>
@@ -210,7 +215,9 @@
 								</c:choose>
 							</span>
 						</div>
-					</div>
+						
+						
+					</div>/////////////////table
 			</div>
 			</c:if>
 			<center>
