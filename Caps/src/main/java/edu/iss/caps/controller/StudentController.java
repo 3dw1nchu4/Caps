@@ -214,6 +214,12 @@ public class StudentController {
 		List<Course> searchList = new ArrayList<Course>();
 
 		List<Course> course = cService.findAllCourses();
+		
+		
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
+		
 //		List<Course> courseTemp = new ArrayList<Course>();
 //		
 //
@@ -254,6 +260,9 @@ public class StudentController {
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
 		
 
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
 //		List<Course> courseTemp = new ArrayList<Course>();
 //		
 //
@@ -289,6 +298,11 @@ public class StudentController {
 		ModelAndView mav = new ModelAndView("course-available");
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
+		
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
+		
 		List<Course> searchList = new ArrayList<Course>();
 		List<Course> courselist = cService.findAllCourses();
 
