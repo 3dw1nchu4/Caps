@@ -52,8 +52,7 @@
 	<div class="collapse navbar-collapse" id="myNavbar">
 
 		<ul class="nav navbar-nav">
-			<li id="navbarHome"><a
-				href="${pageContext.request.contextPath}/home/index?#ssh">Home</a></li>
+
 
 			<%
 				if (session.getAttribute("user") == null || session.getAttribute("user").equals("")) {
