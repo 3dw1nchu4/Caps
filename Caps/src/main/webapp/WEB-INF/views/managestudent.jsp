@@ -14,10 +14,19 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-
 <!-- jQuery library -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+$(function()
+		{
+			$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
+			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+		});
+
+</script>
+
 
 <!-- For dropdown select -->
 <!-- Latest compiled and minified CSS -->
@@ -28,14 +37,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js"></script>
 
-
-<!-- Latest compiled JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!--  additional custom styles -->
 <link rel="stylesheet"
@@ -163,12 +165,12 @@
 						<h3 class="form-signin-heading">Edit Record</h3>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-								<label for="id">Student ID: </label> <input type="text" id="id"
+								<label for="id"><h4>Student ID: </h4></label> <input type="text" id="id"
 								name="id" class="form-control" value="${data.studentId }"
 								placeholder="Unique ID (eg. S1234)" required autofocus>
 							</div>
 							<div class = "col-lg-4 col-xs-12">
-								<label for="emailinput">Email: </label> <input type="email"
+								<label for="emailinput"><h4>Email: </h4></label> <input type="email"
 								id="emailinput" name="emailinput" class="form-control"
 								placeholder="Email" value="${data.email }" required autofocus>
 							</div>
@@ -176,13 +178,13 @@
 						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="firstName">First Name: </label> <input type="text"
+							<label for="firstName"><h4>First Name: </h4></label> <input type="text"
 								id="firstName" name="firstName" class="form-control"
 								placeholder="First Name" value="${data.firstName }" required
 								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
 							</div>
 							<div class = "col-lg-3 col-xs-8">
-							<label for="dateinput">Enrolment Date: </label> <input
+							<label for="dateinput"><h4>Enrolment Date: </h4></label> <input
 								type="text" id="dateinput" name="dateinput" class="form-control"
 								placeholder="Enrolment Date (YYYY-MM-DD)"
 								value="${data.enrolmentDate }" required
@@ -190,14 +192,14 @@
 								title="Date format (YYYY-MM-DD)" autofocus>
 							</div>
 							<div class = "col-lg-1 col-xs-4">
-							<label style="visibility:hidden">ds </label>
+							<label ><br><br> </label>
 								<button type="button" class="btn btn-default" onclick="DateToday()">Today</button>
 							</div>
 						</div>
-						<div class="row"></div>
+						<div class="row"><br></div>
 						<div class="row">
 						<div class = "col-lg-4 col-xs-12">
-							<label for="lastName">Last Name: </label> <input type="text"
+							<label for="lastName"><h4>Last Name: </h4></label> <input type="text"
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
 								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
@@ -206,7 +208,7 @@
 						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-								<label for="password">Password: </label> <input type="password"
+								<label for="password"><h4>Password: </h4></label> <input type="password"
 									id="password" name="password" class="form-control"
 									placeholder="User password (Required for new accounts/ Optional when updating)" value="" autofocus> <br>
 							</div>
@@ -404,11 +406,7 @@
 
 </body>
 <script>
-	$(function()
-	{
-		$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
-		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
-	});
+
 
 	$(document).ready(function() {
 	    $('.selectpicker').selectpicker();
