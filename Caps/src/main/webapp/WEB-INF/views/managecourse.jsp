@@ -201,7 +201,7 @@
 								<div>
 									<select id="lecturerId" name="lecturerId"
 										class="selectpicker show-tick form-control"
-										data-live-search="true">
+										data-live-search="true" required>
 											<option>${data.lecturerDetails.lecturerId }</option>
 										<c:forEach var="lecturer" items="${lecturerList}">
 											<option
@@ -243,17 +243,17 @@
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 							<label for="maxCredits"><h4>Course Credits: </h4></label> <input
-								type="text" id="maxCredits" name="maxCredits"
+								type="number" id="maxCredits" name="maxCredits"
 								class="form-control" placeholder="Enter max credits for course"
-								value="${data.credits }" autofocus
+								value="${data.credits }" autofocus required
 								> 
 						</div>
 						</div>
 							<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="size"><h4>Max Size: </h4></label> <input type="text" id="size"
+							<label for="size"><h4>Max Size: </h4></label> <input type="number" id="size"
 								name="size" class="form-control" placeholder="Maximum class size"
-								value="${data.size }" required autofocus>
+								value="${data.size }" required autofocus required>
 								</div>
 							</div>	
 							<div class="row">
