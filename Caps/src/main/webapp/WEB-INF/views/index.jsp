@@ -61,7 +61,7 @@
 				else{
 			%>
 			<li id="navbarrole"><a
-				href="${pageContext.request.contextPath}/home/movein">${role}</a></li>
+				href="${pageContext.request.contextPath}/home/redirectToRolesHomePage">${role}</a></li>
 			<%
 				}
 			%>
