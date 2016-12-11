@@ -113,7 +113,7 @@ public class StudentController {
 			List<Course> clist = cService.findAllCourses();
 			courseList = new PagedListHolder<Course>();
 			courseList.setSource(clist);
-			courseList.setPageSize(2);
+			courseList.setPageSize(3);
 			// First Request, Return first set of list
 			
 			request.getSession().setAttribute("courseList", courseList);
@@ -291,7 +291,7 @@ public class StudentController {
 			
 			courseList = new PagedListHolder<Course>();
 			courseList.setSource(searchList);
-			courseList.setPageSize(2);
+			courseList.setPageSize(3);
 			// First Request, Return first set of list
 			
 			request.getSession().setAttribute("courseList", courseList);
