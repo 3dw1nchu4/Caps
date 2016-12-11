@@ -3,12 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<spring:url value="/admin/managestudent" var="pageurl" />
 <title></title>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -60,11 +62,11 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li id="sidebarStudent" class="active"><a href="managestudent">Manage
+					<li id="sidebarStudent" class="active"><a href="${pageContext.request.contextPath}/admin/managestudent">Manage
 							Students</a></li>
-					<li id="sidebarLecturer"><a href="managelecturer">Manage
+					<li id="sidebarLecturer"><a href="${pageContext.request.contextPath}/admin/managelecturer">Manage
 							Lecturers</a></li>
-					<li id="sidebarCourse"><a href="managecourse">Manage
+					<li id="sidebarCourse"><a href="${pageContext.request.contextPath}/admin/managecourse">Manage
 							Courses</a></li>
 				</ul>
 
@@ -85,7 +87,7 @@
 							</div>-->
 
 							<form class="navbar-form navbar-left" role="search"
-								action="searchstudent" method="get">
+								action="${pageContext.request.contextPath}/admin/searchstudent" method="get">
 								<div class="form-group">
 									<label>Account Status: </label> <select name="accountstatus"
 										id="accountstatus" class="selectpicker">
@@ -101,11 +103,7 @@
 									<input type="text" class="form-control" placeholder="Search"
 										name="searchcontent" id="searchcontent">
 
-									<div class="input-group-btn">
-										<button class="btn btn-default" type="submit">
-											<i class="glyphicon glyphicon-search"></i>
-										</button>
-									</div>
+									
 								</div>
 								<button type="submit" class="btn btn-default">Search</button>
 								<button type="button" class="btn btn-success"
@@ -122,8 +120,9 @@
 					</div>
 
 					<div id="searchcount" name="searchcount" style="display: none">
-						<h5>Your search returned ${dataList.size() } results</h5>
+						<h5>Your search returned ${studentListPage.getNrOfElements() } results</h5>
 					</div>
+					<c:set var="pageListHolder" value="${studentListPage}" scope="session" />
 					<table class="table table-striped">
 						<thead>
 							<tr>
@@ -131,11 +130,11 @@
 								<th><h4>Name</h4></th>
 								<th><h4>Enrolment Date</h4></th>
 								<th><h4>Status</h4></th>
-								<th><h4></h4></th>
+								<th><h4>Manage</h4></th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="object" items="${dataList}">
+							<c:forEach var="object" items="${pageListHolder.pageList}">
 								<tr class="listRecord">
 									<td>${object.studentId}</td>
 									<td>${object.lastName}, ${object.firstName}</td>
@@ -150,11 +149,32 @@
 
 						</tbody>
 					</table>
+					<center>
+						<div>
+							 <span> 
+							<ul class="pagination">
+							<c:forEach begin="0"
+									end="${pageListHolder.pageCount-1}" varStatus="loop">
+								    &nbsp;&nbsp;
+								    <c:choose>
+										<c:when test="${loop.index == pageListHolder.page}"><li class="active"><a href="#" >${loop.index+1}</a></li></c:when>
+										<c:otherwise>
+											<li><a href="${pageurl}/${loop.index}">${loop.index+1}</a></li>
+										</c:otherwise>
+									</c:choose>
+					    &nbsp;&nbsp;
+					    </c:forEach>
+					    </ul>
+							</span> 
+						</div>
+						</center>
 				</div>
+			
+				
 
 				<div id="editcontent" style="display: none">
 					<form id="formEditRecord" method="POST">
-						<h3 class="form-signin-heading">Edit Record</h3>
+						<h3 id="EditCreateHeader" class="form-signin-heading">Edit Record</h3>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 								<label for="id"><h4>Student ID: </h4></label> <input type="text" id="id"
@@ -188,7 +208,6 @@
 								<button type="button" class="btn btn-default" onclick="DateToday()">Today</button>
 							</div>
 						</div>
-						<div class="row"><br></div>
 						<div class="row">
 						<div class = "col-lg-4 col-xs-12">
 							<label for="lastName"><h4>Last Name: </h4></label> <input type="text"
@@ -197,7 +216,6 @@
 								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
 						</div>
 						</div>
-						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
 								<label for="password"><h4>Password: </h4></label> <input type="password"
@@ -227,6 +245,7 @@
 										<th><h4>Status</h4><br></th>
 										<th><h4>Grade</h4><br></th>
 										<th><h4>Earned Credits</h4><br></th>
+										<th><h4>Manage</h4><br></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -265,7 +284,6 @@
 									onclick="AddCourse('${data.studentId}')">Add Course</button>
 							</div>
 						</div>
-
 					</div>
 				</div>
 			</div>
@@ -344,7 +362,7 @@
 					<h4 class="modal-title">Confirm Inactivation of Student
 						Account</h4>
 				</div>
-				<form action="deletestudent" method="post">
+				<form action="${pageContext.request.contextPath}/admin/deletestudent" method="post">
 					<div class="modal-body">
 
 						<p>The selected student account will be inactivated.</p>
@@ -362,6 +380,24 @@
 
 		</div>
 	</div>
+	
+		<!-- Successful transaction Modal -->
+	<div id="errorActionModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">We encountered a problem</h4>
+				</div>
+				<div class="modal-body" id="errorModalMessage"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
 
 	<!-- Confirm Remove from Enrolment Modal -->
 	<div id="removeEnrolmentModal" class="modal fade" role="dialog">
@@ -371,7 +407,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Confirm Deletion</h4>
 				</div>
-				<form action="removestudentenrolment" method="post">
+				<form action="${pageContext.request.contextPath}/admin/removestudentenrolment" method="post">
 					<div class="modal-body">
 
 						<p>The selected entry will be permanently deleted.</p>
@@ -483,14 +519,17 @@ $(function()
 		if (qs['id'] !="create")
 		{
 			document.getElementById("id").readOnly = true;
-			document.getElementById("formEditRecord").action = "updatestudent";
-			document.getElementById("submitbutton").innerHTML = "Update Record";			
+			document.getElementById("formEditRecord").action = "${pageContext.request.contextPath}/admin/updatestudent";
+			document.getElementById("submitbutton").innerHTML = "Update Record";		
+			document.getElementById("EditCreateHeader").innerHTML = "Update Existing Student Record";
+			
 		} else
 		{
-			document.getElementById("formEditRecord").action = "createstudent";
+			document.getElementById("formEditRecord").action = "${pageContext.request.contextPath}/admin/createstudent";
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
 			document.getElementById("studentcourses").style.display = "none";
 			document.getElementById("password").required = true;
+			document.getElementById("EditCreateHeader").innerHTML = "Create New Student Record";
 		}
 	}
 
@@ -522,17 +561,25 @@ $(function()
 	}
 	
 
-			if (qs['actionstatus'].includes("success"))
-			{
-					document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
-					$('#successActionModal').modal('toggle');
-			}
+	if (qs['actionstatus'].includes("success"))
+	{
+			document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
+			$('#successActionModal').modal('show');
+	}
+
+	if (qs['actionstatus'].includes("createsuccess"))
+	{
+			document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
+			$('#successActionModal').modal('show');
+	}
+	
+	if (qs['actionstatus'].includes("userexisterror"))
+	{
+			document.getElementById("errorModalMessage").innerHTML = "Duplicate User ID. Please try again";
+			$('#errorActionModal').modal('show');
+	}
 		
-			if (qs['actionstatus'] == "createsuccess")
-			{
-					document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
-					$('#successActionModal').modal('toggle');
-			}
+		
 
 	
 	function AddCourse(studentId)

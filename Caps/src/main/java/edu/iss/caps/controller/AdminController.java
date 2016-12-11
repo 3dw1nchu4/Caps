@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,7 @@ import edu.iss.caps.service.CourseService;
 import edu.iss.caps.service.LecturerService;
 import edu.iss.caps.service.StudentService;
 import edu.iss.caps.service.UserService;
+import edu.iss.pagination.model.City;
 import edu.iss.caps.model.StudentDetail;
 import edu.iss.caps.model.Enrolment;
 import edu.iss.caps.service.EnrolmentService;;
@@ -50,8 +53,8 @@ public class AdminController
 	@Autowired
 	EnrolmentService enrolmentService;
 
-	@RequestMapping(value = "/managestudent", method = RequestMethod.GET)
-	public ModelAndView manageStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	@RequestMapping(value = {"/managestudent/{type}", "/managestudent"}, method = RequestMethod.GET)
+	public ModelAndView manageStudent(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 		try
 		{
@@ -92,19 +95,28 @@ public class AdminController
 			return mav;
 		} catch (Exception e) // catches requestParams.get("id") null pointer exception, lists all students
 		{
-			ModelAndView mav = new ModelAndView("managestudent");
-			ArrayList<StudentDetail> lctList = studentService.findAllStudents();
-			List<StudentDetail> tempList = new ArrayList<StudentDetail>();
-			for (StudentDetail l : lctList)
-			{
-				if (l.getStatus().toLowerCase().contains("active"))
-				{
-					tempList.add(l);
-				}
+
+			
+			PagedListHolder<StudentDetail> studentList = null;
+
+			String type = pathVariablesMap.get("type");
+
+			if (null == type) {
+				// First Request, Return first set of list
+				List<StudentDetail> studentListOther = studentService.findAllStudents();
+				studentList = new PagedListHolder<StudentDetail>();
+				studentList.setSource(studentListOther);
+				studentList.setPageSize(10);
+				req.getSession().setAttribute("studentListPage", studentList);
+			} else {
+				// Return specific index set of list
+				studentList = (PagedListHolder<StudentDetail>) req.getSession().getAttribute("studentListPage");
+				int pageNum = Integer.parseInt(type);
+				studentList.setPage(pageNum);
 			}
 
-			mav.addObject("dataList", tempList);
-			return mav;
+			ModelAndView mv = new ModelAndView("managestudent");
+			return mv;
 		}
 	}
 
@@ -114,30 +126,37 @@ public class AdminController
 	{
 
 		String id = requestParams.get("id");
-		String firstName = requestParams.get("firstName");
-		String lastName = requestParams.get("lastName");
-		String password = requestParams.get("password");
-		String email = requestParams.get("emailinput");
-		String dateString = requestParams.get("dateinput");
-		String status = "Active";
-		String role = "Student";
-		
-		Date enrolmentDate = ConvertToDate(dateString);
-
-		// create user
-		User user = new User(id, password, role);
-		userService.createUser(user);
-		
-		//verifies that user is successfully created
-		User userTemp = userService.findUser(id);
-		String id2 = userTemp.getUserId();
-		
-		// create student with reference to user
-		StudentDetail student = new StudentDetail(id2, firstName, lastName, enrolmentDate, status, email);
-		student.setStatus("Active");
-		studentService.createStduent(student);
-
-		return "redirect:managestudent?actionstatus=createsuccess";
+		if (userService.findUser(id) != null)
+		{
+			return "redirect:managestudent?actionstatus=userexisterror&id=create";
+		}
+		else
+		{
+			String firstName = requestParams.get("firstName");
+			String lastName = requestParams.get("lastName");
+			String password = requestParams.get("password");
+			String email = requestParams.get("emailinput");
+			String dateString = requestParams.get("dateinput");
+			String status = "Active";
+			String role = "Student";
+			
+			Date enrolmentDate = ConvertToDate(dateString);
+	
+			// create user
+			User user = new User(id, password, role);
+			userService.createUser(user);
+			
+			//verifies that user is successfully created
+			User userTemp = userService.findUser(id);
+			String id2 = userTemp.getUserId();
+			
+			// create student with reference to user
+			StudentDetail student = new StudentDetail(id2, firstName, lastName, enrolmentDate, status, email);
+			student.setStatus("Active");
+			studentService.createStduent(student);
+	
+			return "redirect:managestudent?actionstatus=createsuccess";
+		}
 	}
 
 	// Update Existing student
@@ -220,8 +239,8 @@ public class AdminController
 	}
 
 	// search student
-	@RequestMapping(value = "/searchstudent", method = RequestMethod.GET)
-	public ModelAndView searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	@RequestMapping(value = {"/searchstudent","/searchstudent/{type}"}, method = RequestMethod.GET)
+	public ModelAndView searchStudent(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		String accountstatus = requestParams.get("accountstatus").toLowerCase();
@@ -257,15 +276,38 @@ public class AdminController
 			}
 		}
 
+
+//		return mav;
+		
+		PagedListHolder<StudentDetail> studentList = null;
+
+		String type = pathVariablesMap.get("type");
+
+		if (null == type) {
+			// First Request, Return first set of list
+			List<StudentDetail> studentListOther = searchList;
+			studentList = new PagedListHolder<StudentDetail>();
+			studentList.setSource(studentListOther);
+			studentList.setPageSize(10);
+			req.getSession().setAttribute("studentListPage", studentList);
+		} else {
+			// Return specific index set of list
+			studentList = (PagedListHolder<StudentDetail>) req.getSession().getAttribute("studentListPage");
+			int pageNum = Integer.parseInt(type);
+			studentList.setPage(pageNum);
+		}
 		mav.addObject("dataList", searchList);
 		mav.addObject("datacount", searchList.size());
-		return mav;
+		ModelAndView mv = new ModelAndView("managestudent");
+		return mv;
+		
+		
 	}
 
 	//// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-LECTURER
 	//// >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
-	@RequestMapping(value = "/managelecturer", method = RequestMethod.GET)
-	public ModelAndView manageLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	@RequestMapping(value = {"/managelecturer/{type}", "/managelecturer"}, method = RequestMethod.GET)
+	public ModelAndView manageLecturer(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 		try
 		{
@@ -300,19 +342,27 @@ public class AdminController
 			return mav;
 		} catch (Exception e) // catches requestParams.get("id") null pointer exception, lists all lecturers
 		{
-			ModelAndView mav = new ModelAndView("managelecturer");
-			ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
-			List<LecturerDetail> tempList = new ArrayList<LecturerDetail>();
-			for (LecturerDetail l : lctList)
-			{
-				if (l.getStatus().toLowerCase().contains("active"))
-				{
-					tempList.add(l);
-				}
+		
+			PagedListHolder<LecturerDetail> lecturerList = null;
+
+			String type = pathVariablesMap.get("type");
+
+			if (null == type) {
+				// First Request, Return first set of list
+				List<LecturerDetail> lecturerListOther = lecturerService.findAllLecturers();
+				lecturerList = new PagedListHolder<LecturerDetail>();
+				lecturerList.setSource(lecturerListOther);
+				lecturerList.setPageSize(10);
+				req.getSession().setAttribute("lecturerListPage", lecturerList);
+			} else {
+				// Return specific index set of list
+				lecturerList = (PagedListHolder<LecturerDetail>) req.getSession().getAttribute("lecturerListPage");
+				int pageNum = Integer.parseInt(type);
+				lecturerList.setPage(pageNum);
 			}
 
-			mav.addObject("dataList", tempList);
-			return mav;
+			ModelAndView mv = new ModelAndView("managelecturer");
+			return mv;
 		}
 	}
 
@@ -320,23 +370,30 @@ public class AdminController
 	@RequestMapping(value = "/createlecturer", method = RequestMethod.POST)
 	public String createLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
-
 		String id = requestParams.get("id");
-		String firstName = requestParams.get("firstName");
-		String lastName = requestParams.get("lastName");
-		String password = requestParams.get("password");
-		String role = "Lecturer";
-
-		User user = new User(id, password, role);
-		userService.createUser(user);
-
-		User userTemp = userService.findUser(id);
-		id = userTemp.getUserId();
-		LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
-		lecturer.setStatus("Active");
-		lecturerService.createLecturer(lecturer);
-
-		return "redirect:managelecturer?actionstatus=createsuccess";
+		if (userService.findUser(id) != null)
+		{
+			return "redirect:managelecturer?actionstatus=userexisterror&id=create";
+		}
+		else
+		{
+			
+			String firstName = requestParams.get("firstName");
+			String lastName = requestParams.get("lastName");
+			String password = requestParams.get("password");
+			String role = "Lecturer";
+	
+			User user = new User(id, password, role);
+			userService.createUser(user);
+	
+			User userTemp = userService.findUser(id);
+			id = userTemp.getUserId();
+			LecturerDetail lecturer = new LecturerDetail(id, firstName, lastName);
+			lecturer.setStatus("Active");
+			lecturerService.createLecturer(lecturer);
+	
+			return "redirect:managelecturer?actionstatus=createsuccess";
+		}
 	}
 
 	// Update Existing
@@ -377,8 +434,8 @@ public class AdminController
 	}
 
 	// search lecturer
-	@RequestMapping(value = "/searchlecturer", method = RequestMethod.GET)
-	public ModelAndView searchLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	@RequestMapping(value = {"/searchlecturer", "/searchlecturer/{type}"}, method = RequestMethod.GET)
+	public ModelAndView searchLecturer(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		String accountstatus = requestParams.get("accountstatus").toLowerCase();
@@ -414,9 +471,28 @@ public class AdminController
 			}
 		}
 
-		mav.addObject("dataList", searchList);
-		mav.addObject("datacount", searchList.size());
-		return mav;
+
+		PagedListHolder<LecturerDetail> lecturerList = null;
+
+		String type = pathVariablesMap.get("type");
+
+		if (null == type) {
+			// First Request, Return first set of list
+			List<LecturerDetail> lecturerListOther = searchList;
+			lecturerList = new PagedListHolder<LecturerDetail>();
+			lecturerList.setSource(lecturerListOther);
+			lecturerList.setPageSize(10);
+			req.getSession().setAttribute("lecturerListPage", lecturerList);
+		} else {
+			// Return specific index set of list
+			lecturerList = (PagedListHolder<LecturerDetail>) req.getSession().getAttribute("lecturerListPage");
+			int pageNum = Integer.parseInt(type);
+			lecturerList.setPage(pageNum);
+		}
+
+		ModelAndView mv = new ModelAndView("managelecturer");
+		return mv;
+		
 	}
 
 	// reassign course to
@@ -439,8 +515,8 @@ public class AdminController
 
 	//// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE
 	//// >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
-	@RequestMapping(value = "/managecourse", method = RequestMethod.GET)
-	public ModelAndView manageCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	@RequestMapping(value = {"/managecourse","/managecourse/{type}"}, method = RequestMethod.GET)
+	public ModelAndView manageCourse(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 
 		// adds list of lecturers to dropdown
@@ -473,26 +549,29 @@ public class AdminController
 			return mav;
 		} catch (Exception e)
 		{
-			ModelAndView mav = new ModelAndView("managecourse");
-			ArrayList<Course> cseList = cseService.findAllCourses();
-			List<Course> tempList1 = new ArrayList<Course>();
-			try
-			{
-				for (Course c : cseList)
-				{
-					if (c.getStatus().toLowerCase().contains("open"))
-					{
-						tempList1.add(c);
-					}
-				}
-			} catch (Exception e2)
-			{
 
+			PagedListHolder<Course> courseList = null;
+
+			String type = pathVariablesMap.get("type");
+
+			if (null == type) {
+				// First Request, Return first set of list
+				List<Course> courseListOther = cseService.findAllCourses();
+				courseList = new PagedListHolder<Course>();
+				courseList.setSource(courseListOther);
+				courseList.setPageSize(5);
+				req.getSession().setAttribute("courseListPage", courseList);
+			} else {
+				// Return specific index set of list
+				courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseListPage");
+				int pageNum = Integer.parseInt(type);
+				courseList.setPage(pageNum);
 			}
-
-			mav.addObject("lecturerList", tempList);
-			mav.addObject("dataList", tempList1);
-			return mav;
+			
+			ModelAndView mv = new ModelAndView("managecourse");
+			mv.addObject("lecturerList", tempList);
+			return mv;
+			
 		}
 
 	}
@@ -504,7 +583,8 @@ public class AdminController
 
 		String cseName = requestParams.get("cseName");
 		String lecturerId = requestParams.get("lecturerId");
-
+		int maxCredits = Integer.parseInt(requestParams.get("maxCredits"));
+				
 		Date startDate = ConvertToDate(requestParams.get("startDate"));
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
 		
@@ -523,6 +603,7 @@ public class AdminController
 		course.setEndDate(endDate);
 		course.setLecturerDetails(lecturer);
 		course.setCurrentEnrollment(currentEnrollment);
+		course.setCredits(maxCredits);
 
 		cseService.changeCourse(course);
 		return "redirect:managecourse?actionstatus=createsuccess";
@@ -545,6 +626,7 @@ public class AdminController
 		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
 		Date startDate = ConvertToDate(requestParams.get("startDate"));
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
+		int maxCredits = Integer.parseInt(requestParams.get("maxCredits"));
 		
 		if (endDate.compareTo(startDate) > 0)
 		{
@@ -556,7 +638,8 @@ public class AdminController
 		course.setLecturerDetails(lecturer);
 		course.setStartDate(startDate);
 		course.setEndDate(endDate);
-
+		course.setCredits(maxCredits);
+		
 		cseService.changeCourse(course);
 		return "redirect:managecourse?actionstatus=success";
 		}
@@ -578,8 +661,8 @@ public class AdminController
 	}
 
 	// search course
-	@RequestMapping(value = "/searchcourse", method = RequestMethod.GET)
-	public ModelAndView searchCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
+	@RequestMapping(value = {"/searchcourse","/searchcourse/{type}"}, method = RequestMethod.GET)
+	public ModelAndView searchCourse(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		String coursestatus = requestParams.get("accountstatus").toLowerCase();
@@ -617,9 +700,30 @@ public class AdminController
 			}
 		}
 
-		mav.addObject("dataList", searchList);
-		mav.addObject("datacount", searchList.size());
-		return mav;
+//		mav.addObject("dataList", searchList);
+//		mav.addObject("datacount", searchList.size());
+//		return mav;
+		
+		PagedListHolder<Course> courseList = null;
+
+		String type = pathVariablesMap.get("type");
+
+		if (null == type) {
+			// First Request, Return first set of list
+			List<Course> courseListOther = searchList;;
+			courseList = new PagedListHolder<Course>();
+			courseList.setSource(courseListOther);
+			courseList.setPageSize(5);
+			req.getSession().setAttribute("courseListPage", courseList);
+		} else {
+			// Return specific index set of list
+			courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseListPage");
+			int pageNum = Integer.parseInt(type);
+			courseList.setPage(pageNum);
+		}
+
+		ModelAndView mv = new ModelAndView("managecourse");
+		return mv;
 	}
 
 	// remove student from enrolment via course

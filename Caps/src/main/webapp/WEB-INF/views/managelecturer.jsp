@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<spring:url value="/admin/managelecturer" var="pageurl" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -86,7 +87,7 @@
 							</div>-->
 
 							<form class="navbar-form navbar-left" role="search"
-								action="searchlecturer" method="get">
+								action="${pageContext.request.contextPath}/admin/searchlecturer" method="get">
 								<div class="form-group">
 									<label>Account Status: </label> <select name="accountstatus"
 										id="accountstatus" class="selectpicker">
@@ -118,19 +119,20 @@
 					</div>
 
 					<div id="searchcount" name="searchcount" style="display: none">
-						<h5>Your search returned ${dataList.size() } results</h5>
+						<h5>Your search returned ${lecturerListPage.getNrOfElements() } results</h5>
 					</div>
+					<c:set var="pageListHolder" value="${lecturerListPage}" scope="session" />
 					<table class="table table-striped">
 						<thead>
 							<tr>
 								<th><h4>Lecturer ID</h4></th>
 								<th><h4>Lecturer Name</h4></th>
 								<th><h4>Status</h4></th>
-								<th><h4></h4></th>
+								<th><h4>Manage</h4></th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="object" items="${dataList}">
+							<c:forEach var="object" items="${pageListHolder.pageList}">
 								<tr class="listRecord">
 									<td>${object.lecturerId}</td>
 									<td>${object.lastName}, ${object.firstName}</td>
@@ -145,14 +147,33 @@
 
 						</tbody>
 					</table>
+					<center>
+						<div>
+							 <span> 
+							<ul class="pagination">
+							<c:forEach begin="0"
+									end="${pageListHolder.pageCount-1}" varStatus="loop">
+								    &nbsp;&nbsp;
+								    <c:choose>
+										<c:when test="${loop.index == pageListHolder.page}"><li class="active"><a href="#" >${loop.index+1}</a></li></c:when>
+										<c:otherwise>
+											<li><a href="${pageurl}/${loop.index}">${loop.index+1}</a></li>
+										</c:otherwise>
+									</c:choose>
+					    &nbsp;&nbsp;
+					    </c:forEach>
+					    </ul>
+							</span> 
+						</div>
+						</center>
 
 				</div>
 				<div id="editcontent" style="display: none">
 					<form id="formEditRecord" method="post">
-						<h2 class="form-signin-heading">Edit Record</h2>
+						<h3 id="EditCreateHeader" class="form-signin-heading">Edit Record</h3>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="id">Lecturer ID: </label> <input type="text" id="id"
+							<label for="id"><h4>Lecturer ID: </h4></label> <input type="text" id="id"
 								name="id" class="form-control" value="${data.lecturerId }"
 								placeholder="Unique ID" required autofocus>
 							</div>
@@ -160,7 +181,7 @@
 						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="firstName">First Name: </label> <input type="text"
+							<label for="firstName"><h4>First Name: </h4></label> <input type="text"
 								id="firstName" name="firstName" class="form-control"
 								placeholder="First Name" value="${data.firstName }" required
 								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
@@ -169,7 +190,7 @@
 						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="lastName">Last Name: </label> <input type="text"
+							<label for="lastName"><h4>Last Name: </h4></label> <input type="text"
 								id="lastName" name="lastName" class="form-control"
 								placeholder="Last Name" value="${data.lastName }" required
 								autofocus pattern="[A-Za-z ]{3,}" title="Only uppercase and lowercase alphabets">
@@ -178,7 +199,7 @@
 						<div class="row"><br></div>
 						<div class="row">
 							<div class = "col-lg-4 col-xs-12">
-							<label for="password">Password: </label> <input type="password"
+							<label for="password"><h4>Password: </h4></label> <input type="password"
 								id="password" name="password" class="form-control"
 								placeholder="User password (Required for new accounts)" value="" autofocus>
 							</div>
@@ -270,6 +291,23 @@
 
 		</div>
 	</div>
+	
+			<!-- Successful transaction Modal -->
+	<div id="errorActionModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">We encountered a problem</h4>
+				</div>
+				<div class="modal-body" id="errorModalMessage"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 	<!-- Successful transaction Modal -->
 	<div id="successActionModal" class="modal fade" role="dialog">
@@ -317,7 +355,7 @@
 					<h4 class="modal-title">Confirm Inactivation of Lecturer
 						Account</h4>
 				</div>
-				<form action="deletelecturer" method="post">
+				<form action="${pageContext.request.contextPath}/admin/deletelecturer" method="post">
 					<div class="modal-body">
 
 						<p>The selected account will be inactivated.</p>
@@ -399,14 +437,16 @@ $(function()
 		if (qs['id'] !="create")
 		{
 			document.getElementById("id").readOnly = true;
-			document.getElementById("formEditRecord").action = "updatelecturer";
+			document.getElementById("formEditRecord").action = "${pageContext.request.contextPath}/admin/updatelecturer";
 			document.getElementById("submitbutton").innerHTML = "Update Record";
+			document.getElementById("EditCreateHeader").innerHTML = "Update Existing Lecturer Record";
 		} else
 		{
-			document.getElementById("formEditRecord").action = "createlecturer";
+			document.getElementById("formEditRecord").action = "${pageContext.request.contextPath}/admin/createlecturer";
 			document.getElementById("submitbutton").innerHTML = "Create New Record";
 			document.getElementById("lecturercourses").style.display = "none";
-			
+			document.getElementById("EditCreateHeader").innerHTML = "Create New Lecturer Record";
+			document.getElementById("password").required = true;
 		}
 	}
 
@@ -458,6 +498,12 @@ $(function()
 	{
 			document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
 			$('#successActionModal').modal('toggle');
+	}
+	
+	if (qs['actionstatus'].includes("userexisterror"))
+	{
+			document.getElementById("errorModalMessage").innerHTML = "Duplicate User ID. Please try again";
+			$('#errorActionModal').modal('show');
 	}
 	
 

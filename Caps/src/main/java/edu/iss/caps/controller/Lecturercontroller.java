@@ -554,22 +554,44 @@ public class Lecturercontroller {
 	}
 
 	// 3.1 view my course for viewing performance
-	@RequestMapping(value = "/mycourse", method = RequestMethod.GET)
-	public ModelAndView mycourse(HttpServletRequest request) {
+	@RequestMapping(value = {"/mycourse/{type}","/mycourse"}, method = RequestMethod.GET)
+	public ModelAndView mycourse(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req) {
 		ModelAndView mav =null;
 		try {
-			User u = (User) request.getSession().getAttribute("user");
+			User u = (User) req.getSession().getAttribute("user");
 			String s = u.getUserId();
 			mav = new ModelAndView("courseavi");
 			List<Course> course = cs.findbylecid(s);
-			mav.addObject("Enlist", course);
+			//mav.addObject("Enlist", course);
 			ArrayList<Integer> ar = new ArrayList<Integer>();
 			for (Course num : course) {
 				ar.add(ens.countungraded(num.getCourseId()));
 			}
 
 			mav.addObject("cou", ar);
+			PagedListHolder<Course> courseList = null;
 
+			String type = pathVariablesMap.get("type");
+
+			if (null == type) {
+				// First Request, Return first set of list
+				List<Course> courseListOther = course;
+				courseList = new PagedListHolder<Course>();
+				courseList.setSource(courseListOther);
+				courseList.setPageSize(5);
+				req.getSession().setAttribute("courseListPage", courseList);
+			} else {
+				// Return specific index set of list
+				courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseListPage");
+				int pageNum = Integer.parseInt(type);
+				courseList.setPage(pageNum);
+			}
+			
+			//ModelAndView mv = new ModelAndView("managecourse");
+		
+			
+			
+			
 			
 		} catch (Exception e) {
 			

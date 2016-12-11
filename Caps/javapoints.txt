@@ -7,25 +7,26 @@ Home display home page
 /admin/managelecturer
 Change "#" to LecturerId in jsp ** OK **
 Magnifying icon and search buttons have same functions. Remove the icon. ** OK **
-after clicking All account status, Disabled user has "Disable" button enable. Change it to enable?
-need to think about what to do with users after disable
-On click "Create New", Header displays edit record
-creating repeated ID replaces lecturer
-Creating new lecturer and updating without password is possible
+after clicking All account status, Disabled user has "Disable" button enable. Change it to enable? **Disabled button**
+need to think about what to do with users after disable ** i duno what to do **
+On click "Create New", Header displays edit record ** OK**
+creating repeated ID replaces lecturer  ** OK**
+Creating new lecturer and updating without password is possible ** OK**
 
 
 /admin/managestudents
-Magnifying icon and search buttons have same functions. Remove the icon.
-Deleting student from course doesnt change count of courses enrolled in. Consider hard delete.
-REGEX for email
-creating repeated ID replaces student
+Magnifying icon and search buttons have same functions. Remove the icon. ** OK **
+Deleting student from course doesnt change count of courses enrolled in. Consider hard delete.  ** Seems OK. May need to test further**
+REGEX for email ** OK**
+creating repeated ID replaces student  ** OK**
 
 /admin/manage course
-On click "Create New", Header displays "Manage Student Records" and "Edit Record"
-Disable "enrolled students" field for create, just initiate from 0.
-Credit field missing
-Need validation for dates before and after 
-Edit course: LecturerID not binded to the view. No validation for lecturer ID make it required.
+Magnifying icon and search buttons have same functions. Remove the icon. ** OK **
+On click "Create New", Header displays "Manage Student Records" and "Edit Record" **ok **
+Disable "enrolled students" field for create, just initiate from 0. **ok **
+Credit field missing ** OK **
+Need validation for dates before and after ** Kinda OK. Server side validation for before/after **
+Edit course: LecturerID not binded to the view. No validation for lecturer ID make it required. ** OK **
 
 
 
