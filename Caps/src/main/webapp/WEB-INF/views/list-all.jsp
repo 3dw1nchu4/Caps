@@ -279,36 +279,46 @@
 	</table>
 	
 	<div>
-							<span style="float: left;"> <c:choose>
+	<center>
+	<ul class="pagination">
+							<li><span style="float: left;"> <c:choose>
 									<c:when test="${pageListHolder.firstPage}">Prev</c:when>
 									<c:otherwise>
 										<a href="${pageurl}/prev">Prev</a>
 									</c:otherwise>
 								</c:choose>
-							</span> <span> <c:forEach begin="0"
+							</span>
+							
+							
+							
+							
+							<c:forEach begin="0"
 									end="${pageListHolder.pageCount-1}" varStatus="loop">
     &nbsp;&nbsp;
     <c:choose>
-										<c:when test="${loop.index == pageListHolder.page}">${loop.index+1}</c:when>
+										<c:when test="${loop.index == pageListHolder.page}"><li class="active"><a href="#">${loop.index+1}</a></c:when>
 										<c:otherwise>
 
 
-
-											<a href="${pageurl}/${loop.index}">${loop.index+1}</a>
+<li>
+											<a href="${pageurl}/${loop.index}">${loop.index+1}</a></li>
 
 										</c:otherwise>
 									</c:choose>
     &nbsp;&nbsp;
     </c:forEach>
-							</span> <span> <c:choose>
+    
+    <li> <span> <c:choose>
 									<c:when test="${pageListHolder.lastPage}">Next</c:when>
 									<c:otherwise>
 										<a href="${pageurl}/next">Next</a>
 									</c:otherwise>
 								</c:choose>
-							</span>
+							</span></ul>
+							</center>
+							
 						</div>
-						
+			</ul>			
 	
 	
 </div>
