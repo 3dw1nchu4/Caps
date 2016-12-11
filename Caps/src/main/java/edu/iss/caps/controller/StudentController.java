@@ -68,6 +68,8 @@ public class StudentController {
 	public ModelAndView AvailablePage1(HttpServletRequest request) {
 		
 		ModelAndView mav = new ModelAndView("course-available");
+		try {
+
 		List<Course> courselist = cService.findAllCourses();
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
@@ -84,6 +86,9 @@ public class StudentController {
 		
 		
 		mav.addObject("courseavailable", courselist);
+		} catch (Exception e) {
+
+		}
 		return mav;
 	}
 	
@@ -92,6 +97,8 @@ public class StudentController {
 	@RequestMapping(value = "/listall", method = RequestMethod.GET)
 	public ModelAndView CourseListPage(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("list-all");
+		try {
+
 		List<Course> courselist = cService.findAllCourses();
 		mav.addObject("courselist", courselist);
 		
@@ -100,6 +107,10 @@ public class StudentController {
 		StudentDetail studentDetail =sService.findStudentById(s);
 		String sname = studentDetail.getFirstName();
 		request.setAttribute("student", sname);
+		
+		} catch (Exception e) {
+
+		}
 		return mav;
 	}
 	
