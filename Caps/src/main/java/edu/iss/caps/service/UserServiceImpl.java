@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
 	public User authenticate(String uid, String password) throws FailedAuthentication {
 		// TODO Auto-generated method stub
 		User u = uRepository.findUserByNamePwd(uid, password);		
-		if(u.getUserId().equals(uid)&&u.getPassword().equals(password)) return u;
+		if(u.getUserId().equalsIgnoreCase(uid)&&u.getPassword().equals(password)) return u;
 		else throw new FailedAuthentication();
 	}
 

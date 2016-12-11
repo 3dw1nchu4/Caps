@@ -40,19 +40,23 @@ public class CommonController {
 	public ModelAndView authenticate(@ModelAttribute User user, HttpSession session, BindingResult result)
 			throws FailedAuthentication {
 		ModelAndView mav = new ModelAndView("login");
-		User u = uService.authenticate(user.getUserId(), user.getPassword());
-		u.setPassword("***");
-		session.setAttribute("user", u);
-		switch (u.getRole()) {
-		case "Admin":
-			mav = new ModelAndView("redirect:/admin/managestudent");
-			break;
-		case "Lecturer":
-			mav = new ModelAndView("redirect:/Lec/viewallenrole");
-			break;
-		case "Student":
-			mav = new ModelAndView("redirect:/Course/listall");
-		}
+		try{
+			User u = uService.authenticate(user.getUserId(), user.getPassword());
+			u.setPassword("***");
+			session.setAttribute("user", u);
+			switch (u.getRole()) {
+			case "Admin":
+				mav = new ModelAndView("redirect:/admin/managelecturer");
+				break;
+			case "Lecturer":
+				mav = new ModelAndView("redirect:/Lec/viewallenrole");
+				break;
+			case "Student":
+				mav = new ModelAndView("redirect:/Course/listall");
+			}
+		} catch(Exception e){
+			mav.addObject("errorMsg", "Please ensure you have entered the correct UserId and Password.");
+		}		
 		return mav;
 	}
 
