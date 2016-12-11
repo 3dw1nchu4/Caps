@@ -71,6 +71,10 @@ public class StudentController {
 		List<Course> courselist = cService.findAllCourses();
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
+
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
 		List<Enrolment> grades = eService.findCourseBySID(s);
 		
 		
@@ -90,13 +94,18 @@ public class StudentController {
 		ModelAndView mav = new ModelAndView("list-all");
 		List<Course> courselist = cService.findAllCourses();
 		mav.addObject("courselist", courselist);
+		
+		User u = (User) request.getSession().getAttribute("user");
+		String s = u.getUserId();
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
 		return mav;
 	}
 	
 
 	
 
-///////chunxiao need to refine this part
 
 
 	
@@ -107,6 +116,10 @@ public class StudentController {
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
+		
+		StudentDetail studentDetail =sService.findStudentById(s);
+		String sname = studentDetail.getFirstName();
+		request.setAttribute("student", sname);
 		
 		float gpa = sService.calcStudentGPA(s);
 		
