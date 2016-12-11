@@ -158,6 +158,7 @@
 
 		</div>
 	</div>
+	</div>
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -165,9 +166,6 @@
 	</footer>
 
 </body>
-
-
-
 <script>
 	$(function()
 	{

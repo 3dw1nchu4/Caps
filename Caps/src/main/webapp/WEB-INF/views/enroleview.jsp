@@ -42,8 +42,10 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
+
 </head>
 <body>
+
 	<div id="header"></div>
 	<div class="container-fluid">
 		<div class="row">
@@ -106,117 +108,92 @@
 					</nav>
 
 				</div>
-
+				
 				<div id="searchcount" name="searchcount" style="display: none">
-
+					<h5>Your search returned ${Enlist.size() } results</h5>
 				</div>
-				<%@ taglib prefix="form"
-					uri="http://www.springframework.org/tags/form"%>
 				<%@ taglib prefix="form"
 					uri="http://www.springframework.org/tags/form"%>
 				<%@ page import="java.io.*,java.util.*"%>
 
-				<spring:url value="/Lec/2searchbyname" var="pageurl" />
-				<c:if test="${Error eq 'all'}">
-					<spring:url value="/Lec/viewallenrole" var="pageurl" />
-				</c:if>
-				<c:if test="${Error== null}">
-					<spring:url value="/Lec/mycourseenrole" var="pageurl" />
-				</c:if>
+				<c:choose>
+					<c:when test="${fn:length(Enlist) gt 0}">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th><h4>
+												<spring:message code="fieldLabel.courseid" />
+											</h4></th>
 
-				<c:if test="${(Error eq 'all') || (Error==null)}">
-					<h5>Your search returned ${courseList.getNrOfElements() }
-						results</h5>
-					<div class="table-responsive">
-						<c:set var="pageListHolder" value="${courseList}" scope="session" />			
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th><spring:message code="fieldLabel.courseid" /></th>
-
-									<th><spring:message code="fieldLabel.coursename" /></th>
-									<th><spring:message code="fieldLabel.startdate" /></th>
-									<th><spring:message code="fieldLabel.enddate" /></th>
-									<th><spring:message code="fieldLabel.size" /></th>
-									<th><spring:message code="fieldLabel.credits" /></th>
-									<th><spring:message code="fieldLabel.cenroll" /></th>
-
-
-								</tr>
-							</thead>
+										<th><h4>
+												<spring:message code="fieldLabel.coursename" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.startdate" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.enddate" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.size" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.credits" />
+											</h4></th>
+										<th><h4>
+												<spring:message code="fieldLabel.cenroll" />
+											</h4></th>
 
 
-							<tbody>
-								<c:forEach var="role" items="${pageListHolder.pageList}">
-									<tr class="listRecord">
-										<td>${role.courseId}</td>
-										<td>${role.courseName}</td>
-										<td>${role.startDate}</td>
-										<td>${role.endDate}</td>
-										<td align="center">${role.size}</td>
-										<td align="center">${role.credits}</td>
-										<td align="center"><c:set var="sta" scope="session"
-												value="${role.currentEnrollment}" /> <c:choose>
-												<c:when test="${sta==0}">
-													<p class="btn btn-primary disabled">
-														<spring:message code="${role.currentEnrollment}" />
-														<br>( view all )
-													</p>
-
-												</c:when>
-												<c:otherwise>
-													<a class="btn btn-primary"
-														href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
-															code="${role.currentEnrollment}" /><br>( view all )</a>
-
-												</c:otherwise>
-											</c:choose></td>
 									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="role" items="${Enlist}">
+										<tr class="listRecord">
+											<td>${role.courseId}</td>
+											<td>${role.courseName}</td>
+											<td>${role.startDate}</td>
+											<td>${role.endDate}</td>
+											<td align="center">${role.size}</td>
+											<td align="center">${role.credits}</td>
+											<td align="center"><c:set var="sta" scope="session"
+													value="${role.currentEnrollment}" /> <c:choose>
+													<c:when test="${sta==0}">
+														<p class="btn btn-primary disabled">
+															<spring:message code="${role.currentEnrollment}" />
+															<br>( view all )
+														</p>
 
-								</c:forEach>
-							</tbody>
-						</table>
-						<div>
-							<span style="float: left;"> <c:choose>
-									<c:when test="${pageListHolder.firstPage}">Prev</c:when>
-									<c:otherwise>
-										<a href="${pageurl}/prev">Prev</a>
-									</c:otherwise>
-								</c:choose>
-							</span> <span> <c:forEach begin="0"
-									end="${pageListHolder.pageCount-1}" varStatus="loop">
-    &nbsp;&nbsp;
-    <c:choose>
-										<c:when test="${loop.index == pageListHolder.page}">${loop.index+1}</c:when>
-										<c:otherwise>
+													</c:when>
+													<c:otherwise>
+														<a class="btn btn-primary"
+															href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
+																code="${role.currentEnrollment}" /><br>( view all
+															)</a>
+
+													</c:otherwise>
+
+												</c:choose></td>
+										</tr>
 
 
+										</tr>
 
-											<a href="${pageurl}/${loop.index}">${loop.index+1}</a>
-
-										</c:otherwise>
-									</c:choose>
-    &nbsp;&nbsp;
-    </c:forEach>
-							</span> <span> <c:choose>
-									<c:when test="${pageListHolder.lastPage}">Next</c:when>
-									<c:otherwise>
-										<a href="${pageurl}/next">Next</a>
-									</c:otherwise>
-								</c:choose>
-							</span>
+									</c:forEach>
+								</tbody>
+							</table>
 						</div>
-						
-						
-					</div>
+
+					</c:when>
+
+
+				</c:choose>
 			</div>
-			</c:if>
-			<center>
-				<c:if test="${(Error!=null) && (Error !='all')}">
-					<h3>${Error}</h3>
-				</c:if>
-				<center>
+
 		</div>
+	</div>
+
 	</div>
 
 	<footer

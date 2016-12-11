@@ -114,19 +114,17 @@
 	Employee</a>-->
 				<%@ taglib prefix="form"
 					uri="http://www.springframework.org/tags/form"%>
-	<!------------------------------------------------------------------------------------------------------------------------->
-	              
-				  <spring:url value="/Lec/viewsp" var="pageurl" />
+
 				<div id="searchcount" name="searchcount" style="display: none">
-					<h5>Your search returned ${studList.getNrOfElements() } results</h5>
+					<h5>Your search returned ${Enlist.size() } results</h5>
 				</div>
-				
-		
-				<div class="table-responsive">
-						<c:set var="pageListHolder" value="${studList}" scope="session" />
-						<table class="table table-striped">
-							<thead>
-								<tr>
+
+				<c:choose>
+					<c:when test="${fn:length(Enlist) gt 0}">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
 										<th><h4><spring:message code="fieldLabel.Studentid" /></h4></th>
 										<th><h4><spring:message code="fieldLabel.name" /></h4></th>
 
@@ -138,12 +136,9 @@
 										<th><h4><spring:message code="fieldLabel.status" /></h4></th>
 
 									</tr>
-							</thead>
-
-
-
-							<tbody>
-									<c:forEach var="role" items="${pageListHolder.pageList}" varStatus="loop">
+								</thead>
+								<tbody>
+									<c:forEach var="role" items="${Enlist}"  varStatus="loop">
 										<tr class="listRecord">
 											<td>${role.studentDetails.studentId}</td>
 											<td>${role.studentDetails.firstName}
@@ -177,44 +172,23 @@
 
 									</c:forEach>
 								</tbody>
-						</table>
-						<div>
-							<span style="float: left;"> <c:choose>
-									<c:when test="${pageListHolder.firstPage}">Prev</c:when>
-									<c:otherwise>
-										<a href="${pageurl}/${ID}/prev">Prev</a>
-									</c:otherwise>
-								</c:choose>
-							</span> <span> <c:forEach begin="0"
-									end="${pageListHolder.pageCount-1}" varStatus="loop">
-    &nbsp;&nbsp;
-    <c:choose>
-										<c:when test="${loop.index == pageListHolder.page}">${loop.index+1}</c:when>
-										<c:otherwise>
-
-											
-
-											<a href="${pageurl}/${ID}/${loop.index}">${loop.index+1}</a>
-
-										</c:otherwise>
-									</c:choose>
-    &nbsp;&nbsp;
-    </c:forEach>
-							</span> <span> <c:choose>
-									<c:when test="${pageListHolder.lastPage}">Next</c:when>
-									<c:otherwise>
-										<a href="${pageurl}/${ID}/next">Next</a>
-									</c:otherwise>
-								</c:choose>
-							</span>
+							</table>
 						</div>
-					</div>
-				
+
+					</c:when>
+
+					<c:otherwise>
+
+						<spring:message code="error.notfoundhere" />
+
+					</c:otherwise>
+
+				</c:choose>
 			</div>
 
 		</div>
 	</div>
-	
+	</div>
 
 	<footer
 		class="t7-container t7-dark-grey t7-padding-32 t7-padding-xlarge footer">
@@ -225,7 +199,7 @@
 <script>
 	$(function() {
 		$("#header").load(
-				"${pageContext.request.contextPath}/resources/header.html");
+				"${pageContext.request.contextPath}/resources/header.jsp");
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
