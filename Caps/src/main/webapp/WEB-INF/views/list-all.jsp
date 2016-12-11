@@ -1,9 +1,7 @@
-
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<title>Student</title>
+<title>Lecturer</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -18,6 +16,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+<spring:url value="/Course/listallsearchbyname" var="pageurl" />
+				
+					<spring:url value="/Course/listall" var="pageurl" />
+				
+				
+
 <style>
 
 .navbar-custom {
@@ -163,7 +174,9 @@
 
 </head>
 <body>
-	<div id="header"></div>
+
+
+<div id="header"></div>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
@@ -182,7 +195,8 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 			
-			<h2 class="sub-header" id="sectiontitle"><p class="text-danger">Hello welcome "${student}"</p></h2>
+			
+				<h2 class="sub-header" id="sectiontitle"><p class="text-danger">Hello welcome "${student}"</p></h2>
 
 
 
@@ -195,7 +209,7 @@
 				 <nav class="navbar navbar-custom" role="navigation" height=50px>
 					<div class="container-fluid"> 
 						<form class="navbar-form navbar-left" role="search"
-							action="listallsearchbyname" method="get">
+							action="${pageContext.request.contextPath}/Course/listallsearchbyname" method="get">
 							<div class="form-group">
 								<label for="search"><h4 style="color:white">Search by :</h4> </label>
 								
@@ -220,9 +234,16 @@
 
 
 				<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+				<spring:url value="/Course/listall" var="pageurl" />
 
+
+
+					<h5>Your search returned ${courseList.getNrOfElements() }
+						results</h5>
 
 <div class="table-responsive">
+
+	<c:set var="pageListHolder" value="${courseList}" scope="session" />
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -239,7 +260,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="course" items="${courselist}">
+		
+		<c:forEach var="course" items="${pageListHolder.pageList}" varStatus="loop">
+		
 				<tr class="listRecord">
 					<td>${course.courseId}</td>
 					<td>${course.courseName}</td>
@@ -254,6 +277,40 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<div>
+							<span style="float: left;"> <c:choose>
+									<c:when test="${pageListHolder.firstPage}">Prev</c:when>
+									<c:otherwise>
+										<a href="${pageurl}/prev">Prev</a>
+									</c:otherwise>
+								</c:choose>
+							</span> <span> <c:forEach begin="0"
+									end="${pageListHolder.pageCount-1}" varStatus="loop">
+    &nbsp;&nbsp;
+    <c:choose>
+										<c:when test="${loop.index == pageListHolder.page}">${loop.index+1}</c:when>
+										<c:otherwise>
+
+
+
+											<a href="${pageurl}/${loop.index}">${loop.index+1}</a>
+
+										</c:otherwise>
+									</c:choose>
+    &nbsp;&nbsp;
+    </c:forEach>
+							</span> <span> <c:choose>
+									<c:when test="${pageListHolder.lastPage}">Next</c:when>
+									<c:otherwise>
+										<a href="${pageurl}/next">Next</a>
+									</c:otherwise>
+								</c:choose>
+							</span>
+						</div>
+						
+	
+	
 </div>
 
 </div>
@@ -267,16 +324,18 @@
 
 </body>
 <script>
-	$(function()
-	{
-		$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
-		$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
-	});
+$(function() {
+	$("#header").load(
+			"${pageContext.request.contextPath}/resources/header.jsp");
+	$("#footer").load(
+			"${pageContext.request.contextPath}/resources/footer.html");
+});
 
-
-
+//////////////////////////////////////////////////////
+	
 </script>
 </html>
+
 
 
 

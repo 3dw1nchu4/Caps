@@ -65,12 +65,12 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Dashboard</h1>
 			
-				<h2 class="sub-header" id="sectiontitle"><p class="text-success">Your enrollment status : </p></h2>
 
+			    <h2 class="sub-header" id="sectiontitle"><div><pre><p class="text-success">Your enrollment status : </p></pre></div></h2>
 			
 
 	
-	<h1 class="text-danger">"${sessionScope.message}"</h1>	 
+	            <h1 class="text-danger">"${sessionScope.message}"</h1>	 
 	
 
 <div class="col xs-6">
