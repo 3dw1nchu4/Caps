@@ -1,18 +1,12 @@
 package edu.iss.caps.controller;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
@@ -25,16 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.iss.caps.model.Course;
+import edu.iss.caps.model.Enrolment;
 import edu.iss.caps.model.LecturerDetail;
+import edu.iss.caps.model.StudentDetail;
 import edu.iss.caps.model.User;
 import edu.iss.caps.service.CourseService;
+import edu.iss.caps.service.EnrolmentService;
 import edu.iss.caps.service.LecturerService;
 import edu.iss.caps.service.StudentService;
-import edu.iss.caps.service.UserService;
-import edu.iss.pagination.model.City;
-import edu.iss.caps.model.StudentDetail;
-import edu.iss.caps.model.Enrolment;
-import edu.iss.caps.service.EnrolmentService;;
+import edu.iss.caps.service.UserService;;
 
 @RequestMapping("/admin")
 @Controller
