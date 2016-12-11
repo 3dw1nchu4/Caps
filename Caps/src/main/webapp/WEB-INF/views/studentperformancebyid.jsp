@@ -24,7 +24,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>allcourse</title>
+<title></title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -42,6 +42,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
+
 </head>
 <body>
 	<div id="header"></div>
@@ -50,13 +51,13 @@
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
 
-					<li class="active" id="sidebarStudent"><a
+					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallenrole">View
 							Course Enrolment </a></li>
 					<li id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewalltograde">Grade
 							a course </a></li>
-					<li id="sidebarStudent"><a
+					<li class="active" id="sidebarStudent"><a
 						href="${pageContext.request.contextPath}/Lec/viewallcr">View a
 							Student Preformance </a></li>
 				</ul>
@@ -66,7 +67,8 @@
 				<h1 class="page-header">Dashboard</h1>
 
 
-				<h2 class="sub-header" id="sectiontitle">View Course Enrolment</h2>
+
+				<h2 class="sub-header" id="sectiontitle">View Student performance</h2>
 
 
 
@@ -78,14 +80,15 @@
 							</div>-->
 
 						<form class="navbar-form navbar-left" role="search"
-							action="2searchbyname" method="get">
+							action="${requestScope['javax.servlet.forward.request_uri']}"
+							method="get">
 							<div class="form-group">
 								<label>Search by : </label>
 							</div>
 							<div class="input-group">
 
 								<input type="text" class="form-control"
-									placeholder="course name or ID" name="searchcontent"
+									placeholder="Student name or ID" name="searchcontent"
 									id="searchcontent">
 
 								<!-- <div class="input-group-btn">
@@ -95,130 +98,96 @@
 									</div> -->
 							</div>
 							<button type="submit" class="btn btn-default">Search</button>
+
 							<a class="btn btn-success"
-								href="${pageContext.request.contextPath}/Lec/mycourseenrole"><spring:message
-									code="My course" /></a> <a class="btn btn-success"
-								href="${pageContext.request.contextPath}/Lec/viewallenrole"><spring:message
-									code="All course" /></a>
+								href="${pageContext.request.contextPath}/Lec/viewallcr"> <span
+								class="glyphicon glyphicon-arrow-left"></span> back to All
+								courses
+							</a>
+
 						</form>
 
 					</div>
 					</nav>
-
 				</div>
+				<!--  <a href="${pageContext.request.contextPath}/gokul/create">Add
+	Employee</a>-->
+				<%@ taglib prefix="form"
+					uri="http://www.springframework.org/tags/form"%>
 
 				<div id="searchcount" name="searchcount" style="display: none">
-
+					<h5>Your search returned ${Enlist.size() } results</h5>
 				</div>
-				<%@ taglib prefix="form"
-					uri="http://www.springframework.org/tags/form"%>
-				<%@ taglib prefix="form"
-					uri="http://www.springframework.org/tags/form"%>
-				<%@ page import="java.io.*,java.util.*"%>
 
-				<spring:url value="/Lec/2searchbyname" var="pageurl" />
-				<c:if test="${Error eq 'all'}">
-					<spring:url value="/Lec/viewallenrole" var="pageurl" />
-				</c:if>
-				<c:if test="${Error== null}">
-					<spring:url value="/Lec/mycourseenrole" var="pageurl" />
-				</c:if>
+				<c:choose>
+					<c:when test="${fn:length(Enlist) gt 0}">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th><h4><spring:message code="fieldLabel.Studentid" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.name" /></h4></th>
 
 
+										<th><h4><spring:message code="fieldLabel.grade" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.earncredit" /></h4></th>
+										<th><h4><spring:message code="fieldLabel.gpa" /></h4></th>
 
-				<c:if test="${(Error eq 'all') || (Error==null)}">
-					<h5>Your search returned ${courseList.getNrOfElements() }
-						results</h5>
+										<th><h4><spring:message code="fieldLabel.status" /></h4></th>
 
-					<div class="table-responsive">
-						<c:set var="pageListHolder" value="${courseList}" scope="session" />
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th><spring:message code="fieldLabel.courseid" /></th>
-
-									<th><spring:message code="fieldLabel.coursename" /></th>
-									<th><spring:message code="fieldLabel.startdate" /></th>
-									<th><spring:message code="fieldLabel.enddate" /></th>
-									<th><spring:message code="fieldLabel.size" /></th>
-									<th><spring:message code="fieldLabel.credits" /></th>
-									<th><spring:message code="fieldLabel.cenroll" /></th>
-
-
-								</tr>
-							</thead>
-
-
-
-							<tbody>
-								<c:forEach var="role" items="${pageListHolder.pageList}">
-									<tr class="listRecord">
-										<td>${role.courseId}</td>
-										<td>${role.courseName}</td>
-										<td>${role.startDate}</td>
-										<td>${role.endDate}</td>
-										<td align="center">${role.size}</td>
-										<td align="center">${role.credits}</td>
-										<td align="center"><c:set var="sta" scope="session"
-												value="${role.currentEnrollment}" /> <c:choose>
-												<c:when test="${sta==0}">
-													<p class="btn btn-primary disabled">
-														<spring:message code="${role.currentEnrollment}" />
-														<br>( view all )
-													</p>
-
-												</c:when>
-												<c:otherwise>
-													<a class="btn btn-primary"
-														href="${pageContext.request.contextPath}/Lec/enrole/${role.courseId}"><spring:message
-															code="${role.currentEnrollment}" /><br>( view all )</a>
-
-												</c:otherwise>
-											</c:choose></td>
 									</tr>
-
-								</c:forEach>
-							</tbody>
-						</table>
-						<div>
-							<span style="float: left;"> <c:choose>
-									<c:when test="${pageListHolder.firstPage}">Prev</c:when>
-									<c:otherwise>
-										<a href="${pageurl}/prev">Prev</a>
-									</c:otherwise>
-								</c:choose>
-							</span> <span> <c:forEach begin="0"
-									end="${pageListHolder.pageCount-1}" varStatus="loop">
-    &nbsp;&nbsp;
-    <c:choose>
-										<c:when test="${loop.index == pageListHolder.page}">${loop.index+1}</c:when>
-										<c:otherwise>
+								</thead>
+								<tbody>
+									<c:forEach var="role" items="${Enlist}"  varStatus="loop">
+										<tr class="listRecord">
+											<td>${role.studentDetails.studentId}</td>
+											<td>${role.studentDetails.firstName}
+												${role.studentDetails.lastName}</td>
 
 
 
-											<a href="${pageurl}/${loop.index}">${loop.index+1}</a>
+											<td>${role.grade}</td>
+											<td>${role.earnedCredit}</td>
+											<td>${Stgpa[loop.index]}</td>
+											<td><c:set var="sta" scope="session"
+													value="${role.status}" /> <c:choose>
+													<c:when test="${sta=='Failed'}">
+														<p class="btn btn-danger">
+															<spring:message code="${role.status}" />
+														</p>
+													</c:when>
+													<c:when test="${sta=='Passed'}">
+														<p class="btn btn-success">
+															<spring:message code="${role.status}" />
+														</p>
+													</c:when>
+													<c:otherwise>
+													<p class="btn btn-warning">
+															<spring:message code="${role.status}" />
+														</p>
+													</c:otherwise>
 
-										</c:otherwise>
-									</c:choose>
-    &nbsp;&nbsp;
-    </c:forEach>
-							</span> <span> <c:choose>
-									<c:when test="${pageListHolder.lastPage}">Next</c:when>
-									<c:otherwise>
-										<a href="${pageurl}/next">Next</a>
-									</c:otherwise>
-								</c:choose>
-							</span>
+												</c:choose></td>
+										</tr>
+
+									</c:forEach>
+								</tbody>
+							</table>
 						</div>
-					</div>
+
+					</c:when>
+
+					<c:otherwise>
+
+						<spring:message code="error.notfoundhere" />
+
+					</c:otherwise>
+
+				</c:choose>
 			</div>
-			</c:if>
-			<center>
-				<c:if test="${(Error!=null) && (Error !='all')}">
-					<h3>${Error}</h3>
-				</c:if>
-				<center>
+
 		</div>
+	</div>
 	</div>
 
 	<footer
@@ -234,7 +203,7 @@
 		$("#footer").load(
 				"${pageContext.request.contextPath}/resources/footer.html");
 	});
-
+	
 	function search() {
 		var x = document.getElementById("inputPK").value;
 		window.location = "${pageContext.request.contextPath}/Lec/viewallcr/"
@@ -268,7 +237,6 @@
 		document.getElementById("searchcontent").value = qs['searchcontent'];
 		document.getElementById("searchcount").style.display = "block";
 	}
-
 </script>
 </html>
 

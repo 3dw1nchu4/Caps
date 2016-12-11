@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -58,55 +59,210 @@ public class Lecturercontroller {
 	private StudentService sds;
 
 	// 1.view all course to select enrole details
+		@SuppressWarnings("unchecked")
+		@RequestMapping(value = { "/viewallenrole/{type}", "/viewallenrole" }, method = RequestMethod.GET)
+		public ModelAndView all(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest req) {
 
-	@RequestMapping(value = "/viewallenrole", method = RequestMethod.GET)
-	public ModelAndView viewallcourseenrole() {
+			PagedListHolder<Course> courseList = null;
 
-		ModelAndView mav = new ModelAndView("enroleview");
-		List<Course> course = cs.findAllCourses();
-		mav.addObject("Enlist", course);
-		return mav;
-	}
+			String type = pathVariablesMap.get("type");
+
+			if (null == type) {
+				// First Request, Return first set of list
+				List<Course> phonesList = cs.findAllCourses();
+
+				courseList = new PagedListHolder<Course>();
+				courseList.setSource(phonesList);
+				courseList.setPageSize(2);
+
+				req.getSession().setAttribute("courseList", courseList);
+
+				printPageDetails(courseList);
+
+			} else if ("next".equals(type)) {
+				// Return next set of list
+				courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+				courseList.nextPage();
+
+				printPageDetails(courseList);
+
+			} else if ("prev".equals(type)) {
+				// Return previous set of list
+				courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+				courseList.previousPage();
+
+				printPageDetails(courseList);
+
+			} else {
+				// Return specific index set of list
+				System.out.println("type:" + type);
+
+				courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+				int pageNum = Integer.parseInt(type);
+
+				courseList.setPage(pageNum);
+
+				printPageDetails(courseList);
+			}
+
+			ModelAndView mv = new ModelAndView("enroleview");
+			String s = "all";
+			mv.addObject("Error", s);
+			return mv;
+		}
+
+		public void printPageDetails(PagedListHolder LList) {
+
+			System.out.println("curent page - productList.getPage() :" + LList.getPage());
+
+			System.out.println("Total Num of pages - productList.getPageCount :" + LList.getPageCount());
+
+			System.out.println("is First page - productList.isFirstPage :" + LList.isFirstPage());
+
+			System.out.println("is Last page - productList.isLastPage :" + LList.isLastPage());
+		}
 
 	// 1.[search] search courseid & course name(viewalleenrole)
-	@RequestMapping(value = "/2searchbyname", method = RequestMethod.GET)
-	public ModelAndView searchStudent2(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-			HttpServletRequest request) {
-		String searchContent = requestParams.get("searchcontent").toLowerCase();
-		ModelAndView mav = new ModelAndView("enroleview");
-		ArrayList<Course> lctList = cs.findAllCourses();
-		List<Course> searchList = new ArrayList<Course>();
-		int bn = 0;
-		String s2 = "";
-		for (Course l : lctList) {
-			bn = (l.getCourseId());
-			s2 = Integer.toString(bn);
-			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-				searchList.add(l);
-			} else if (s2.toLowerCase().contains(searchContent)) {
-				searchList.add(l);
+		@RequestMapping(value = { "/2searchbyname/{type}", "/2searchbyname" }, method = RequestMethod.GET)
+		public ModelAndView searchStudent2(Locale locale, Model model, @PathVariable Map<String, String> pathVariablesMap,
+				@RequestParam Map<String, String> requestParams, HttpServletRequest req) {
+
+			List<Course> searchList = new ArrayList<Course>();
+
+			String searchContent = requestParams.get("searchcontent").toLowerCase();
+			System.out.println("I am for form:" + searchContent);
+			ArrayList<Course> lctList = cs.findAllCourses();
+
+			String s = null;
+			int bn = 0;
+			String s2 = "";
+			for (Course l : lctList) {
+				bn = (l.getCourseId());
+				s2 = Integer.toString(bn);
+				if (l.getCourseName().toLowerCase().contains(searchContent)) {
+					searchList.add(l);
+					System.out.println(l);
+				} else if (s2.toLowerCase().contains(searchContent)) {
+					System.out.println(l);
+					searchList.add(l);
+				}
 			}
-		}
-		mav.addObject("Enlist", searchList);
-		mav.addObject("datacount", searchList.size());
-		return mav;
-	}
+			if (searchList.size() <= 0) {
+				s = "No SRhearch Result ";
 
-	// 1.1 view my course only.
-	@RequestMapping(value = "/mycourseenrole", method = RequestMethod.GET)
-	public ModelAndView mycourseenrole(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("enroleview");
-		try {
-			User u = (User) request.getSession().getAttribute("user");
+			} else {
+				PagedListHolder<Course> courseList = null;
+
+				String type = pathVariablesMap.get("type");
+
+				if (null == type) {
+					// First Request, Return first set of list
+					List<Course> phonesList = searchList;
+
+					courseList = new PagedListHolder<Course>();
+					courseList.setSource(phonesList);
+					courseList.setPageSize(3);
+
+					req.getSession().setAttribute("courseList", courseList);
+
+					printPageDetails(courseList);
+
+				} else if ("next".equals(type)) {
+					// Return next set of list
+					courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+					courseList.nextPage();
+
+					printPageDetails(courseList);
+
+				} else if ("prev".equals(type)) {
+					// Return previous set of list
+					courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+					courseList.previousPage();
+
+					printPageDetails(courseList);
+
+				} else {
+					// Return specific index set of list
+					System.out.println("type:" + type);
+
+					courseList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+					int pageNum = Integer.parseInt(type);
+
+					courseList.setPage(pageNum);
+
+					printPageDetails(courseList);
+				}
+
+			}
+
+			ModelAndView mv = new ModelAndView("enroleview");
+			mv.addObject("Error", s);
+			return mv;
+
+		}
+		// 1.1 view my course only.
+		@SuppressWarnings("unchecked")
+		@RequestMapping(value = { "/mycourseenrole/{type}", "/mycourseenrole" }, method = RequestMethod.GET)
+		public ModelAndView mycourseenrole(@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest req) {
+
+			User u = (User) req.getSession().getAttribute("user");
 			String s = u.getUserId();
-			List<Course> course = cs.findbylecid(s);
-			mav.addObject("Enlist", course);
-		} catch (Exception e) {
+
+			PagedListHolder<Course> couList = null;
+
+			String type = pathVariablesMap.get("type");
+
+			if (null == type) {
+				// First Request, Return first set of list
+
+				List<Course> cList = cs.findbylecid(s);
+				couList = new PagedListHolder<Course>();
+				couList.setSource(cList);
+				couList.setPageSize(3);
+
+				req.getSession().setAttribute("courseList", couList);
+
+				printPageDetails(couList);
+
+			} else if ("next".equals(type)) {
+				// Return next set of list
+				couList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+				couList.nextPage();
+
+				printPageDetails(couList);
+
+			} else if ("prev".equals(type)) {
+				// Return previous set of list
+				couList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+				couList.previousPage();
+
+				printPageDetails(couList);
+
+			} else {
+				// Return specific index set of list
+				System.out.println("type:" + type);
+
+				couList = (PagedListHolder<Course>) req.getSession().getAttribute("courseList");
+
+				int pageNum = Integer.parseInt(type);
+
+				couList.setPage(pageNum);
+
+				printPageDetails(couList);
+			}
+
+			ModelAndView mv = new ModelAndView("enroleview");
+			
+			return mv;
 		}
-
-		return mav;
-
-	}
 
 	// 1.2 view all student enroled / with search
 	@RequestMapping(value = "/enrole/{id}", method = RequestMethod.GET)
@@ -246,15 +402,19 @@ public class Lecturercontroller {
 	}
 
 	// 3.2 view all student performance / search for all students.
-	@RequestMapping(value = "/viewsp/{id}", method = RequestMethod.GET)
-	public ModelAndView viewstudentbycid(@PathVariable int id, HttpServletRequest request,
-			@RequestParam Map<String, String> requestParams) {
-		ModelAndView mav = new ModelAndView("studentperformance");
+	//-----------------------------------------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = { "/viewsp/{id}/{type}", "/viewsp/{id}" }, method = RequestMethod.GET)
+	public ModelAndView viewstudentbycid(@PathVariable int id, HttpServletRequest req,
+			@RequestParam Map<String, String> requestParams,@PathVariable Map<String, String> pathVariablesMap) {
+		
 
-		List<Enrolment> lctList = ens.findcompletedbyid(id);
+		PagedListHolder<Enrolment> studList = null;
+		String type = pathVariablesMap.get("type");	
 
-		List<Enrolment> searchList = new ArrayList<Enrolment>();
 		if (requestParams.get("searchcontent") != null && !requestParams.get("searchcontent").isEmpty()) {
+			ModelAndView mav = new ModelAndView("studentperformancebyid");
+			List<Enrolment> lctList = ens.findcompletedbyid(id);
+			List<Enrolment> searchList = new ArrayList<Enrolment>();
 			String searchContent = requestParams.get("searchcontent").toLowerCase();
 			for (Enrolment l : lctList) {
 
@@ -281,17 +441,63 @@ public class Lecturercontroller {
 			return mav;
 
 		}
-		mav.addObject("Enlist", lctList);
-		ArrayList<String> gpa = new ArrayList<String>();
-		for (Enrolment en : lctList) {
-			float f = sds.calcStudentGPA(en.getStudentDetails().getStudentId());
-			String ss = String.format("%.2f%n", f);
-			gpa.add(ss);
-		}
-		mav.addObject("Stgpa", gpa);
-		return mav;
-	}
+		else {
+			if (null == type) {
+										
+				List<Enrolment>sList =ens.findcompletedbyid(id);
+				studList = new PagedListHolder<Enrolment>();
+				studList.setSource(sList);
+				studList.setPageSize(3);
 
+				req.getSession().setAttribute("studList", studList);
+
+				printPageDetails(studList);
+
+			} else if ("next".equals(type)) {
+				// Return next set of list
+				studList = (PagedListHolder<Enrolment>) req.getSession().getAttribute("studList");
+
+				studList.nextPage();
+
+				printPageDetails(studList);
+
+			} else if ("prev".equals(type)) {
+				// Return previous set of list
+				studList = (PagedListHolder<Enrolment>) req.getSession().getAttribute("studList");
+
+				studList.previousPage();
+
+				printPageDetails(studList);
+
+			} else {
+				// Return specific index set of list
+				System.out.println("type:" + type);
+
+				studList = (PagedListHolder<Enrolment>) req.getSession().getAttribute("studList");
+
+				int pageNum = Integer.parseInt(type);
+
+				studList.setPage(pageNum);
+
+				printPageDetails(studList);
+			}
+			
+			ArrayList<String> gpa = new ArrayList<String>();
+			List<Enrolment> lctList = ens.findcompletedbyid(id);
+			for (Enrolment en : lctList) {
+				float f = sds.calcStudentGPA(en.getStudentDetails().getStudentId());
+				String ss = String.format("%.2f%n", f);
+				gpa.add(ss);
+			}
+			 
+			ModelAndView mv = new ModelAndView("studentperformance");
+			mv.addObject("ID",id);
+			mv.addObject("Stgpa", gpa);
+			return mv;
+			
+			}
+	}
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 	// 3.1 to view performance
 	@RequestMapping(value = "/viewallcr", method = RequestMethod.GET)
 	public ModelAndView viewallcourse() {
