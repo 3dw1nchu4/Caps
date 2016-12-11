@@ -3,8 +3,8 @@ package edu.iss.caps.controller;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.SessionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
@@ -37,23 +37,15 @@ public class CommonController {
 	}
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ModelAndView authenticate(@ModelAttribute User user, HttpSession session, BindingResult result)
+	public ModelAndView authenticate(@ModelAttribute User user, HttpSession session, BindingResult result,HttpServletResponse response,HttpServletRequest request)
 			throws FailedAuthentication {
 		ModelAndView mav = new ModelAndView("login");
 		try{
 			User u = uService.authenticate(user.getUserId(), user.getPassword());
 			u.setPassword("***");
 			session.setAttribute("user", u);
-			switch (u.getRole()) {
-			case "Admin":
-				mav = new ModelAndView("redirect:/admin/managelecturer");
-				break;
-			case "Lecturer":
-				mav = new ModelAndView("redirect:/Lec/viewallenrole");
-				break;
-			case "Student":
-				mav = new ModelAndView("redirect:/Course/listall");
-			}
+			response.sendRedirect(request.getContextPath()+"/home/redirectToRolesHomePage");
+			
 		} catch(Exception e){
 			mav.addObject("errorMsg", "Please ensure you have entered the correct UserId and Password.");
 		}		
@@ -94,7 +86,7 @@ public class CommonController {
 
 	}
 
-	@RequestMapping(value = "/movein", method = RequestMethod.GET)
+	@RequestMapping(value = "/redirectToRolesHomePage", method = RequestMethod.GET)
 	public ModelAndView movein(HttpSession session) throws FailedAuthentication {
 
 		ModelAndView mav = new ModelAndView("login");
