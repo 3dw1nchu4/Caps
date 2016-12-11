@@ -360,6 +360,7 @@
 
 				</div>
 				<br>
+				
 
 				<div class="t7-head">
 					<h3 class="fa fa-coffee" style="font-size: 36px"> Follow us</h3>
@@ -385,7 +386,7 @@
 				</div>
 
 				<div style="height: 20px"></div>
-				<br> <br>
+				<br> 
 			</div>
 
 			<div class="col-sm-6 ">

@@ -151,7 +151,6 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
 		localeChangeInterceptor.setParamName("lang");
 		registry.addInterceptor(localeChangeInterceptor);
-		registry.addInterceptor(new UnauthenticatedInterceptor()).addPathPatterns("/admin","/admin/*","/admin/*/*","/Course","/Course/*","/Course/*/*","/Lec","/Lec/*","/Lec/*/*");
 		registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/admin/*","/admin/*/*");
 		registry.addInterceptor(new StudentCheckInterceptor()).addPathPatterns("/Course/*","/Course/*/*");
 		registry.addInterceptor(new LecturerCheckInterceptor()).addPathPatterns("/Lec/*","/Lec/*/*");
