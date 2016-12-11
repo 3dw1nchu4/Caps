@@ -92,9 +92,9 @@
 									<label>Account Status: </label> <select name="accountstatus"
 										id="accountstatus" class="selectpicker">
 										<optgroup label="Account Status">
+											<option value="all">All</option>
 											<option value="active">Active</option>
 											<option value="disabled">Disabled</option>
-											<option value="all">All</option>
 										</optgroup>
 									</select>
 								</div>
