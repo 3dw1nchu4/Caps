@@ -45,11 +45,20 @@ public class AdminController
 	StudentService studentService;
 	@Autowired
 	EnrolmentService enrolmentService;
+	
+//	--------------------------------------------
+//	
+//	Manage Student Section
+//	
+//	--------------------------------------------
 
+	//	--------------------------------------------
+	// Manage Student Views - All views are processed here, pagination handled here
+	//	--------------------------------------------
 	@RequestMapping(value = {"/managestudent/{type}", "/managestudent"}, method = RequestMethod.GET)
 	public ModelAndView manageStudent(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
-		try
+		try //tries to get ID params, and return 1 result
 		{
 			String id = requestParams.get("id").toLowerCase();
 			ModelAndView mav = new ModelAndView("managestudent");
@@ -113,13 +122,15 @@ public class AdminController
 		}
 	}
 
-	// CREATE NEW
+	//	--------------------------------------------
+	// Create Student - Creates User, then Student, and redirects to Manage Student
+	//	--------------------------------------------
 	@RequestMapping(value = "/createstudent", method = RequestMethod.POST)
 	public String createStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 
 		String id = requestParams.get("id");
-		if (userService.findUser(id) != null)
+		if (userService.findUser(id) != null) // Ensures User with ID does not exist already
 		{
 			return "redirect:managestudent?actionstatus=userexisterror&id=create";
 		}
@@ -133,6 +144,7 @@ public class AdminController
 			String status = "Active";
 			String role = "Student";
 			
+			// Passes data string to method below for processing
 			Date enrolmentDate = ConvertToDate(dateString);
 	
 			// create user
@@ -152,7 +164,9 @@ public class AdminController
 		}
 	}
 
-	// Update Existing student
+	//	--------------------------------------------
+	// Update Student + Student User Details, and redirects to Manage Student
+	//	--------------------------------------------
 	@RequestMapping(value = "/updatestudent", method = RequestMethod.POST)
 	public String updateStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -163,7 +177,7 @@ public class AdminController
 		String email = requestParams.get("emailinput");
 		String role = "Student";
 
-		if (password.length() > 1) // If password not keyed in, no update
+		if (password.length() > 1) // If password length <1 , not updated. MAy be updated depending on requirement
 		{
 			User user = new User(id, password, role);
 			userService.changeUser(user);
@@ -180,7 +194,9 @@ public class AdminController
 		return "redirect:managestudent?actionstatus=success";
 	}
 
-	// delete student
+	//	--------------------------------------------
+	// Soft delete Student Account - Marked Disabled , and redirects to Manage Student
+	//	--------------------------------------------
 	@RequestMapping(value = "/deletestudent", method = RequestMethod.POST)
 	public String deleteStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -188,10 +204,13 @@ public class AdminController
 		StudentDetail student = studentService.findStudentById(id);
 		student.setStatus("Disabled");
 		studentService.changeStudent(student);
+		
 		return "redirect:managestudent?actionstatus=success";
 	}
 
-	// remove student from enrolment
+	//	--------------------------------------------
+	// Mark Student as removed from course ( In enrolment table), and redirects to Manage Student
+	//	--------------------------------------------
 	@RequestMapping(value = "/removestudentenrolment", method = RequestMethod.POST)
 	public String removeStudentFromEnrolment(Locale locale, Model model,
 			@RequestParam Map<String, String> requestParams)
@@ -208,7 +227,9 @@ public class AdminController
 		return "redirect:managestudent?actionstatus=success&id=" + studentId;
 	}
 
-	// add course for student
+	//	--------------------------------------------
+	// Add course via student table - Redirects to Manage Student / specific student profile view
+	//	--------------------------------------------
 	@RequestMapping(value = "/addcoursetostudent", method = RequestMethod.GET)
 	public String addCourseToStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -231,13 +252,19 @@ public class AdminController
 		}
 	}
 
-	// search student
+	//	--------------------------------------------
+	// Search Student - Returns full list of Students, uses controller to iterate through array
+	// (Inefficient, but benefits from not having to write additional queries) - Generates own view
+	// Has pagination
+	//	--------------------------------------------
 	@RequestMapping(value = {"/searchstudent","/searchstudent/{type}"}, method = RequestMethod.GET)
 	public ModelAndView searchStudent(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		String accountstatus = requestParams.get("accountstatus").toLowerCase();
-		if (accountstatus.contains("all"))
+		
+		// Ensures that correct account status is passed into variable 'accountstatus'
+		if (accountstatus.contains("all")) 
 		{
 			accountstatus = "";
 		}
@@ -266,14 +293,14 @@ public class AdminController
 					&& l.getStatus().toLowerCase().contains(accountstatus))
 			{
 				searchList.add(l);
+			} else if (l.getEnrolmentDate().toString().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(accountstatus))
+			{
+				searchList.add(l);
 			}
 		}
-
-
-//		return mav;
 		
 		PagedListHolder<StudentDetail> studentList = null;
-
 		String type = pathVariablesMap.get("type");
 
 		if (null == type) {
@@ -293,16 +320,22 @@ public class AdminController
 		mav.addObject("datacount", searchList.size());
 		ModelAndView mv = new ModelAndView("managestudent");
 		return mv;
-		
-		
+	
 	}
 
-	//// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-LECTURER
-	//// >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
+//	--------------------------------------------
+//	
+//	Manage Lecturer Section
+//	
+//	--------------------------------------------
+
+	//	--------------------------------------------
+	// Manage Lecturer Views - All views are processed here, pagination handled here
+	//	--------------------------------------------
 	@RequestMapping(value = {"/managelecturer/{type}", "/managelecturer"}, method = RequestMethod.GET)
 	public ModelAndView manageLecturer(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
-		try
+		try //tries to get ID params, and return 1 result
 		{
 			// adds list of lecturers to dropdown
 			ArrayList<LecturerDetail> lctList = lecturerService.findAllLecturers();
@@ -331,7 +364,7 @@ public class AdminController
 			}
 			mav.addObject("lecturerList", tempList);
 			mav.addObject("enroldata", enrolList2);
-			mav.addObject("data", lecturer); // add lecturer details to MAV
+			mav.addObject("data", lecturer); // add individual lecturer details to MAV
 			return mav;
 		} catch (Exception e) // catches requestParams.get("id") null pointer exception, lists all lecturers
 		{
@@ -359,18 +392,19 @@ public class AdminController
 		}
 	}
 
-	// CREATE NEW
+	//	--------------------------------------------
+	// Create Lecturer - Creates User, then Lecturer, and redirects to Manage Lecturer
+	//	--------------------------------------------
 	@RequestMapping(value = "/createlecturer", method = RequestMethod.POST)
 	public String createLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
 		String id = requestParams.get("id");
-		if (userService.findUser(id) != null)
+		if (userService.findUser(id) != null) // Ensures ID is unique before account creation
 		{
 			return "redirect:managelecturer?actionstatus=userexisterror&id=create";
 		}
 		else
 		{
-			
 			String firstName = requestParams.get("firstName");
 			String lastName = requestParams.get("lastName");
 			String password = requestParams.get("password");
@@ -389,7 +423,9 @@ public class AdminController
 		}
 	}
 
-	// Update Existing
+	//	--------------------------------------------
+	// Update Lecturer + Lecturer User Details, and redirects to Manage Lecturer
+	//	--------------------------------------------
 	@RequestMapping(value = "/updatelecturer", method = RequestMethod.POST)
 	public String updateLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -399,7 +435,7 @@ public class AdminController
 		String password = requestParams.get("password");
 		String role = "Lecturer";
 
-		if (password.length() > 1) // If password not keyed in, no update
+		if (password.length() > 1) // If password length <1, no update
 		{
 			User user = new User(id, password, role);
 			userService.changeUser(user);
@@ -415,7 +451,9 @@ public class AdminController
 		return "redirect:managelecturer?actionstatus=success";
 	}
 
-	// delete lecturer
+	//	--------------------------------------------
+	// Soft delete lecturer account and redirects to Manage Student
+	//	--------------------------------------------
 	@RequestMapping(value = "/deletelecturer", method = RequestMethod.POST)
 	public String deleteLecturer(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -426,7 +464,11 @@ public class AdminController
 		return "redirect:managelecturer?actionstatus=success";
 	}
 
-	// search lecturer
+	//	--------------------------------------------
+	// Search Lecturer - Returns full list of lecturer, uses controller to iterate through array
+	// (Inefficient, but benefits from not having to write additional queries) - Generates own view
+	// Has pagination
+	//	--------------------------------------------
 	@RequestMapping(value = {"/searchlecturer", "/searchlecturer/{type}"}, method = RequestMethod.GET)
 	public ModelAndView searchLecturer(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
@@ -488,7 +530,9 @@ public class AdminController
 		
 	}
 
-	// reassign course to
+	//	--------------------------------------------
+	// Reassigns course to another lecturer - redirects via string back to Manage Lecturer + profile
+	//	--------------------------------------------
 	@RequestMapping(value = "/reassignto", method = RequestMethod.GET)
 	public String reassignCourseTo(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -506,8 +550,15 @@ public class AdminController
 		return "redirect:managelecturer?id=" + returnTo + "&actionstatus=success";
 	}
 
-	//// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADMIN-COURSE
-	//// >>>>>>>>>>>>>>>>>>>>>>>>>>>/////////
+//	--------------------------------------------
+//	
+//	Manage Course Section
+//	
+//	--------------------------------------------
+
+	//	--------------------------------------------
+	// Manage Course Views - All views are processed here, pagination handled here
+	//	--------------------------------------------
 	@RequestMapping(value = {"/managecourse","/managecourse/{type}"}, method = RequestMethod.GET)
 	public ModelAndView manageCourse(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
@@ -523,7 +574,7 @@ public class AdminController
 			}
 		}
 
-		try
+		try // returns specific course information if ID is passed in params. Else, null exception thrown
 		{
 			int id = Integer.parseInt(requestParams.get("id"));
 			ModelAndView mav = new ModelAndView("managecourse");
@@ -540,7 +591,7 @@ public class AdminController
 			mav.addObject("lecturerList", tempList);
 			mav.addObject("data", course);
 			return mav;
-		} catch (Exception e)
+		} catch (Exception e) // catches null pointer exception and retrieves full list of vourses
 		{
 
 			PagedListHolder<Course> courseList = null;
@@ -563,13 +614,14 @@ public class AdminController
 			
 			ModelAndView mv = new ModelAndView("managecourse");
 			mv.addObject("lecturerList", tempList);
-			return mv;
-			
+			return mv;	
 		}
-
 	}
 
-	// CREATE NEW
+	//	--------------------------------------------
+	// Create new course entry - Assigns lecturer. Status 'Open' is hardcoded here.
+	// New courses assumed to be 'Open' upon creation
+	//	--------------------------------------------
 	@RequestMapping(value = "/createcourse", method = RequestMethod.POST)
 	public String createCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -577,30 +629,29 @@ public class AdminController
 		String cseName = requestParams.get("cseName");
 		String lecturerId = requestParams.get("lecturerId");
 		int maxCredits = Integer.parseInt(requestParams.get("maxCredits"));
-				
 		Date startDate = ConvertToDate(requestParams.get("startDate"));
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
-		
-
 		int size = Integer.parseInt(requestParams.get("size"));
+		
+		//ensures  start date is > end date, and that the revised max size of course is > current enrolment
 		if (endDate.compareTo(startDate) > 0 && size >0)
 		{
-		String status = "Open";
-		int currentEnrollment = 0;
-		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
-
-		Course course = new Course();
-		course.setCourseName(cseName);
-		course.setSize(size);
-		course.setStatus(status);
-		course.setStartDate(startDate);
-		course.setEndDate(endDate);
-		course.setLecturerDetails(lecturer);
-		course.setCurrentEnrollment(currentEnrollment);
-		course.setCredits(maxCredits);
-
-		cseService.changeCourse(course);
-		return "redirect:managecourse?actionstatus=createsuccess";
+			String status = "Open";
+			int currentEnrollment = 0;
+			LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
+	
+			Course course = new Course();
+			course.setCourseName(cseName);
+			course.setSize(size);
+			course.setStatus(status);
+			course.setStartDate(startDate);
+			course.setEndDate(endDate);
+			course.setLecturerDetails(lecturer);
+			course.setCurrentEnrollment(currentEnrollment);
+			course.setCredits(maxCredits);
+	
+			cseService.changeCourse(course);
+			return "redirect:managecourse?actionstatus=createsuccess";
 		}
 		else
 		{
@@ -608,7 +659,9 @@ public class AdminController
 		}
 	}
 
-	// Update Existing
+	//	--------------------------------------------
+	// Update Course information
+	//	--------------------------------------------
 	@RequestMapping(value = "/updatecourse", method = RequestMethod.POST)
 	public String updateCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -625,6 +678,8 @@ public class AdminController
 
 			
 		Course course = cseService.findCourse(id);
+		
+		//ensures  start date is > end date, and that the revised max size of course is > current enrolment
 		if (endDate.compareTo(startDate) > 0 && size > course.getCurrentEnrollment())
 		{
 		course.setCourseName(cseName);
@@ -644,7 +699,9 @@ public class AdminController
 		}
 	}
 
-	// delete course
+	//	--------------------------------------------
+	// Soft-delete course - Course status is set to 'Closed', and user is redirected to Manage Course
+	//	--------------------------------------------
 	@RequestMapping(value = "/deletecourse", method = RequestMethod.POST)
 	public String deleteCourse(Locale locale, Model model, @RequestParam Map<String, String> requestParams)
 	{
@@ -655,7 +712,11 @@ public class AdminController
 		return "redirect:managecourse?actionstatus=success";
 	}
 
-	// search course
+	//	--------------------------------------------
+	// Search Course - Returns full list of lecturer, uses controller to iterate through array
+	// (Inefficient, but benefits from not having to write additional queries) - Generates own view
+	// Has pagination
+	//	--------------------------------------------
 	@RequestMapping(value = {"/searchcourse","/searchcourse/{type}"}, method = RequestMethod.GET)
 	public ModelAndView searchCourse(@PathVariable Map<String, String> pathVariablesMap, Locale locale, Model model, @RequestParam Map<String, String> requestParams , HttpServletRequest req)
 	{
@@ -692,17 +753,19 @@ public class AdminController
 					&& l.getStatus().toLowerCase().contains(coursestatus))
 			{
 				searchList.add(l);
+			} else if (l.getStartDate().toString().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
+			} else if (l.getEndDate().toString().contains(searchContent)
+					&& l.getStatus().toLowerCase().contains(coursestatus))
+			{
+				searchList.add(l);
 			}
 		}
 
-//		mav.addObject("dataList", searchList);
-//		mav.addObject("datacount", searchList.size());
-//		return mav;
-		
 		PagedListHolder<Course> courseList = null;
-
 		String type = pathVariablesMap.get("type");
-
 		if (null == type) {
 			// First Request, Return first set of list
 			List<Course> courseListOther = searchList;;
@@ -716,12 +779,13 @@ public class AdminController
 			int pageNum = Integer.parseInt(type);
 			courseList.setPage(pageNum);
 		}
-
 		ModelAndView mv = new ModelAndView("managecourse");
 		return mv;
 	}
 
-	// remove student from enrolment via course
+	//	--------------------------------------------
+	// Removes student from a course - Sets Enrolment Status to 'Removed', grade to 'N/A'
+	//	--------------------------------------------
 	@RequestMapping(value = "/removestudentenrolmentviacourse", method = RequestMethod.POST)
 	public String removeStudentFromEnrolmentViaCourse(Locale locale, Model model,
 			@RequestParam Map<String, String> requestParams)
@@ -738,7 +802,17 @@ public class AdminController
 		return "redirect:managecourse?actionstatus=success&id=" + courseId;
 	}
 
+//	--------------------------------------------
+//	
+//	Miscellaneous methods
+//	
+//	--------------------------------------------
+	
+	
+	//	--------------------------------------------
 	// To get date formatted from string (year -1900, & for some reason, month-1 is required as well
+	// Utilizes deprecated date constructor
+	//	--------------------------------------------
 	@SuppressWarnings("deprecation")
 	private static Date ConvertToDate(String dateString)
 	{
@@ -752,6 +826,9 @@ public class AdminController
 		return date;
 	}
 
+	//	--------------------------------------------
+	// Adds/Deducts from course current enrolment counter. Bool 'true' to add, 'false' to deduct
+	//	--------------------------------------------
 	private void AddCourseEnrolmentCounter(Course c, Boolean b)
 	{
 		if (b)

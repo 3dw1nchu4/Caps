@@ -212,7 +212,7 @@
 					<div class="jumbotron" id="lecturercourses" name="lecturercourses">
 						
 						<h3>
-							<b><u>${data.lastName }, ${data.firstName }</u></b> is teaching
+							<b><u>${data.lastName }, ${data.firstName }</u></b> is currently teaching
 							the following ${enroldata.size() } courses
 						</h3>
 						<table class="table table-striped">

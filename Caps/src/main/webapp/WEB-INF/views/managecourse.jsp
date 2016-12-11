@@ -128,6 +128,7 @@
 								<th><h4>Course Name</h4></th>
 								<th><h4>Lecturer</h4></th>
 								<th><h4>Currently enrolled</h4></th>
+								<th><h4>Course Date</h4></th>
 								<th><h4>Max Credits</h4></th>
 								<th><h4>Course Status</h4></th>
 								<th><h4>Manage</h4></th>
@@ -140,7 +141,8 @@
 									<td>${object.courseName}</td>
 									<td>${object.lecturerDetails.lastName},
 										${object.lecturerDetails.firstName}</td>
-									<td>${object.currentEnrollment}/ ${object.size}</td>
+									<td>${object.currentEnrollment} of ${object.size} students</td>
+									<td><b>Start:</b><br> ${object.startDate}<br><b>End:</b><br> ${object.endDate} </td>
 									<td>${object.credits}</td>
 									<td>${object.status}</td>
 									<td><button class="btn btn-primary"
