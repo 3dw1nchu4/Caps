@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@page import="edu.iss.caps.model.User"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -138,7 +141,6 @@
 					<img src="${pageContext.request.contextPath}/resources/pic/22.jpg"
 						alt="Chania" width="100%">
 					<div class="carousel-caption">
-						<h3>The bird</h3>
 					</div>
 				</div>
 
@@ -151,7 +153,6 @@
 					<img src="${pageContext.request.contextPath}/resources/pic/24.jpg"
 						alt="Flower" width="100%">
 					<div class="carousel-caption">
-						<h3>Flowers</h3>
 
 					</div>
 				</div>
@@ -178,26 +179,26 @@
 			<div class="col-sm-4 ">
 				<br>
 				<div class="t7-head">
-					<h3 class="fa fa-calendar" style="font-size: 36px">Events</h3>
+					<h3 class="fa fa-calendar" style="font-size: 36px"> Events</h3>
 				</div>
 				<br>
 				<div class="t7-card-8 t7-grey" style="height: 300px">
 					<div class="t7-container">
 						<br>
 						<div class="t7-container t7-card-8 t7-white">
-							<h5>03 Dec- Six Days FDP Short Course on Finite ...</h5>
+							<h5>03 Dec - Six Days FDP Short Course on Finite ...</h5>
 						</div>
 					</div>
 					<br>
 					<div class="t7-container">
 						<div class="t7-container t7-card-8 t7-white">
-							<h5>05 Dec- Four Days Short Course on Java...</h5>
+							<h5>05 Dec - Four Days Short Course on Java...</h5>
 						</div>
 					</div>
 					<br>
 					<div class="t7-container">
 						<div class="t7-container t7-card-8 t7-white">
-							<h5>08 Dec- One Day ADO.NET Refresher..</h5>
+							<h5>08 Dec - One Day ADO.NET Refresher..</h5>
 						</div>
 					</div>
 
@@ -209,7 +210,7 @@
 
 			<div class="col-sm-4 ">
 				<div class="t7-head">
-					<h3 class="fa  fa-question" style="font-size: 36px">Why CAPS</h3>
+					<h3 class="fa  fa-question" style="font-size: 36px"> Why CAPS</h3>
 				</div>
 
 				<br>
@@ -226,7 +227,7 @@
 			</div>
 			<div class="col-sm-4 ">
 				<div class="t7-head">
-					<h3 class="fa fa-user" style="font-size: 36px">Login</h3>
+					<h3 class="fa fa-user" style="font-size: 36px"> Login</h3>
 				</div>
 				<br>
 				<div class="t7-card-8 t7-grey" style="height: 300px;">
@@ -234,23 +235,26 @@
 						<br>
 						<div style="width: 80%; text-align: left">
 							<br>
-							<form class="form-signin">
-								<h2 class="form-signin-heading">Please sign in</h2>
-								<label for="inputEmail" class="sr-only">Email address</label> <input
-									type="email" id="inputEmail" class="form-control"
-									placeholder="Email address" required> <label
-									for="inputPassword" class="sr-only">Password</label> <input
-									type="password" id="inputPassword" class="form-control"
-									placeholder="Password" required>
-								<div class="checkbox">
-									<label> <input type="checkbox" value="remember-me">
-										Remember me
-									</label>
-								</div>
-								<!-- removed the type="submit" property for testing, redirect function for testing only -->
-								<button class="btn btn-lg btn-primary btn-block"
-									onclick="Redirect()">Sign in</button>
-							</form>
+							<form:form modelAttribute="user" method="POST"
+				action="${pageContext.request.contextPath}/home/authenticate">
+				<h2 class="form-signin-heading">Please sign in</h2>
+				<label for="userid" class="sr-only"></label>
+				<form:input class="form-control" placeholder="UserId" id="userid"
+					path="userId" />
+				<br>
+				<label for="inputPassword" class="sr-only"></label>
+				<form:input class="form-control" placeholder="Password"
+					id="inputPassword" path="password" />
+				<div class="checkbox">
+					<label> <input type="checkbox" value="remember-me">
+						Remember me
+					</label>
+				</div>
+				<!-- removed the type="submit" property for testing, redirect function for testing only -->
+				<form:button class="btn btn-lg btn-primary btn-block" name="submit"
+					type="submit" value="s">
+				Sign in</form:button>
+			</form:form>
 
 						</div>
 					</center>
@@ -265,7 +269,7 @@
 
 			<div class="col-sm-6 ">
 				<div class="t7-head">
-					<h3 class="fa fa-newspaper-o" style="font-size: 36px">News</h3>
+					<h3 class="fa fa-newspaper-o" style="font-size: 36px"> News</h3>
 				</div>
 				<br>
 				<div class="row">
@@ -359,7 +363,7 @@
 				<br>
 
 				<div class="t7-head">
-					<h3 class="fa fa-coffee" style="font-size: 36px">Follow us</h3>
+					<h3 class="fa fa-coffee" style="font-size: 36px"> Follow us</h3>
 				</div>
 				<br>
 				<div class="t7-container t7-xlarge t7-padding t7-card-8">
@@ -387,7 +391,7 @@
 
 			<div class="col-sm-6 ">
 				<div class="t7-head">
-					<h3 class="fa fa-map-marker " style="font-size: 36px">Reach us</h3>
+					<h3 class="fa fa-map-marker " style="font-size: 36px"> Reach us</h3>
 				</div>
 				<br>
 				<div class="t7-container t7-card-8"">
@@ -403,7 +407,13 @@
 				</div>
 				<br>
 				<div class="t7-card-8" style="height: 250px">
-					<img src="pic/map.png" alt="map" height="250px" width="100%">
+					<iframe
+					  width="100%"
+					  height=100%
+					  frameborder="0" style="border:0"
+					  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAJxp3M2utOpluDl1ZXuP3s9G5VtWBqTAE
+					    &q=Singapore+119615" allowfullscreen>
+					</iframe>
 				</div>
 			</div>
 		</div>

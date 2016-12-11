@@ -59,7 +59,7 @@
 </body>
 <script>
 	$(function() {
-		$("#header").load("resources/header.html");
+		$("#header").load("resources/header.jsp");
 		$("#footer").load("resources/footer.html");
 	});
 

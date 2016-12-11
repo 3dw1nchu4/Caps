@@ -73,7 +73,7 @@ public class CommonController {
 		} catch (Exception e) {
 			role = null;
 		}
-
+		mav.addObject("user", new User());
 		mav.addObject("role", role);
 
 		return mav;
