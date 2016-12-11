@@ -507,7 +507,9 @@ public class AdminController
 
 		Date startDate = ConvertToDate(requestParams.get("startDate"));
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
-
+		
+		if (endDate.compareTo(startDate) > 0)
+		{
 		int size = Integer.parseInt(requestParams.get("size"));
 		String status = "Open";
 		int currentEnrollment = 0;
@@ -524,6 +526,11 @@ public class AdminController
 
 		cseService.changeCourse(course);
 		return "redirect:managecourse?actionstatus=createsuccess";
+		}
+		else
+		{
+			return "redirect:managecourse?actionstatus=failcuzofdate&id=create";
+		}
 	}
 
 	// Update Existing
@@ -538,7 +545,10 @@ public class AdminController
 		LecturerDetail lecturer = lecturerService.findLecturerById(lecturerId);
 		Date startDate = ConvertToDate(requestParams.get("startDate"));
 		Date endDate = ConvertToDate(requestParams.get("endDate"));
-
+		
+		if (endDate.compareTo(startDate) > 0)
+		{
+			
 		Course course = cseService.findCourse(id);
 		course.setCourseName(cseName);
 		course.setSize(size);
@@ -549,6 +559,11 @@ public class AdminController
 
 		cseService.changeCourse(course);
 		return "redirect:managecourse?actionstatus=success";
+		}
+		else
+		{
+			return "redirect:managecourse?actionstatus=failcuzofdate&id="+id;
+		}
 	}
 
 	// delete course

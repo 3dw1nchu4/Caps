@@ -61,7 +61,7 @@
 				else{
 			%>
 			<li id="navbarrole"><a
-				href="${pageContext.request.contextPath}/home/movein">${role}</a></li>
+				href="${pageContext.request.contextPath}/home/redirectToRolesHomePage">${role}</a></li>
 			<%
 				}
 			%>
@@ -243,7 +243,7 @@
 					path="userId" />
 				<br>
 				<label for="inputPassword" class="sr-only"></label>
-				<form:input class="form-control" placeholder="Password"
+				<form:input type="password" class="form-control" placeholder="Password"
 					id="inputPassword" path="password" />
 				<div class="checkbox">
 					<label> <input type="checkbox" value="remember-me">
@@ -353,11 +353,11 @@
 				<br>
 				<div class="t7-card-8 t7-container">
 					<br> <i class="fa fa-map-marker" style="font-size: 25px;"></i>
-					Singapore 119077<br> <br> <i class="fa fa-phone"
-						style="font-size: 25px;"> </i> Phone: +00 151515<br>( Enquiry
+					Singapore 119615<br> <br> <i class="fa fa-phone"
+						style="font-size: 25px;"> </i> Phone: +65 6516 2093<br>( Enquiry
 					Line :Monday - Friday : 9:00am to 4:00pm)<br> <br> <i
-						class="fa fa-envelope" style="font-size: 25px;"> </i> Email:
-					caps@mail.com<br> <br>
+						class="fa fa-envelope" style="font-size: 25px;"> </i> <a href="mailto:sa43team7@gmail.com?Subject=Enquires for SA43 Team 7"> Email:
+					sa43team7@gmail.com<br></a> <br>
 
 				</div>
 				<br>

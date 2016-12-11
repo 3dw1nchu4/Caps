@@ -5,8 +5,8 @@ Home display home page
 
 
 /admin/managelecturer
-Change "#" to LecturerId in jsp
-Magnifying icon and search buttons have same functions. Remove the icon.
+Change "#" to LecturerId in jsp ** OK **
+Magnifying icon and search buttons have same functions. Remove the icon. ** OK **
 after clicking All account status, Disabled user has "Disable" button enable. Change it to enable?
 need to think about what to do with users after disable
 On click "Create New", Header displays edit record

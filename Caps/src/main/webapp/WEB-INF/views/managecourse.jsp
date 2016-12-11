@@ -10,24 +10,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title></title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-<script>
-$(function()
-		{
-			$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
-			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
-		});
-
-</script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 <!-- For dropdown select -->
@@ -334,6 +324,23 @@ $(function()
 
 		</div>
 	</div>
+	
+		<!-- Fail transaction Modal -->
+	<div id="failureActionModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Failure. Please check date.</h4>
+				</div>
+				<div class="modal-body" id="failureModalMessage"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 	<!-- Not logged in Modal -->
 
@@ -416,7 +423,11 @@ $(function()
 
 </body>
 <script>
-
+$(function()
+		{
+			$("#header").load("${pageContext.request.contextPath}/resources/headerforadmin.jsp");
+			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+		});
 	
 	try
 	{
@@ -495,6 +506,12 @@ $(function()
 	{
 		document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
 		$('#successActionModal').modal('toggle');
+	}
+	
+	if (qs['actionstatus'] == "failcuzofdate")
+	{
+		document.getElementById("failureModalMessage").innerHTML = "Record not created. End date must be after start date!";
+		$('#failureActionModal').modal('toggle');
 	}
 
 	if (qs['actionstatus'] == "createsuccess")

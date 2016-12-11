@@ -10,22 +10,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title></title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<!-- jQuery library -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<script>
-$(function()
-		{
-			$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
-			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
-		});
-
-</script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 <!-- For dropdown select -->
@@ -405,17 +397,30 @@ $(function()
 	</footer>
 
 </body>
+
 <script>
+
+
+$(function()
+		{
+			$("#header").load("${pageContext.request.contextPath}/resources/headerforadmin.jsp");
+			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+		});
+
+
 
 
 	$(document).ready(function() {
 	    $('.selectpicker').selectpicker();
+	    
 	});
 	
 	//clears search content when entering search box
 	$("#searchcontent").click(function(){
 	    $("#searchcontent").val('');
 	});
+	
+	
 
 	var url = window.location.href;
 
@@ -516,24 +521,19 @@ $(function()
 		$('#deleteModal').modal('toggle');
 	}
 	
-	try
-	{
-		if (qs['actionstatus'] == "success")
-		{
-				document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
-				$('#successActionModal').modal('toggle');
-		}
-	
-		if (qs['actionstatus'] == "createsuccess")
-		{
-				document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
-				$('#successActionModal').modal('toggle');
-		}
-	}
-	catch (err)
-	{
-		console.log("no action status");
-	}
+
+			if (qs['actionstatus'].includes("success"))
+			{
+					document.getElementById("successModalMessage").innerHTML = "Record successfully updated!";
+					$('#successActionModal').modal('toggle');
+			}
+		
+			if (qs['actionstatus'] == "createsuccess")
+			{
+					document.getElementById("successModalMessage").innerHTML = "Record successfully created!";
+					$('#successActionModal').modal('toggle');
+			}
+
 	
 	function AddCourse(studentId)
 	{

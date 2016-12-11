@@ -10,22 +10,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title></title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<!-- jQuery library -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<script>
-$(function()
-		{
-			$("#header").load("${pageContext.request.contextPath}/resources/header.jsp");
-			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
-		});
-
-</script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 <!-- For dropdown select -->
@@ -110,11 +102,6 @@ $(function()
 									<input type="text" class="form-control" placeholder="Search"
 										name="searchcontent" id="searchcontent">
 
-									<div class="input-group-btn">
-										<button class="btn btn-default" type="submit">
-											<i class="glyphicon glyphicon-search"></i>
-										</button>
-									</div>
 								</div>
 								<button type="submit" class="btn btn-default">Search</button>
 								<button type="button" class="btn btn-success"
@@ -136,7 +123,7 @@ $(function()
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th id="tableheader1"><h4>#</h4></th>
+								<th><h4>Lecturer ID</h4></th>
 								<th><h4>Lecturer Name</h4></th>
 								<th><h4>Status</h4></th>
 								<th><h4></h4></th>
@@ -152,7 +139,7 @@ $(function()
 									<td><button class="btn btn-primary"
 											onclick="EditRecord('${object.lecturerId}')">Edit</button>
 										<button class="btn btn-danger"
-											onclick="DeleteRecord('${object.lecturerId}')">Disable</button></td>
+											onclick="DeleteRecord('${object.lecturerId}')" <c:if test="${object.status == 'Disabled'}">disabled</c:if> >Disable</button></td>
 								</tr>
 							</c:forEach>
 
@@ -356,6 +343,11 @@ $(function()
 
 </body>
 <script>
+$(function()
+		{
+			$("#header").load("${pageContext.request.contextPath}/resources/headerforadmin.jsp");
+			$("#footer").load("${pageContext.request.contextPath}/resources/footer.html");
+		});
 
 	$(document).ready(function() {
 	    $('.selectpicker').selectpicker();

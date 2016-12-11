@@ -11,20 +11,6 @@
 <title></title>
 
 
-<!-- Latest compiled JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-<!--  additional custom styles -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/mystyle.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="${pageContext.request.contextPath}/resources/dashboard.css"
-	rel="stylesheet">
-
-
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
