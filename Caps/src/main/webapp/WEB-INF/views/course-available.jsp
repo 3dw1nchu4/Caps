@@ -200,7 +200,7 @@
 
 								
 							</div>
-							<button type="submit" class="btn btn-success" size="25">Search By:</button>
+							<button type="submit" class="btn btn-success" size="25">Search</button>
 						</form>
 					 </div>
 					</nav>  
