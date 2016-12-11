@@ -222,7 +222,7 @@
 				<th>Credit</th>
 				<th>Current Enrollment</th>
 				
-				<th>Enrolling</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -240,7 +240,7 @@
 				    <td><div class="col xs-6">
 		            <a class="btn btn-Danger"
 						href="${pageContext.request.contextPath}/Course/enrol/${c.courseId}"><spring:message
-								code="enrolling"  /></a></div></td>
+								code="Enrol"  /></a></div></td>
 				
 				</tr>
 			</c:forEach>

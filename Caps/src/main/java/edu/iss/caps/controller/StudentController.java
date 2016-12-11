@@ -164,7 +164,7 @@ public class StudentController {
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
-		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		StudentDetail studentDetail =sService.findStudentById(s);
 		String sname = studentDetail.getFirstName();
 		request.setAttribute("student", sname);
@@ -179,7 +179,11 @@ public class StudentController {
 		
 		request.getSession().setAttribute("GPA",k);
 		
-		
+		for (Enrolment enrolment : grades) {
+			if (enrolment.getCourses().getStatus()=="Closed") {
+				grades.remove(enrolment);
+			}
+		}
 		
 		mav.addObject("grlist", grades);
 		return mav;
@@ -362,6 +366,12 @@ public class StudentController {
 		StudentDetail studentDetail =sService.findStudentById(s);
 		String sname = studentDetail.getFirstName();
 		request.setAttribute("student", sname);
+		
+		for (Enrolment enrolment : grades) {
+			if (enrolment.getCourses().getStatus()=="Closed") {
+				grades.remove(enrolment);
+			}
+		}
 //		List<Course> courseTemp = new ArrayList<Course>();
 //		
 //
