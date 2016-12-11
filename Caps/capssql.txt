@@ -142,14 +142,14 @@ insert into caps.Enrolments values
 (null,'S008',1,'A',8,'Passed'),
 (null,'S013',1,'C',8,'Passed'),
 
-(null,'S004',2,null,null,'Enrolled'),
+(null,'S004',2,'B',8,'Enrolled'),
 (null,'S005',2,null,null,'Enrolled'),
 (null,'S006',2,null,null,'Enrolled'),
 (null,'S012',2,null,null,'Enrolled'),
 
 (null,'S014',3,null,null,'Enrolled'),
 (null,'S001',3,null,null,'Enrolled'),
-(null,'S004',3,null,null,'Enrolled'),
+(null,'S004',3,'B',8,'Enrolled'),
 (null,'S005',3,null,null,'Enrolled'),
 (null,'S006',3,null,null,'Enrolled'),
 (null,'S007',3,null,null,'Enrolled'),
