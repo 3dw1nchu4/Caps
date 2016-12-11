@@ -64,6 +64,7 @@ Constraint FK_StudentCourses_Courses Foreign Key(CourseId) references Courses(Co
 
 insert into caps.users values
 ('A001','pw','Admin'),
+('A002','pw','Admin'),
 ('S001','pw','Student'),
 ('S002','pw','Student'),
 ('S003','pw','Student'),
@@ -83,15 +84,21 @@ insert into caps.users values
 ('L002','pw','Lecturer'),
 ('L003','pw','Lecturer'),
 ('L004','pw','Lecturer'),
-('L005','pw','Lecturer');
+('L005','pw','Lecturer'),
+('L006','pw','Lecturer'),
+('L007','pw','Lecturer'),
+('L008','pw','Lecturer'),
+('L009','pw','Lecturer'),
+('L010','pw','Lecturer');
+
 
 insert into caps.studentdetails values
 ('S001','Z S','Sum','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S002','Linda','Chen','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S003','Chun Xiao','Ji','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S004','Gogul','Kanan','2016/11/27','Active','sumzhanseng@gmail.com'),
-('S005','Sandi','Lin','2016/11/27','Active','sumzhanseng@gmail.com'),
-('S006','Odin','Zaw','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S005','Sandi','Ei','2016/11/27','Active','sumzhanseng@gmail.com'),
+('S006','Krauk','Oldin','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S007','Edwin','Chua','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S008','Joe','Wu','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S009','John','Smith','2016/11/27','Active','sumzhanseng@gmail.com'),
@@ -100,20 +107,29 @@ insert into caps.studentdetails values
 ('S012','Prince','Charming','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S013','Mu','Lan','2016/11/27','Active','sumzhanseng@gmail.com'),
 ('S014','Ariel','Tan','2016/11/27','Active','sumzhanseng@gmail.com'),
-('S015','Cinderella','Lee','2016/11/27','Active','sumzhanseng@gmail.com');
+('S015','Cinderella','Lee','2016/11/27','Disabled','sumzhanseng@gmail.com');
 
 insert into caps.lecturerdetails values
 ('L001','Derek','Kiong','Active'),
-('L002','Hans','Superman','Active'),
+('L002','Hans','The Superman','Active'),
 ('L003','Esther','Tan','Active'),
-('L004','Lazyman With no Courses','Sleeps','Active'),
-('L005','Venkat','Ramanathan','Active');
+('L004','Lazyman With no Courses','Sleeps','Disabled'),
+('L005','Venkat','Ramanathan','Active'),
+('L006','Suria','The Fastest','Active'),
+('L007','Lee','Boonkee','Active'),
+('L008','Super','Man','Active'),
+('L009','Thor','The Hammer','Active'),
+('L010','Captain','America','Active');
 
 insert into caps.courses values
-(null,'This Course has passed and graded','L002',8,'2016/12/1','2016/12/2',9,0,'Closed'),
-(null,'This Course has passed and ungraded','L003',8,'2016/12/1','2016/12/2',4,0,'Closed'),
-(null,'This Course is Full, not started','L001',8,'2017/01/01','2017/06/30',7,7,'Open'),
-(null,'This Course is open and not full','L005',4,'2017/01/01','2017/06/30',6,3,'Open');
+(null,'Endurance Training','L002',8,'2016/12/1','2016/12/2',9,9,'Closed'),
+(null,'Team Building Session','L003',8,'2016/12/1','2016/12/2',4,4,'Closed'),
+(null,'OOAD','L003',8,'2017/01/01','2017/06/30',20,7,'Open'),
+(null,'C#.Net','L001',8,'2017/01/01','2017/06/30',10,4,'Open'),
+(null,'ASP.Net','L001',8,'2017/01/01','2017/06/30',10,0,'Open'),
+(null,'Java','L006',8,'2017/01/01','2017/06/30',10,0,'Open'),
+(null,'Android','L001',8,'2017/01/01','2017/06/30',10,0,'Open'),
+(null,'Project Management','L007',8,'2017/01/01','2017/06/30',10,0,'Open');
 
 insert into caps.Enrolments values
 (null,'S001',1,'F',0,'Failed'),
@@ -124,19 +140,22 @@ insert into caps.Enrolments values
 (null,'S006',1,'A',8,'Passed'),
 (null,'S007',1,'B',8,'Passed'),
 (null,'S008',1,'A',8,'Passed'),
-(null,'S004',2,'',NULL,'Enrolled'),
-(null,'S005',2,'',NULL,'Enrolled'),
-(null,'S006',2,'',NULL,'Enrolled'),
-(null,'S001',3,'',0,'Enrolled'),
-(null,'S004',3,'',0,'Enrolled'),
-(null,'S005',3,'',0,'Enrolled'),
-(null,'S006',3,'',0,'Enrolled'),
-(null,'S007',3,'',0,'Enrolled'),
-(null,'S008',4,'',0,'Enrolled'),
-(null,'S009',4,'B',4,'Enrolled'),
-(null,'S010',3,'',0,'Enrolled'),
-(null,'S011',4,'F',0,'Failed'),
-(null,'S012',2,'',NULL,'Enrolled'),
 (null,'S013',1,'C',8,'Passed'),
-(null,'S014',3,'',0,'Enrolled'),
-(null,'S015',4,'B',0,'Enrolled');
+
+(null,'S004',2,null,null,'Enrolled'),
+(null,'S005',2,null,null,'Enrolled'),
+(null,'S006',2,null,null,'Enrolled'),
+(null,'S012',2,null,null,'Enrolled'),
+
+(null,'S014',3,null,null,'Enrolled'),
+(null,'S001',3,null,null,'Enrolled'),
+(null,'S004',3,null,null,'Enrolled'),
+(null,'S005',3,null,null,'Enrolled'),
+(null,'S006',3,null,null,'Enrolled'),
+(null,'S007',3,null,null,'Enrolled'),
+(null,'S010',3,null,null,'Enrolled'),
+
+(null,'S008',4,null,null,'Enrolled'),
+(null,'S009',4,null,null,'Enrolled'),
+(null,'S011',4,null,null,'Enrolled'),
+(null,'S015',4,null,null,'Enrolled');
