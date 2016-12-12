@@ -41,7 +41,7 @@
 <link href="${pageContext.request.contextPath}/resources/dashboard.css"
 	rel="stylesheet">
 <style>
-#searchclear {
+#searchclear {	
 	position: absolute;
 	right: 20px;
 	top: 0;
@@ -251,7 +251,7 @@
 								<tbody>
 									<c:forEach var="enrol" items="${enroldata}">
 										<tr class="listRecord">
-											<td><a href="managecourse?id=${enrol.courses.courseId}">${enrol.courses.courseName}</a></td>
+											<td><a href="${pageContext.request.contextPath}/admin/managecourse?id=${enrol.courses.courseId}">${enrol.courses.courseName}</a></td>
 											<td>${enrol.status}</td>
 											<td>${enrol.grade}</td>
 											<td>${enrol.earnedCredit}</td>
