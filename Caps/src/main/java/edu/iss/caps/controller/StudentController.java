@@ -160,7 +160,9 @@ public class StudentController {
 	@RequestMapping(value = "/grade",method = RequestMethod.GET)
 	public ModelAndView studentviewgrade(HttpServletRequest request) {
 		
+		
 		ModelAndView mav = new ModelAndView("list-grade");
+		try {
 		User u = (User) request.getSession().getAttribute("user");
 		String s = u.getUserId();
 		List<Enrolment> grades = eService.findCourseBySID(s);/////////joe changed in eservice
@@ -186,6 +188,10 @@ public class StudentController {
 		}
 		
 		mav.addObject("grlist", grades);
+		} catch (Exception e) {
+
+		}
+		
 		return mav;
 	}
 	
@@ -195,6 +201,9 @@ public class StudentController {
 	public ModelAndView enrolling(@ModelAttribute Course course, BindingResult result,HttpServletRequest request,
 			@PathVariable int courseId, final RedirectAttributes redirectAttributes,HttpServletResponse response) throws ServletException, IOException {
 
+		
+		try {
+			
 		
 		   Course c = cService.findCourse(courseId);
 		   String message ="";
@@ -230,17 +239,30 @@ public class StudentController {
 		
 //		Session session = SetAttribute("message", );
 		ModelAndView mav = new ModelAndView("redirect:/Course/bar");
-
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		ModelAndView mav = new ModelAndView("redirect:/Course/bar");
 		return mav;
 	}
+	
+	
 	@RequestMapping(value = "/bar",method = RequestMethod.GET)
 	public ModelAndView bar(HttpServletRequest request) {
+		try {
+
+			ModelAndView mav = new ModelAndView("bar");
+			String m=(String)request.getSession().getAttribute("message");
+			mav.addObject("message", m);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
-		ModelAndView mav = new ModelAndView("bar");
-		String m=(String)request.getSession().getAttribute("message");
 	
 		
-		mav.addObject("message", m);
+		ModelAndView mav = new ModelAndView("bar");
 		return mav;
 	}
 	
@@ -248,10 +270,9 @@ public class StudentController {
 	@RequestMapping(value = { "/listallsearchbyname/{type}", "/listallsearchbyname" }, method = RequestMethod.GET)
 	public ModelAndView searchStudentforgrd(Locale locale, Model model,@PathVariable Map<String, String> pathVariablesMap, HttpServletRequest request, @RequestParam Map<String, String> requestParams) {
 
+	try {
+		
 	
-//	@RequestMapping(value = "/listallsearchbyname", method = RequestMethod.GET)
-//	public ModelAndView searchStudentforgrd(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
-//			HttpServletRequest request) {
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 	
 		User u = (User) request.getSession().getAttribute("user");
@@ -327,33 +348,28 @@ public class StudentController {
 			printPageDetails(courseList);
 		}
 		
-		
-	//////////////////////////////////	
-		
-
-//		int bn = 0;
-//		String s2 = "";
-//		for (Course l : course) {
-//			bn = (l.getCourseId());
-//			s2 = Integer.toString(bn);
-//			if (l.getCourseName().toLowerCase().contains(searchContent)) {
-//				searchList.add(l);
-//			}
-//
-//			else if (s2.toLowerCase().contains(searchContent)) {
-//				searchList.add(l);
-//			}
-//		}
-
 		ModelAndView mav = new ModelAndView("list-all");
 		mav.addObject("courselist", searchList);
 		mav.addObject("datacount", searchList.size());
+		
+	
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
+	    ModelAndView mav = new ModelAndView("list-all");
 		return mav;
+	
+
+		
 	}
 	
 	@RequestMapping(value = "/listgradesearchbyname", method = RequestMethod.GET)
 	public ModelAndView searchStudentforgr(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
 			HttpServletRequest request) {
+		
+		try {
+			
+		
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		ModelAndView mav = new ModelAndView("list-grade");
 		User u = (User) request.getSession().getAttribute("user");
@@ -372,15 +388,7 @@ public class StudentController {
 				grades.remove(enrolment);
 			}
 		}
-//		List<Course> courseTemp = new ArrayList<Course>();
-//		
-//
-//		for (Course c : course) {
-//			if (eService.findungraded(s, c.getCourseId()).size() != 0) {
-//				courseTemp.add(c);
-//			}
-//		}
-
+		
 		int bn = 0;
 		String s2 = "";
 		for (Enrolment l : grades) {
@@ -397,12 +405,24 @@ public class StudentController {
 
 		mav.addObject("grlist", searchList);
 		mav.addObject("datacount", searchList.size());
-		return mav;
+		
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		 ModelAndView mav = new ModelAndView("list-all");
+	     return mav;
+		
 	}
 	
 	@RequestMapping(value = "/asearch", method = RequestMethod.GET)
 	public ModelAndView searchStudent(Locale locale, Model model, @RequestParam Map<String, String> requestParams,
 			HttpServletRequest request) {
+		
+		
+try {
+	
+
 		String searchContent = requestParams.get("searchcontent").toLowerCase();
 		ModelAndView mav = new ModelAndView("course-available");
 		User u = (User) request.getSession().getAttribute("user");
@@ -415,17 +435,8 @@ public class StudentController {
 		List<Course> searchList = new ArrayList<Course>();
 		List<Course> courselist = cService.findAllCourses();
 
-//		List<Course> courseTemp = new ArrayList<Course>();
-//		
-//
-//		for (Course c : course) {
-//			if (eService.findungraded(s, c.getCourseId()).size() != 0) {
-//				courseTemp.add(c);
-//			}
-//		}
-
-//		ModelAndView mav = new ModelAndView("course-available");
-//		List<Course> courselist = cService.findAllCourses();
+		
+		
 
 		List<Enrolment> grades = eService.findCourseBySID(s);
 		
@@ -454,6 +465,13 @@ public class StudentController {
 
  		mav.addObject("courseavailable", searchList);
 	    mav.addObject("datacount", searchList.size());
+	    
+	    
+} catch (Exception e) {
+	// TODO: handle exception
+}
+
+         ModelAndView mav = new ModelAndView("list-all");
 		return mav;
 	}
 	public void printPageDetails(PagedListHolder LList) {
